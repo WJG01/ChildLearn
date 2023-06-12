@@ -14,7 +14,7 @@ function executeQuery($query) {
     return $result;
 }
 ?>s
-<!-- testing -->
+<!-- testing  ahahhaha -->
 
 <?php
 while ($res = mysqli_fetch_array($result)): {
