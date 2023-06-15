@@ -13,7 +13,8 @@ function executeQuery($query) {
     $result = mysqli_query($connect, $query);
     return $result;
 }
-?>
+?>s
+<!-- testing  ahahhaha -->
 
 <?php
 while ($res = mysqli_fetch_array($result)): {
