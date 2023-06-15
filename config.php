@@ -2,7 +2,7 @@
 $serverName = "localhost";
 $dbUsername = "root";
 $dbPass = "";
-$dbName = "skillsoft";
+$dbName = "childLearn";
 
 $conn = mysqli_connect($serverName, $dbUsername, $dbPass, $dbName);
 
