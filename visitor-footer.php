@@ -12,7 +12,7 @@
         <div class="skillsoft-footer" id="skillsoft-footer">
             <div class="logo-and-social">
                 <a class="skillsoft-logo" href="#">Skill<b>Soft.</b></a>
-                <p class="company-des">Skillsoft provide multiple features to make a classroom fun, interactive and engaging. Quizzes for everyone in anywhere.</p>
+                <p class="company-des">ChildLearn provide multiple features to make a classroom fun, interactive and engaging. Quizzes for everyone in anywhere.</p>
                 <div class="social-icon">
                     <div class="facebook social-odd">
                         <a href="https://www.facebook.com/apuniversity" target="_NEW"><i class="fab fa-facebook-f"></i></a>

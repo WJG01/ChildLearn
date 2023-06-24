@@ -34,12 +34,12 @@ else{
                 </div>
                 <div class="about-content">
                     <p>
-                        Skillsoft is a responsive online learning website that aims to enhance student’s learning 
+                        ChildLearn is a responsive online learning website that aims to enhance student’s learning 
                         quality from different educational backgrounds such as students from the Information Technology course, 
-                        Design course, Business course and much more. The main objective of Skillsoft is to assess students’ knowledge towards a 
-                        specific academic domain while having a major goal to spark interest in subjects such as information technology. Skillsoft also 
+                        Design course, Business course and much more. The main objective of ChildLearn is to assess students’ knowledge towards a 
+                        specific academic domain while having a major goal to spark interest in subjects such as information technology. ChildLearn also 
                         hopes to assist students to grasp technical concepts while preparing them for real university exams as an effort in increasing their 
-                        problem solving and critical thinking skills. Skillsoft, similarly like Kahoot specializes in providing various quizzes for users to answer 
+                        problem solving and critical thinking skills. ChildLearn, similarly like Kahoot specializes in providing various quizzes for users to answer 
                         questions and gain new knowledge. It contains different quizzes in a multiple-choice question (MCQ) format where students would be able to choose one 
                         correct answer out of a total of four choices which are A, B, C, and D. Each quiz has a specific time limit and points would be accumulated 
                         for every question that were answered correctly within the specific quiz. Students would also be able to view their results once they have completed the quiz.
@@ -49,7 +49,7 @@ else{
                     <h1 id="jump-to-mission">Mission</h1>
                     <h3>Make learning awesome!</h3>
                     <p>
-                    To make learning awesome! At SkillSoft!, we are all about lifelong learning. In life, we learn new skills through curiosity and play. 
+                    To make learning awesome! At ChildLearn!, we are all about lifelong learning. In life, we learn new skills through curiosity and play. 
                     By combining the two, in a fun and social way, we can unlock the learning potential within all of us, no matter the subject, age or ability.
                     <br><br>
                     Unleashing this potential within every learner is what drives us, which is why we are on a mission to make learning awesome. We do this by creating 
@@ -84,7 +84,7 @@ else{
                             </div>
                             <span>We are inclusive</span>
                             <p>
-                            We’re team players and SkillSoft strives to ensure that everyone has the chance to succeed.
+                            We’re team players and ChildLearn strives to ensure that everyone has the chance to succeed.
                             </p>
                         </div>
                     </div>

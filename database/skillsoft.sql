@@ -105,7 +105,7 @@ INSERT INTO `chatbot` (`id`, `queries`, `replies`) VALUES
 (8, 'Do you offer membership? | Do you have membership feature?', 'We do not offer any membership feature as of now due to the website still being in the initial release stage. '),
 (9, 'Is it possible to order attempt quiz without signing in? Can i attempt quiz without signing in? | Can i attempt quiz without logging in? | Is it compulsory to log in? | log in | login | signin | sign in', 'Yes, all users are required to sign in and verify their account through the registered email before being able to utilize the major website features.'),
 (10, 'Can i post a forum? How to post a forum question? | forum | Can i post unrelated forum question?', 'You can always post a question in the forum by clicking the forum button on the top navigational panel when you are logged into your account.'),
-(11, 'What is this website about? | What is the main objective of Skillsoft? | What does Skillsoft hope to achieve?', 'This is a website that focuses on providing exciting quizzes that enhances students learning knowledge.');
+(11, 'What is this website about? | What is the main objective of ChildLearn? | What does ChildLearn hope to achieve?', 'This is a website that focuses on providing exciting quizzes that enhances students learning knowledge.');
 
 -- --------------------------------------------------------
 

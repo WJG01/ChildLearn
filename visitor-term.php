@@ -95,34 +95,34 @@ else{
             <h1 class="term-title">Terms & Conditions</h1>
 
             <div class="term-content">
-                <h2>Welcome to Skillsoft</h2>
+                <h2>Welcome to ChildLearn</h2>
                 <p>
-                These Terms apply to your use of the Skillsoft! Services and our Platform, and we encourage you to read them carefully. 
+                These Terms apply to your use of the ChildLearn! Services and our Platform, and we encourage you to read them carefully. 
                 Please also refer to the definitions set out at the bottom of this page. The Terms and any attachments related to it, including our 
-                Acceptable Use Policy, applicable guidelines and any Service Plan(s), forms a legal Agreement between you and Skillsoft! for your use of the Skillsoft! Services. 
-                If you, or an Organization you are affiliated with, have entered into an Enterprise Agreement with Skillsoft!, 
-                your use of the Skillsoft! Services and Resources will be governed by the Enterprise Agreement and the documents incorporated therein.
+                Acceptable Use Policy, applicable guidelines and any Service Plan(s), forms a legal Agreement between you and ChildLearn! for your use of the ChildLearn! Services. 
+                If you, or an Organization you are affiliated with, have entered into an Enterprise Agreement with ChildLearn!, 
+                your use of the ChildLearn! Services and Resources will be governed by the Enterprise Agreement and the documents incorporated therein.
                 <br><br>
-                These Terms define the terms and conditions under which you are allowed to use the Skillsoft! Services and consume Resources. 
-                If you do not agree to these Terms, you must immediately discontinue your use of the Skillsoft! Services and Resources.
+                These Terms define the terms and conditions under which you are allowed to use the ChildLearn! Services and consume Resources. 
+                If you do not agree to these Terms, you must immediately discontinue your use of the ChildLearn! Services and Resources.
                 </p>
             </div>
             <div class="term-content">
                 <h2>Account Security</h2>
                 <p>
-                As the creator of your Skillsoft! account you have access and control over the Skillsoft! account and the devices that are used to access the Service. 
+                As the creator of your ChildLearn! account you have access and control over the ChildLearn! account and the devices that are used to access the Service. 
                 To maintain control over the account and to prevent anyone from accessing the account, you should maintain control over the devices that are used to access the 
                 Service and not reveal the password to anyone. you are responsible for updating and maintaining the 
                 accuracy of the information you provide to us relating to your account. you are also responsible for preventing unauthorized access and use of your account by any other 
                 than you. We can terminate your account or place your account on hold in order to protect you, 
-                Skillsoft! or our partners from conducting or attempting to conduct identity theft or other fraudulent activity.
+                ChildLearn! or our partners from conducting or attempting to conduct identity theft or other fraudulent activity.
                 </p>
             </div>
             <div class="term-content">
                 <h2>Monitoring of User Content</h2>
                 <p>
-                Unless agreed differently in a separate agreement with us, Skillsoft! may review, monitor, edit or remove User Content in our sole discretion, 
-                but is under no obligation to do so. In all cases, Skillsoft! reserves the right to remove or disable access to any User Content that breaches the Agreement, 
+                Unless agreed differently in a separate agreement with us, ChildLearn! may review, monitor, edit or remove User Content in our sole discretion, 
+                but is under no obligation to do so. In all cases, ChildLearn! reserves the right to remove or disable access to any User Content that breaches the Agreement, 
                 including breach of our Acceptable Use Policy and Editorial Guidelines. Removal or disabling of access to User Content shall be at our sole discretion.
                 </p>
             </div>
@@ -135,12 +135,12 @@ else{
             <div class="term-content">
                 <h2>Limitation of liability</h2>
                 <p>
-                ***To the maximum extent permitted by law, in no event will Skillsoft!, its officers, shareholders, employees, agents, directors, subsidiaries, affiliates, successors, assigns, 
+                ***To the maximum extent permitted by law, in no event will ChildLearn!, its officers, shareholders, employees, agents, directors, subsidiaries, affiliates, successors, assigns, 
                 suppliers, or licensors be liable for (1) any indirect, special, incidental, punitive, exemplary, or consequential damages; or (2) any loss of use, data, business, or profits 
-                (whether direct or indirect), in all cases arising out of the use or inability to use the Skillsoft! service, Third Party Applications, or Third Party Application content, 
-                regardless of legal theory, without regard to whether Skillsoft! has been made aware of the possibility of those damages, and even if a remedy fails of its essential purpose.  
-                Skillsoft!’s aggregate liability for all claims arising under or in connection with 
-                this Agreement shall be limited to the amounts paid by you to Skillsoft! under this Agreement during the twelve months immediately preceding the last event giving rise to 
+                (whether direct or indirect), in all cases arising out of the use or inability to use the ChildLearn! service, Third Party Applications, or Third Party Application content, 
+                regardless of legal theory, without regard to whether ChildLearn! has been made aware of the possibility of those damages, and even if a remedy fails of its essential purpose.  
+                ChildLearn!’s aggregate liability for all claims arising under or in connection with 
+                this Agreement shall be limited to the amounts paid by you to ChildLearn! under this Agreement during the twelve months immediately preceding the last event giving rise to 
                 liability.
                 </p>
             </div>

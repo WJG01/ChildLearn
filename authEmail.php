@@ -25,12 +25,12 @@ function sendVerificationEmail($userEmail, $token)
     <body>
         <div class="wrapper">
             <p>
-                <b>Welcome to Skillsoft!</b>
+                <b>Welcome to ChildLearn!</b>
             </p>
             <p>
                 Thank you for signing up on our website. Please click on the link below to verify your email.
             </p>
-            <a href="http://localhost/skillsoft/verification.php?token=' . $token .'">Verify your email address now</a>
+            <a href="http://localhost/ChildLearn/verification.php?token=' . $token .'">Verify your email address now</a>
         </div>
     </body>
     </html>'; 
@@ -64,7 +64,7 @@ function sendPasswordResetLink($userEmail, $token)
 
                 Please click on the link below to reset your password.
             </p>
-            <a href="http://localhost/skillsoft/verification.php?password-token=' . $token .'">Reset your password</a>
+            <a href="http://localhost/ChildLearn/verification.php?password-token=' . $token .'">Reset your password</a>
         </div>
     </body>
     </html>'; 

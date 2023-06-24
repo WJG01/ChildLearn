@@ -10,7 +10,7 @@ if (isset($_POST['search'])) {
 }
 
 function executeQuery($query) {
-    $connect = mysqli_connect("localhost", "root", "", "skillsoft");
+    $connect = mysqli_connect("localhost", "root", "", "children");
     $result = mysqli_query($connect, $query);
     return $result;
 }

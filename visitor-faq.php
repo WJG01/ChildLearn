@@ -30,11 +30,11 @@ else{
                 <div class="account-setup">
                     <i class="fas fa-user"></i>
                     <h1>Account Setup</h1>
-                    <h2>Get started on <br>SkillSoft</h2>
+                    <h2>Get started on <br>ChildLearn</h2>
                     <div class="overlay">
                         <p>Account Setup</p>
                         <div class="questions">
-                            <h2><a href="#1">Create a SkillSoft Account</a></h2>
+                            <h2><a href="#1">Create a ChildLearn Account</a></h2>
                             <h3><a href="#2">Update Account Info</a></h3>
                             <h4><a href="#3">Delete an Account</a></h4>
                         </div>
@@ -46,7 +46,7 @@ else{
                 <div class="enrollment">
                     <i class="fas fa-layer-group"></i>
                     <h1>Join Quiz</h1>
-                    <h2>Join a quiz on <br>SkillSoft</h2>
+                    <h2>Join a quiz on <br>ChildLearn</h2>
                     <div class="overlay">
                         <p>Join Quiz</p>
                         <div class="questions">
@@ -80,11 +80,11 @@ else{
                 <details id="1">
                     <summary id="faq-question">
                         <span>
-                            Create a SkillSoft Account
+                            Create a ChildLearn Account
                         </span>
                     </summary>
                         <p style="margin-top: 10px; margin-bottom: 10px; font-size: 18px;">Here are the steps to create an account with SkillSoft</p>
-                        <li>1. Login to skillsoft from a browser, and click on the sign-up on the top right corner.</li>
+                        <li>1. Login to childLearn from a browser, and click on the sign-up on the top right corner.</li>
                         <li>2. Select the type of Account best suitable to you. Types of accounts include: Student and Teacher.</li>
                         <li style="list-style-type: none;">For students, you can register as a "Student" where you can test some quiz questions.</li>
                         <li style="list-style-type: none;">For teacher, you can register as a "Teacher" to start create your own quiz!</li>
@@ -100,7 +100,7 @@ else{
                         </span>
                     </summary>
                         <p style="margin-top: 10px; margin-bottom: 10px; font-size: 18px;">Here are the steps to update your account</p>
-                        <li>1. Login to your SkillSoft account, mouse over to "My Account" and click on "Profile" from the drop down list.</li>
+                        <li>1. Login to your ChildLearn account, mouse over to "My Account" and click on "Profile" from the drop down list.</li>
                         <li style="list-style-type: none;">In profile settings, you can upload your profile picture, update your username and update your name.</li>
                         <li style="list-style-type: none;">In account settings, you can update you login information such as password and email address.</li>
                         <li>2. Make sure to click on "Save" to update your latest info.</li>
@@ -122,7 +122,7 @@ else{
                         </span>
                     </summary>
                         <li>1. Search or browse a Quiz.</li>
-                        <li style="list-style-type: none;">In SkillSoft, we provide Business, Design, IT and more quizzes for all the students.</li>
+                        <li style="list-style-type: none;">In ChildLearn, we provide Business, Design, IT and more quizzes for all the students.</li>
                         <li>2. Click on the quiz card, to start the quiz.</li>
                         <li>3. You will be redirected and start to attempt your quiz, a timer will notify you when the time is up.</li>
                         <li style="list-style-type: none;">Start a quiz now! Enjoy.</li>
