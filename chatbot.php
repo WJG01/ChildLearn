@@ -16,7 +16,7 @@ if(mysqli_num_rows($run_query) > 0){
     $replay = $fetch_data['replies'];
     echo $replay;
 }else{
-    echo "Sorry I am unable to understand your query. However, you can always send us an email at skillsofteducation@gmail.com.";
+    echo "Sorry I am unable to understand your query. However, you can always send us an email at childlearndaycare@gmail.com.";
 }
 
 ?>

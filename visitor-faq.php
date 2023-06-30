@@ -159,7 +159,7 @@ else{
                         <li style="list-style-type: none;">Make sure to click on the verification link to verify your account. </li>
                         <li style="list-style-type: none;">Still unable to login? Try to reset your password.</li>
                         <li>2. If you have try the steps above but still unable to login at the end. Please drop us an email to 
-                            <a style="color: #FA8334" href="mailto: skillsofteducation@gmail.com">skillsofteducation@gmail.com</a>
+                            <a style="color: #FA8334" href="mailto: childlearndaycare@gmail.com">childlearndaycare@gmail.com</a>
                         </li>
                 </details>
                 <details id="8">
@@ -168,7 +168,7 @@ else{
                             Can't Solve Your Issues?
                         </span>
                     </summary>
-                        <li style="list-style-type: none;">Please contact us at: <a style="color: #FA8334" href="mailto: skillsofteducation@gmail.com">skillsofteducation@gmail.com</a></li>
+                        <li style="list-style-type: none;">Please contact us at: <a style="color: #FA8334" href="mailto: childlearndaycare@gmail.com">childlearndaycare@gmail.com</a></li>
                 </details>
             </div>
         </div>

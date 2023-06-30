@@ -1,6 +1,6 @@
 <?php
 
-define('EMAIL', 'skillsofteducation@gmail.com');
+define('EMAIL', 'childlearndaycare@gmail.com');
 define('PASSWORD', 'scxekehfvpqldgvy');
 
 
