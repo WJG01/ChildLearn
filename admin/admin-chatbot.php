@@ -96,7 +96,7 @@ function executeQuery($query) {
 
     <div class="admin-footer">
         <div class="foo-des">
-            <p>Design and Develop by Win Yip & Jordan - FWDD Assignment</p>
+            <p>Mathematics and Logic and Develop by Win Yip & Jordan - FWDD Assignment</p>
         </div>
     </div>
 

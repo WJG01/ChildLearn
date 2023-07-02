@@ -194,7 +194,7 @@ $totalques = $row['totalquestion'];
                     }
                     ?>
                     <div class="btn-column">
-                        <button onclick="location.href='student-quiz.php'" id="cancel-btn" type="button">Back</button>
+                        <button onclick="location.href='student-course-quiz.php'" id="cancel-btn" type="button">Back</button>
                     </div>
                 </div>
             </div>

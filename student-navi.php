@@ -26,17 +26,17 @@ $sid = $row['stud_id'];
     <body>
         <section class="top-nav-bar" style="z-index:50;" id="top-nav-bar">
             <div class="left-nav"  id="left-nav">
-                <a class="skillsoft-logo" href="student-quiz.php">Skill<b>Soft.</b></a>
+                <a class="skillsoft-logo" href="student-course-quiz.php">Skill<b>Soft.</b></a>
                 <a href="#" class="icon" id="menu-btn">
                     <i class="fa fa-bars"></i>
                 </a>
                 <nav>
                     <ul class="main-menu">
-                        <li><a href="student-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
+                        <li><a href="student-course-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
                             <ul class="sub-menu" style="z-index:50;">
-                                <li><a href="show-quiz.php?cat=Business">Business Quiz</a></li>
-                                <li><a href="show-quiz.php?cat=Design">Design Quiz</a></li>
-                                <li><a href="show-quiz.php?cat=IT">IT Quiz</a></li>
+                                <li><a href="show-quiz.php?cat=Language and Literacy">Language and Literacy Quiz</a></li>
+                                <li><a href="show-quiz.php?cat=Mathematics and Logic">Mathematics and Logic Quiz</a></li>
+                                <li><a href="show-quiz.php?cat=Science and Discovery">Science and Discovery Quiz</a></li>
                             </ul>
                         </li>
                         <li><a href="student-forum.php">Forum</a></li>
@@ -65,13 +65,13 @@ $sid = $row['stud_id'];
         </section>
 
         <div class="" id="dropdown-list">
-            <a class="skillsoft-logo" href="student-quiz.php">SkillSoft.</a>
+            <a class="skillsoft-logo" href="student-course-quiz.php">SkillSoft.</a>
             <ul class="main-menu">
                 <li><a href="#" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
                     <ul class="sub-menu" style="z-index:50;">
-                        <li><a href="show-quiz.php?cat=Business">Business Quiz</a></li>
-                        <li><a href="show-quiz.php?cat=Design">Design Quiz</a></li>
-                        <li><a href="show-quiz.php?cat=IT">IT Quiz</a></li>
+                        <li><a href="show-quiz.php?cat=Language and Literacy">Language and Literacy Quiz</a></li>
+                        <li><a href="show-quiz.php?cat=Mathematics and Logic">Mathematics and Logic Quiz</a></li>
+                        <li><a href="show-quiz.php?cat=Science and Discovery">Science and Discovery Quiz</a></li>
                     </ul>
                 </li>
                 <li><a href="student-forum.php">Forum</a></li>

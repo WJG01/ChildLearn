@@ -122,7 +122,7 @@ else{
                         </span>
                     </summary>
                         <li>1. Search or browse a Quiz.</li>
-                        <li style="list-style-type: none;">In ChildLearn, we provide Business, Design, IT and more quizzes for all the students.</li>
+                        <li style="list-style-type: none;">In ChildLearn, we provide Language and Literacy, Mathematics and Logic, Science and Discovery and more quizzes for all the students.</li>
                         <li>2. Click on the quiz card, to start the quiz.</li>
                         <li>3. You will be redirected and start to attempt your quiz, a timer will notify you when the time is up.</li>
                         <li style="list-style-type: none;">Start a quiz now! Enjoy.</li>
@@ -134,7 +134,7 @@ else{
                         </span>
                     </summary>
                         <li>1. To search for a quiz, just simply browse into the quiz category you looking for.</li>
-                        <li style="list-style-type: none;">For examples: Design Quiz => Click on "View More" button and it will only 
+                        <li style="list-style-type: none;">For examples: Mathematics and Logic Quiz => Click on "View More" button and it will only 
                         show related quiz to you. In the search column, enter the keywords and click on the search icon. The related or similar
                         result will list down to you.</li>
                 </details>

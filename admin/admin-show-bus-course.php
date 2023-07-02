@@ -9,7 +9,7 @@ require("conn.php");
 $result_per_page = 12;
 
 //Find out the number of results stored in the table
-$sql = "SELECT * FROM quiz WHERE quiz_category = 'Business'";
+$sql = "SELECT * FROM quiz WHERE quiz_category = 'Language and Literacy'";
 $result = executeQuery($sql);
 $number_of_results = mysqli_num_rows($result);
 
@@ -32,7 +32,7 @@ if (!isset($_SESSION['page-title'])){
 $starting_num = ($page-1)*$result_per_page;
 
 if (isset($_POST['search'])) {
-    $search_query ="SELECT * FROM quiz WHERE quiz_title LIKE '%".$_POST['search']."%' AND WHERE quiz_category = 'Business'";
+    $search_query ="SELECT * FROM quiz WHERE quiz_title LIKE '%".$_POST['search']."%' AND WHERE quiz_category = 'Language and Literacy'";
     $result = executeQuery($search_query);
     $starting_num = 0;
 } 
@@ -61,7 +61,7 @@ function executeQuery($query) {
     <link rel="stylesheet" href="admin-course-card.css">
     <link rel="stylesheet" href="admin-showcourse.css">
     <link rel="stylesheet" href="admin-paginations.css">
-    <title>Business Courses</title>
+    <title>Language and Literacy Courses</title>
 </head>
 <body>
       <?php include("admin-nav.php")?>

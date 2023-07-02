@@ -2,7 +2,7 @@
 
 $quiz_search_cat = $_GET['cat'];
 if (isset($_POST['search'])) {
-    $search_query = "SELECT *FROM question WHERE ques_title LIKE '%" . $_POST['search'] . "%'";
+    $search_query = "SELECT *FROM quiz WHERE quiz_title LIKE '%" . $_POST['search'] . "%'";
     $result = executeQuery($search_query);
 } else {
     $default_query = "SELECT *FROM quiz WHERE (quiz_category = '$quiz_search_cat')";
@@ -10,7 +10,7 @@ if (isset($_POST['search'])) {
 }
 
 function executeQuery($query) {
-    $connect = mysqli_connect("localhost", "root", "", "children");
+    $connect = mysqli_connect("localhost", "root", "", "childlearn");
     $result = mysqli_query($connect, $query);
     return $result;
 }

@@ -36,7 +36,7 @@ else{
                     <p>
                         ChildLearn is a responsive online learning website that aims to enhance student’s learning 
                         quality from different educational backgrounds such as students from the Information Technology course, 
-                        Design course, Business course and much more. The main objective of ChildLearn is to assess students’ knowledge towards a 
+                        Mathematics and Logic course, Language and Literacy course and much more. The main objective of ChildLearn is to assess students’ knowledge towards a 
                         specific academic domain while having a major goal to spark interest in subjects such as information technology. ChildLearn also 
                         hopes to assist students to grasp technical concepts while preparing them for real university exams as an effort in increasing their 
                         problem solving and critical thinking skills. ChildLearn, similarly like Kahoot specializes in providing various quizzes for users to answer 

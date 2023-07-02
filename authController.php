@@ -268,7 +268,7 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['verified'] = $user['verified'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                window.location='student-quiz.php';
+                window.location='student-course-quiz.php';
                 </script>";
                 exit();
             } else {
@@ -357,7 +357,7 @@ function verifyUser($token)
             $_SESSION['verified'] = 1;
          // flash message
             echo "<script type='text/javascript'>alert('Account has been successfully verified!');
-            window.location='student-quiz.php';
+            window.location='student-course-quiz.php';
             </script>";
             exit();
         }

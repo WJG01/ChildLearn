@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito&family=Roboto+Slab&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato+Extended:wght@400;700&display=swap");
+
+body {
+  font-family: "Nunito", sans-serif;
+}
+
+h1,
+h2 {
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+}
+
+a {
+  font-family: "Lato Extended", Lato, "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  color: black;
+}
+
+.card-body.slim-card-body a {
+  font-family: "Lato Extended", Lato, "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  color: black;
+  text-decoration: underline;
+}
+
+.alert-info {
+  font-family: "Nunito", sans-serif;
+}
+
+.icon-link {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.icon-link::before {
+  content: "\f105";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 20px;
+  margin-right: 10px;
+}

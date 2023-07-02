@@ -91,35 +91,35 @@ include "conn.php";
     <div class="category-course">
         <p>Quizzes by Category:</p>
             <?php 
-                $business = "SELECT COUNT(*) AS business FROM quiz WHERE quiz_category = 'business'";
-                $result = mysqli_query($conn, $business);
+                $language = "SELECT COUNT(*) AS language FROM quiz WHERE quiz_category = 'Language and Literacy'";
+                $result = mysqli_query($conn, $language);
                 $row = mysqli_fetch_assoc($result);
             ?>
-        <div class="business-cat">
-            <h2>Business: <b><?php echo $row['business']; ?> quizzes</b></h2>
+        <div class="language-cat">
+            <h2>Language and Literacy: <b><?php echo $row['language']; ?> quizzes</b></h2>
         </div>
             <?php 
-                $design = "SELECT COUNT(*) AS design FROM quiz WHERE quiz_category = 'Design'";
-                $result = mysqli_query($conn, $design);
+                $mathematic = "SELECT COUNT(*) AS mathematic FROM quiz WHERE quiz_category = 'Mathematics and Logic'";
+                $result = mysqli_query($conn, $mathematic);
                 $row = mysqli_fetch_assoc($result);
             ?>
-        <div class="design-cat">
-            <h2>Design: <b><?php echo $row['design']; ?> quizzes</b></h2>
+        <div class="mathematic-cat">
+            <h2>Mathematics and Logic: <b><?php echo $row['mathematic']; ?> quizzes</b></h2>
         </div>
             <?php 
-                $IT = "SELECT COUNT(*) AS IT FROM quiz WHERE quiz_category = 'IT'";
-                $result = mysqli_query($conn, $IT);
+                $Science_and_Discovery = "SELECT COUNT(*) AS Science and Discovery FROM quiz WHERE quiz_category = 'Science and Discovery'";
+                $result = mysqli_query($conn, $Science_and_Discovery);
                 $row = mysqli_fetch_assoc($result);
             ?>
-        <div class="IT-cat">
-            <h2>IT: <b><?php echo $row['IT']; ?> quizzes</b></h2>
+        <div class="Science and Discovery-cat">
+            <h2>Science and Discovery: <b><?php echo $row['Science and Discovery']; ?> quizzes</b></h2>
         </div>
     </div>
    </div>
 
    <div class="admin-footer">
         <div class="foo-des">
-            <p>Design and Develop by Win Yip & Jordan - FWDD Assignment</p>
+            <p>Mathematics and Logic and Develop by Win Yip & Jordan - FWDD Assignment</p>
         </div>
     </div>
 </body>

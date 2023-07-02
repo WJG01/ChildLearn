@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="footer-menu">
-                <a href="student-quiz.php">Quizzes</a>
+                <a href="student-course-quiz.php">Quizzes</a>
                 <a href="student-forum.php"">Forum</a>
                 <a href="visitor-faq.php">FAQ</a>
                 <a href="visitor-aboutus.php">About Us</a>

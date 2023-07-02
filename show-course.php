@@ -10,18 +10,24 @@ if (isset($_SESSION['id'])) {
 }
 include($nav);
 
-$quiz_category = $_GET['cat'];
+$course_category = $_GET['cat'];
 //Pagination
 //Define how many results you want per page
 $result_per_page = 10;
 
 //Find out the number of results stored in the table
-$sql = "SELECT *, (SELECT COUNT(quques_id) FROM quiz_question qq WHERE (qq.quiz_id = q.quiz_id)) AS totalquestion 
-, (SELECT COUNT(stud_id) FROM history h WHERE (h.quques_id = qq.quques_id)) AS totalplays FROM quiz q INNER JOIN quiz_question qq WHERE (qq.quiz_id = q.quiz_id) AND (q.quiz_category = '$quiz_category') GROUP BY q.quiz_id ORDER BY RAND()";
+// $sql = "SELECT *, (SELECT COUNT(quques_id) FROM quiz_question qq WHERE (qq.quiz_id = q.quiz_id)) AS totalquestion 
+// , (SELECT COUNT(stud_id) FROM history h WHERE (h.quques_id = qq.quques_id)) AS totalplays FROM quiz q INNER JOIN 
+// quiz_question qq WHERE (qq.quiz_id = q.quiz_id) AND (q.quiz_category = '$quiz_category') GROUP BY q.quiz_id ORDER BY RAND()";
+$sql = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count FROM course
+INNER JOIN course_chapter ON course.course_id = course_chapter.course_id
+WHERE course.course_category = '$course_category'
+GROUP BY course.course_id";
+
 $result = mysqli_query($conn, $sql);
 $number_of_results = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result);
-$quiz_title = $row['quiz_category'];
+$course_title = $row['course_category'];
 
 //Determine number of total pages available
 $number_of_pages = ceil($number_of_results / $result_per_page);
@@ -37,30 +43,26 @@ if (!isset($_GET['page'])) {
 $starting_num = ($page - 1) * $result_per_page;
 
 if (isset($_POST['search'])) {
-    $search_query = "SELECT q.*, COUNT(qq.quques_id) AS totalquestion, COUNT(h.stud_id) AS totalplays, c.course_title
-                     FROM quiz q
-                     INNER JOIN quiz_question qq ON qq.quiz_id = q.quiz_id
-                     LEFT JOIN history h ON h.quques_id = qq.quques_id
-                     INNER JOIN course c ON c.course_id = q.course_id
-                     WHERE q.quiz_category = '$quiz_category' AND q.quiz_title LIKE '%" . $_POST['search'] . "%'
-                     GROUP BY q.quiz_id
-                     ORDER BY RAND()";
+    $search_query = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count 
+                     FROM course
+                     INNER JOIN course_chapter ON course.course_id = course_chapter.course_id
+                     WHERE course.course_category = '$course_category' AND course.course_title LIKE '%" . $_POST['search'] . "%'
+                     GROUP BY course.course_id";
+
     $result = executeQuery($search_query);
     $starting_num = 0;
 } else {
-    // Retrieve selected results from the table and display them on the page
-    $sql = "SELECT q.*, COUNT(qq.quques_id) AS totalquestion, COUNT(h.stud_id) AS totalplays, c.course_title
-            FROM quiz q
-            INNER JOIN quiz_question qq ON qq.quiz_id = q.quiz_id
-            LEFT JOIN history h ON h.quques_id = qq.quques_id
-            INNER JOIN course c ON c.course_id = q.course_id
-            WHERE q.quiz_category = '$quiz_category'
-            GROUP BY q.quiz_id
-            ORDER BY RAND()
+    //Retreive selected result from the table and display them on page
+    $sql = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count 
+            FROM course
+            INNER JOIN course_chapter ON course.course_id = course_chapter.course_id
+            WHERE course.course_category = '$course_category'
+            GROUP BY course.course_id ORDER BY RAND() 
             LIMIT " . $starting_num . ',' . $result_per_page;
 
     $result = mysqli_query($conn, $sql);
 }
+
 
 function executeQuery($query)
 {
@@ -85,17 +87,27 @@ function executeQuery($query)
     <link rel="stylesheet" href="stylesheets/quiz-cards.css">
     <link rel="stylesheet" href="stylesheets/show-allquiz.css">
     <link rel="stylesheet" href="stylesheets/paginations.css">
-    <title><?php echo $row['quiz_category'] ?> Quiz Page</title>
+    <title><?php echo $row['course_category'] ?> Course Page</title>
 </head>
 
 <body>
     <section class="show-all-quiz" id="show-all-quiz">
         <?php include("backBtn.php"); ?>
-        <div class="title-and-search">
-            <p class="show-quiz"><?php echo $row['quiz_category'] ?> Quiz</p>
+        <!-- <div class="title-and-search">
+            <p class="show-quiz"><?php echo $row['course_category'] ?> Course</p>
             <div class="search-bar">
-                <form method="POST" action="show-quiz.php?cat=<?php echo $quiz_category; ?>" autocomplete="off">
-                    <input id="search-input" name="search" type="text" placeholder="Search quiz here...">
+                <form method="POST" action="show-course.php?cat=<?php echo $course_category; ?>" autocomplete="off">
+                    <input id="search-input" name="search" type="text" placeholder="Search course here...">
+                    <input id="real-submit" type="submit" hidden>
+                    <button id="search-btn" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div> -->
+        <div class="title-and-search">
+            <p class="show-quiz"><?php echo $row['course_category'] ?> Course</p>
+            <div class="search-bar">
+                <form method="POST" action="show-course.php?cat=<?php echo $course_category; ?>" autocomplete="off">
+                    <input id="search-input" name="search" type="text" placeholder="Search course here..." value="<?php echo isset($_POST['search']) ? $_POST['search'] : ''; ?>">
                     <input id="real-submit" type="submit" hidden>
                     <button id="search-btn" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
                 </form>
@@ -112,14 +124,13 @@ function executeQuery($query)
                 <?php
                 while ($row = mysqli_fetch_array($result)) {
                 ?>
-                    <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
+                    <a class="quiz-link" href="student-course-details.php?course_id=<?php echo $row['course_id']; ?>">
                         <div class="quiz-card">
-                            <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
-                            <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
+                            <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
+                            <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                             <div class="quiz-tag">
-                                <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
-                                <p class="quiz-question"><?php echo $row['totalquestion'] ?>Qs</p>
-                                <p class="quiz-play"><?php echo $row['totalplays'] ?>plays</p>
+                                <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
+                                <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
                             </div>
                         </div>
                     </a>
@@ -130,7 +141,7 @@ function executeQuery($query)
                                 var searchText = $(this).val();
                                 if (searchText != '') {
                                     $.ajax({
-                                        url: 'action-quiz.php?cat=<?php echo $row['quiz_category'] ?>',
+                                        url: 'action-course.php?cat=<?php echo $row['course_category'] ?>',
                                         method: 'post',
                                         data: {
                                             query: searchText
@@ -161,7 +172,7 @@ function executeQuery($query)
             //Display the links to the pages
             for ($page = 1; $page <= $number_of_pages; $page++) {
             ?>
-                <a class="page-links" href="show-quiz.php?cat=<?php echo $quiz_category; ?>&page=<?php echo $page; ?>"><?php echo $page; ?></a>
+                <a class="page-links" href="show-course.php?cat=<?php echo $course_category; ?>&page=<?php echo $page; ?>"><?php echo $page; ?></a>
             <?php
             }; ?>
         </div>

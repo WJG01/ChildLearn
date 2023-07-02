@@ -19,11 +19,11 @@
                     </a>
                     <nav>
                         <ul class="main-menu">
-                            <li><a href="student-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
+                            <li><a href="student-course-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
                                 <ul class="sub-menu" style="z-index:50;">
-                                    <li><a href="show-quiz.php?cat=Business">Business Quiz</a></li>
-                                    <li><a href="show-quiz.php?cat=Design">Design Quiz</a></li>
-                                    <li><a href="show-quiz.php?cat=IT">IT Quiz</a></li>
+                                    <li><a href="show-quiz.php?cat=Language and Literacy">Language and Literacy Quiz</a></li>
+                                    <li><a href="show-quiz.php?cat=Mathematics and Logic">Mathematics and Logic Quiz</a></li>
+                                    <li><a href="show-quiz.php?cat=Science and Discovery">Science and Discovery Quiz</a></li>
                                 </ul>
                             </li>
                             <li><a href="student-forum.php">Forum</a></li>
@@ -130,11 +130,11 @@
         <div class="" id="dropdown-list">
             <a class="skillsoft-logo" href="index.php">SkillSoft.</a>
             <ul class="main-menu">
-                <li><a href="student-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
+                <li><a href="student-course-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
                     <ul class="sub-menu" style="z-index:50;">
-                        <li><a href="show-quiz.php?cat=Business">Business Quiz</a></li>
-                        <li><a href="show-quiz.php?cat=Design">Design Quiz</a></li>
-                        <li><a href="show-quiz.php?cat=IT">IT Quiz</a></li>
+                        <li><a href="show-quiz.php?cat=Language and Literacy">Language and Literacy Quiz</a></li>
+                        <li><a href="show-quiz.php?cat=Mathematics and Logic">Mathematics and Logic Quiz</a></li>
+                        <li><a href="show-quiz.php?cat=Science and Discovery">Science and Discovery Quiz</a></li>
                     </ul>
                 </li>
                 <li><a href="student-forum.php">Forum</a></li>

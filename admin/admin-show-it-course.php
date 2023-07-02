@@ -9,7 +9,7 @@ require("conn.php");
 $result_per_page = 12;
 
 //Find out the number of results stored in the table
-$sql = "SELECT * FROM course WHERE cour_category = 'IT'";
+$sql = "SELECT * FROM course WHERE cour_category = 'Science and Discovery'";
 $result = executeQuery($sql);
 $number_of_results = mysqli_num_rows($result);
 
@@ -32,12 +32,12 @@ if (!isset($_SESSION['page-title'])){
 $starting_num = ($page-1)*$result_per_page;
 
 if (isset($_POST['search'])) {
-    $search_query ="SELECT *FROM course WHERE cour_name LIKE '%".$_POST['search']."%' AND WHERE cour_category = 'IT'";
+    $search_query ="SELECT *FROM course WHERE cour_name LIKE '%".$_POST['search']."%' AND WHERE cour_category = 'Science and Discovery'";
     $result = executeQuery($search_query);
     $starting_num = 0;
 } else {
     //Retreive selected result from the table and display them on page
-    $sql = "SELECT *,(SELECT AVG(rate_course_value) FROM rating r WHERE (r.cour_id = c.cour_id)) AS avg_rating FROM course c, teacher t WHERE (c.teac_id = t.teac_id) AND (c.cour_category = 'IT') ORDER BY RAND()";
+    $sql = "SELECT *,(SELECT AVG(rate_course_value) FROM rating r WHERE (r.cour_id = c.cour_id)) AS avg_rating FROM course c, teacher t WHERE (c.teac_id = t.teac_id) AND (c.cour_category = 'Science and Discovery') ORDER BY RAND()";
     $result = mysqli_query($conn, $sql);
 }
 
@@ -64,7 +64,7 @@ function executeQuery($query) {
     <link rel="stylesheet" href="admin-course-card.css">
     <link rel="stylesheet" href="admin-showcourse.css">
     <link rel="stylesheet" href="admin-paginations.css">
-    <title>IT Courses</title>
+    <title>Science and Discovery Courses</title>
 </head>
 <body>
       <?php include("admin-nav.php")?>

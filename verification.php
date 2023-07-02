@@ -14,7 +14,7 @@ if (isset($_GET['password-token'])) {
 }
 
 if (!isset($_SESSION['id'])) {
-    header('location: student-quiz.php');
+    header('location: student-course-quiz.php');
     exit();
 }
 ?>
@@ -41,7 +41,7 @@ if (!isset($_SESSION['id'])) {
                     </label>
                     <?php if($_SESSION['verified']): ?>
                         <?php echo '<script>alert("Your account has been successfully verified!");
-                        window.location="student-quiz.php";
+                        window.location="student-course-quiz.php";
                         </script>'; ?>
                     <?php endif; ?>
                 </div>

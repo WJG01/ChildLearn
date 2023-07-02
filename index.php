@@ -17,7 +17,7 @@
                 <div class="content-des">
                     <h1>Make Learning <br> Awesome!</h1>
                     <p>
-                        SkillSoft delivers engaging learning platfrom and provide a multiplication
+                        ChildLearn delivers engaging learning platfrom and provide a multiplication
                         turns the times tables into an awesome and captivating game experience.
                     </p>
                     <a class="learn-more" href="visitor-aboutus.php">Learn More</a>
@@ -73,7 +73,7 @@
                 ?>
             </div>
             <div class="view-more-btn">
-                <a href="student-quiz.php">View More</a>
+                <a href="student-course-quiz.php">View More</a>
             </div>
         </div>
 
