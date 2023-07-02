@@ -37,22 +37,28 @@ $content_video = $row['content_video'];
     <link rel="stylesheet" href="stylesheets/student-chapter-details.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/paginations.css">
-    <title>Chapter: <?php echo $chapter_title ?> </title>
+    <title>Chapter <?php echo $chapter_id ?>: <?php echo $chapter_title ?> </title>
 </head>
 
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">Chapter: <?php echo $chapter_title; ?></h2>
+        <h1 class="mb-4">Chapter <?php echo $chapter_id ?>: <?php echo $chapter_title; ?></h1>
         <div class="chapter-image">
-            <img src="<?php echo $content_image; ?>" alt="Chapter Image">
+            <img src="Images/<?php echo $content_image; ?>" alt="Chapter Image" class="img-fluid">
         </div>
         <div class="chapter-content">
-            <div class="content-text">
+            <div class="content-text" style="white-space: pre-line;">
                 <p><?php echo $content_text; ?></p>
             </div>
             <div class="content-video">
-                <video src="<?php echo $content_video; ?>" controls></video>
+                <h2>Recap Video :</h2> <!-- Added heading for the video section -->
+                <video src="Videos/<?php echo $content_video; ?>" controls class="video-border"></video>
+
             </div>
+            <div class="end-of-chapter">
+                <span>End of Chapter</span>
+            </div>
+            <div class="after-end-chapter"></div>
         </div>
     </div>
 

@@ -1,0 +1,70 @@
+h1,
+h2 {
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+}
+
+.chapter-image {
+  text-align: center;
+  border: 1px solid #e8e8e8; /* Soft border color */
+  padding: 10px; /* Add padding for a visual separation */
+  margin-bottom: 50px;
+}
+
+.chapter-image img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
+
+.content-text {
+  font-family: "Comic Sans MS", cursive;
+  padding: 20px;
+  background-color: #f2f2f2; /* Replace with your desired background color */
+  border-radius: 5px;
+  margin-bottom: 80px;
+}
+
+.content-video video {
+  margin: 30px 0px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.end-of-chapter {
+  text-align: center;
+  margin-top: 200px;
+  position: relative;
+}
+
+.end-of-chapter:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0)
+  );
+  z-index: -1;
+}
+
+.end-of-chapter span {
+  background-color: #fff;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.after-end-chapter {
+  margin-top: 300px;
+  margin-bottom: 300px;
+}
+
+.video-border {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
