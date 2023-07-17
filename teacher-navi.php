@@ -26,6 +26,7 @@ $tid = $row['teac_id'];
                 <a class="skillsoft-logo" href="teacher-quiz.php">Skill<b>Soft.</b></a>
                 <nav>
                     <ul class="main-menu">
+                        <li><a href="teacher-course.php">Course</a></li>
                         <li><a href="teacher-quiz.php">Quizzes</a></li>
                         <li><a href="teacher-forum.php">Forum</a></li>
                         <li><a href="teacher-statistics.php">Statistics</a></li>
