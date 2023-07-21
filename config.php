@@ -1,13 +1,14 @@
 <?php
-$serverName = "localhost";
-$dbUsername = "root";
-$dbPass = "";
-$dbName = "childLearn";
+$dbHost = 'childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com'; // RDS endpoint
+$dbUsername = 'admin'; // RDS username
+$dbPassword = 'Admin123#'; // RDS password
+$dbName = 'childlearn'; // RDS database name
 
-$conn = mysqli_connect($serverName, $dbUsername, $dbPass, $dbName);
+// Create a conn
+$conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
 
+// Check conn
 if (!$conn) {
   die("ERROR: Could not connect. " . mysqli_connect_error());
 }
-
 ?>

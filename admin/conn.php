@@ -1,15 +1,14 @@
 <?php
-$server = "localhost";
-$username = "root";
-$password = "";
-$database = "childlearn";
+$dbHost = 'childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com'; // RDS endpoint
+$dbUsername = 'admin'; // RDS username
+$dbPassword = 'Admin123#'; // RDS password
+$dbName = 'childlearn'; // RDS database name
 
-$conn = mysqli_connect($server, $username, $password, $database);
+// Create a conn
+$conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
 
-if (mysqli_connect_errno()) {
-    echo "<script type='text/javascript'>alert('Failed to connect to MySQL.');</script>";
-    exit();
-}else{
-    #echo "<script type='text/javascript'>alert('Connection established.');</script>";
+// Check conn
+if (!$conn) {
+    die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 ?>
