@@ -9,7 +9,7 @@ if (isset($_POST['search'])) {
 }
 
 function executeQuery($query) {
-    $connect = mysqli_connect("localhost", "root", "", "childLearn");
+    $connect = mysqli_connect("childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com", "admin", "Admin123#", "childLearn");
     $result = mysqli_query($connect, $query);
     return $result;
 }
