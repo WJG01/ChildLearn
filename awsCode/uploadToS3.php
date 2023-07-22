@@ -6,9 +6,9 @@ use Aws\S3\Exception\S3Exception;
 
 // AWS credentials (Access Key and Secret Key)
 $credentials = new Aws\Credentials\Credentials(
-    'ASIA5WKXJVR5LEP2CZMH',
-    'Ahgal3uLGkChiZok4J2+1G9lG0T3WOK/cMRL6AbB',
-    'FwoGZXIvYXdzEEgaDDuS+cI2JJoKiITXnCK8Ace187GHPuI54vIsV8vbkfbjHDML8tFiG/PuIvhQghG4r9dtcpjQVfVaOciWiwG5qX/F8i9+orNN5W7PpvwfJ+uQDaDz/Vhig/vkzSrqdDg3lEOajQUZva6tdqWLkdMZeQKbgY35xE/HtelLtywfN0JYFst+8jn67vBOJXXzmhtAZfqWNPU8rtkuyKUrW04EfIJbsp0oxWTrnG+f92Pe7Od/XFXYgcRkaYIlxZ8OoSlle062UrP4BttKKkHXKIOr6qUGMi05khICcoQH7Nxf4A4Y7XqRrTiHmWN8bSbuMAgoEZ4H0mzGftDYD/pLO2/P/KA='
+    'ASIA5WKXJVR5M74H2EPQ',
+    '3Ws2l4u5f6iO6vztoODsk/pdYow9X4nxh3LWjemu',
+    'FwoGZXIvYXdzEFUaDLd/P5Mo1gmxYnrnGiK8AeGS077Zr66euYW0aOrBymmZ55NAN1rBhB7CJxkSbUeClYRkQiEVmyzDDncOWD+lD228cW0N+Q17jwEEHgYfG4o6W11OWVmTrT8uAgaroUeP/8+dcfC8xGYWYm51YgV4hpG1ddTPJWjKKqobnjMIjA1CTK7KKAyV4kS5wXNVefA595Lg8aGeS1kbx6Ogp3Y0Ws6EWgNBJjXOozi+wvsHudE48t6NO3NQhxIB4kTphxQ0QuyomBmm33O+sWgwKIqg7aUGMi0Gz1NzFy6MxoY/Rg5s5E4Ox/J3eAy8XiL1D0VQbYM0rd/hk6Z/Iyp3m7+emcs='
 );
 
 // AWS region where your S3 bucket is located
