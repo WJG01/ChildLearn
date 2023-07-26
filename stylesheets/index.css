@@ -1,153 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito&family=Roboto+Slab:wght@300&display=swap');
 
-@media screen and (max-width: 850px) {
-    #ads-container, #sign-up-teacher-column {
-        width: 100%;
-        height: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #ads-container {
-        flex-direction: column;
-        margin-bottom: 20px;
-    }
-
-    #ads-container .left-title {
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-        width: 100%;
-    }
-
-    #ads-container .content-des {
-        width: 100%;
-    }
-
-    #ads-container .right-img {
-        display: none;
-    }
-
-    #ads-container .content-des h1 {
-        font-size: 28px;
-    }
-
-    #ads-container .content-des p {
-        font-size: 18px;
-    }
-
-    #quiz-list-column {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 10px;
-        height: 100%;
-    }
-
-    #quiz-list-column .quiz-box {
-        justify-content: center;
-    }
-
-    #quiz-list-column .view-more-btn {
-        text-align: center;
-    }
-
-    #sign-up-teacher-column {
-        height: 100%;
-        margin-bottom: 100px;
-        flex-direction: column;
-    }
-
-    #sign-up-teacher-column .image-des {
-        width: 100%;
-        text-align: center;
-    }
-
-    #sign-up-teacher-column .des-learneasy {
-        width: 90%;
-        height: 100%;
-        margin: 0;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #sign-up-teacher-column .des-content {
-        margin: 0;
-        height: 100%;
-        text-align: center;
-    }
-
-    #sign-up-teacher-column .des-content p {
-        margin: 0;
-        font-size: 28px;
-    }
-
-    #sign-up-teacher-column .des-content h3 {
-        margin: 0;
-        margin-bottom: 20px;
-        text-align: justify;
-        font-size: 18px;
-    }
-}
-
-@media screen and (max-width: 1200px) {
-    #ads-container, #sign-up-teacher-column {
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #ads-container .left-title {
-        width: 90%;
-    }
-
-    #ads-container .content-des {
-        padding: 35px 0 34px 0;
-    }
-
-    #ads-container .right-img {
-        width: 60%;
-    }
-    
-    #quiz-list-column {
-        width: 80%;
-        height: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #quiz-list-column .quiz-box {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        flex-wrap: wrap;
-        height: 100%;
-    }
-
-    #quiz-list-column .quiz-box .quiz-card {
-        margin-right: 10px;
-    }
-
-    #sign-up-teacher-column img {
-        width: 80%;
-        height: 80%;
-    }
-
-    #sign-up-teacher-column .des-learneasy {
-        width: 90%;
-    }
-
-    #sign-up-teacher-column .des-content {
-        margin: 0;
-    }
-
-    #sign-up-teacher-column .des-content p {
-        margin-top: 0;
-    }
-
-}
-
 body {
     margin: 0;
     padding: 0;
@@ -230,6 +83,84 @@ body {
     height:100%;
     object-fit: fit;
 }
+
+/* .ads-container {
+    width: 1202px;
+    height: 370px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 90px;
+    display: flex;
+    flex-direction: row;
+}
+
+.ads-container .left-title {
+    width: 50%;
+    height: 100%;
+}
+
+.ads-container .left-title .content-des {
+    padding: 65px 0 64px 0;
+}
+
+.ads-container .left-title .content-des h1 {
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 49px;
+    color: #50514F;
+    margin-bottom: 10px;
+    margin-top: 0px;
+}
+
+.ads-container .left-title .content-des p {
+    max-width: 464px;
+    min-height: 75px;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: justify;
+    color: #50514F;
+    margin-top: 0px;
+    margin-bottom: 18px;
+}
+
+.ads-container .left-title .content-des .learn-more {
+    height: 40px;
+    padding: 7px 33px 7px 33px;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    color: #FFFFFF;
+    background-color: #FA8334;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-decoration: none;
+}
+
+.ads-container .left-title .content-des .learn-more:hover {
+    color: #FA8334;
+    background-color: #FFFFFF;
+    transition: 0.6s;
+}
+
+.ads-container .right-img {
+    width: 50%;
+    height: 100%;
+}
+
+.ads-container .right-img img {
+    width:80%;
+    height:100%;
+    object-fit: fit;
+} */
 
 .join-account-column {
     width: 1254px;
@@ -461,6 +392,153 @@ body {
     color: #FA8334;
     background-color: #FFFFFF;
     transition: 0.6s;
+}
+
+@media screen and (max-width: 1200px) {
+    .ads-container, #sign-up-teacher-column {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .ads-container .left-title {
+        width: 90%;
+    }
+
+    .ads-container .content-des {
+        padding: 35px 0 34px 0;
+    }
+
+    .ads-container .right-img {
+        width: 60%;
+    }
+    
+    #quiz-list-column {
+        width: 80%;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #quiz-list-column .quiz-box {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-wrap: wrap;
+        height: 100%;
+    }
+
+    #quiz-list-column .quiz-box .quiz-card {
+        margin-right: 10px;
+    }
+
+    #sign-up-teacher-column img {
+        width: 80%;
+        height: 80%;
+    }
+
+    #sign-up-teacher-column .des-learneasy {
+        width: 90%;
+    }
+
+    #sign-up-teacher-column .des-content {
+        margin: 0;
+    }
+
+    #sign-up-teacher-column .des-content p {
+        margin-top: 0;
+    }
+
+}
+
+@media screen and (max-width: 850px) {
+    .ads-container, #sign-up-teacher-column {
+        width: 100%;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .ads-container {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .ads-container .left-title {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        width: 100%;
+    }
+
+    .ads-container .content-des {
+        width: 100%;
+    }
+
+    .ads-container .right-img {
+        display: none;
+    }
+
+    .ads-container .content-des h1 {
+        font-size: 28px;
+    }
+
+    .ads-container .content-des p {
+        font-size: 18px;
+    }
+
+    #quiz-list-column {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        height: 100%;
+    }
+
+    #quiz-list-column .quiz-box {
+        justify-content: center;
+    }
+
+    #quiz-list-column .view-more-btn {
+        text-align: center;
+    }
+
+    #sign-up-teacher-column {
+        height: 100%;
+        margin-bottom: 100px;
+        flex-direction: column;
+    }
+
+    #sign-up-teacher-column .image-des {
+        width: 100%;
+        text-align: center;
+    }
+
+    #sign-up-teacher-column .des-learneasy {
+        width: 90%;
+        height: 100%;
+        margin: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #sign-up-teacher-column .des-content {
+        margin: 0;
+        height: 100%;
+        text-align: center;
+    }
+
+    #sign-up-teacher-column .des-content p {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    #sign-up-teacher-column .des-content h3 {
+        margin: 0;
+        margin-bottom: 20px;
+        text-align: justify;
+        font-size: 18px;
+    }
 }
 
 
