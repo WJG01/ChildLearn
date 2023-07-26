@@ -1,7 +1,7 @@
 <?php
 
 define('EMAIL', 'childlearndaycare@gmail.com');
-define('PASSWORD', 'scxekehfvpqldgvy');
+define('PASSWORD', 'zfljpbdaxkwngjcj');
 
 
 define('DB_HOST', 'childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com');
