@@ -90,30 +90,18 @@ include "conn.php";
 
     <div class="category-course">
         <p>Quizzes by Category:</p>
-            <?php 
-                $language = "SELECT COUNT(*) AS language FROM quiz WHERE quiz_category = 'Language and Literacy'";
-                $result = mysqli_query($conn, $language);
-                $row = mysqli_fetch_assoc($result);
+            <?php
+            $sql = "SELECT quiz_category, COUNT(*) AS category_count FROM quiz GROUP BY quiz_category";
+            $result = mysqli_query($conn, $sql);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                ?>
+                <div class="language-cat">
+                    <h2><?php echo $row['quiz_category']; ?>: <b><?php echo $row['category_count']; ?> quizzes</b></h2>
+                </div>
+                <?php
+            }
             ?>
-        <div class="language-cat">
-            <h2>Language and Literacy: <b><?php echo $row['language']; ?> quizzes</b></h2>
-        </div>
-            <?php 
-                $mathematic = "SELECT COUNT(*) AS mathematic FROM quiz WHERE quiz_category = 'Mathematics and Logic'";
-                $result = mysqli_query($conn, $mathematic);
-                $row = mysqli_fetch_assoc($result);
-            ?>
-        <div class="mathematic-cat">
-            <h2>Mathematics and Logic: <b><?php echo $row['mathematic']; ?> quizzes</b></h2>
-        </div>
-            <?php 
-                $Science_and_Discovery = "SELECT COUNT(*) AS Science and Discovery FROM quiz WHERE quiz_category = 'Science and Discovery'";
-                $result = mysqli_query($conn, $Science_and_Discovery);
-                $row = mysqli_fetch_assoc($result);
-            ?>
-        <div class="Science and Discovery-cat">
-            <h2>Science and Discovery: <b><?php echo $row['Science and Discovery']; ?> quizzes</b></h2>
-        </div>
     </div>
    </div>
 
