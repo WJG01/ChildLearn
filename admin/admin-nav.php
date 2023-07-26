@@ -22,6 +22,7 @@
                             <li><a href="admin-mgadmin.php">Manage Admin</a></li>
                         </ul>
                     </li>
+                    <li><a href="admin-course.php">Manage Course&nbsp;</a>
                     <li><a href="admin-quiz.php">Manage Quiz&nbsp;</a>
                     <li><a href="admin-chatbot.php">Manage Chatbot&nbsp;</a>
                     </li>
