@@ -14,7 +14,7 @@
 
 <body>
     <?php include("visitor-navi.php"); ?>
-    <div class="ads-container" id="ads-container">
+    <div class="ads-container">
         <div class="left-title">
             <div class="content-des">
                 <h1>Make Learning <br> Awesome!</h1>
