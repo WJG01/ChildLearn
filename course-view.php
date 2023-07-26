@@ -122,7 +122,7 @@ require 'config.php';
 		$('#table').DataTable();
 		$('#new_question').click(function(){
 			$('#msg').html('')
-			$('#manage_question .modal-title').html('Add New Question')
+			$('#manage_question .modal-title').html('Add New Chapter')
 			$('#manage_question #question-frm').get(0).reset()
 			$('#manage_question').modal('show')
 		})
