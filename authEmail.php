@@ -1,20 +1,17 @@
 <?php
-
+use Aws\Sns\SnsClient;
+use Aws\Exception\AwsException;
 require_once 'vendor/autoload.php';
 require_once 'constant.php';
-
-// Create the Transport
-$transport = (new Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl'))
-  ->setUsername(EMAIL)
-  ->setPassword(PASSWORD);
-
-// Create the Mailer using your created Transport
-$mailer = new Swift_Mailer($transport);
 
 
 function sendVerificationEmail($userEmail, $token)
 {   
-    global $mailer; 
+    global $awsAccessKeyId, $awsSecretAccessKey;
+    $sns = new SnsClient([
+        'version' => 'latest',
+        'region' => 'us-east-1', // Change this to your desired AWS region
+    ]);
 
     $body = '<!DOCTYPE html>
     <html lang="en">
@@ -30,26 +27,51 @@ function sendVerificationEmail($userEmail, $token)
             <p>
                 Thank you for signing up on our website. Please click on the link below to verify your email.
             </p>
-            <a href="http://localhost/ChildLearn/verification.php?token=' . $token .'">Verify your email address now</a>
+            <a href="http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com/ChildLearn-sns/verification.php?token=' . $token .'">Verify your email address now</a>
         </div>
     </body>
     </html>'; 
 
-    // Create a message
-    $message = (new Swift_Message('Please verify your email address'))
-        ->setFrom(EMAIL)
-        ->setTo($userEmail)
-        ->setBody($body, 'text/html');
-        
+    try {
+    // Publish the email to the topic
+    $result = $sns->publish([
+        'TopicArn' => 'arn:aws:sns:us-east-1:941317794938:ChildLearnEmailTopic',
+        'Message' => $body,
+        'Subject' => 'Please verify your email address',
+        'MessageAttributes' => [
+            'email' => [
+                'DataType' => 'String',
+                'StringValue' => $userEmail,
+            ],
+            'token' => [
+                'DataType' => 'String',
+                'StringValue' => $token,
+            ],
+        ],
+    ]);
 
-    // Send the message
-    $result = $mailer->send($message);
-   
+    } catch (AwsException $e) {
+        // Catch any AWS-related exceptions and log the error message
+        $errorMessage = 'AWS Exception: ' . $e->getMessage();
+        logError($errorMessage);
+        // You can also choose to throw the exception again if you want to handle it further up the call stack.
+        // throw $e;
+    } catch (Exception $e) {
+        // Catch any other exceptions (non-AWS related) and log the error message
+        $errorMessage = 'Exception: ' . $e->getMessage();
+        logError($errorMessage);
+        // You can also choose to throw the exception again if you want to handle it further up the call stack.
+        // throw $e;
+    }
 }
 
 function sendPasswordResetLink($userEmail, $token)
 {
-    global $mailer; 
+    global $awsAccessKeyId, $awsSecretAccessKey;
+    $sns = new SnsClient([
+        'version' => 'latest',
+        'region' => 'us-east-1', // Change this to your desired AWS region
+    ]);
 
     $body = '<!DOCTYPE html>
     <html lang="en">
@@ -64,19 +86,71 @@ function sendPasswordResetLink($userEmail, $token)
 
                 Please click on the link below to reset your password.
             </p>
-            <a href="http://localhost/ChildLearn/verification.php?password-token=' . $token .'">Reset your password</a>
+            <a href="http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com/ChildLearn-sns/verification.php?password-token=' . $token .'">Reset your password</a>
         </div>
     </body>
     </html>'; 
 
-    // Create a message
-    $message = (new Swift_Message('Reset your password'))
-        ->setFrom(EMAIL)
-        ->setTo($userEmail)
-        ->setBody($body, 'text/html');
-        
+    try {
+    // Publish the email to the topic
+    $result = $sns->publish([
+        'TopicArn' => 'arn:aws:sns:us-east-1:941317794938:ChildLearnEmailTopic',
+        'Message' => $body,
+        'Subject' => 'Reset your password',
+        'MessageAttributes' => [
+            'email' => [
+                'DataType' => 'String',
+                'StringValue' => $userEmail,
+            ],
+            'password-token' => [
+                'DataType' => 'String',
+                'StringValue' => $token,
+            ],
+        ],
+    ]);  
 
-    // Send the message
-    $result = $mailer->send($message);  
+    } catch (AwsException $e) {
+        // Catch any AWS-related exceptions and log the error message
+        $errorMessage = 'AWS Exception: ' . $e->getMessage();
+        logError($errorMessage);
+        // You can also choose to throw the exception again if you want to handle it further up the call stack.
+        // throw $e;
+    } catch (Exception $e) {
+        // Catch any other exceptions (non-AWS related) and log the error message
+        $errorMessage = 'Exception: ' . $e->getMessage();
+        logError($errorMessage);
+        // You can also choose to throw the exception again if you want to handle it further up the call stack.
+        // throw $e;
+    }
 }
 
+
+
+function subscribeEmail($userEmail, $token)
+{
+    $filterPolicy = [
+        'email' => [$userEmail],
+        'password-token' => [$token]
+    ];
+
+    $sns = new SnsClient([
+        'version' => 'latest',
+        'region' => 'us-east-1', // Change this to your desired AWS region
+    ]);
+    try {
+        // Subscribe the endpoint to the topic
+        $result = $sns->subscribe([
+            'TopicArn' => 'arn:aws:sns:us-east-1:941317794938:ChildLearnEmailTopic',
+            'Protocol' => 'email', // Use 'email' for email subscription
+            'Endpoint' => $userEmail,
+            'FilterPolicy' => json_encode($filterPolicy),
+        ]);
+
+        // Optionally, you can print the subscription ARN if needed
+        $subscriptionArn = $result->get('SubscriptionArn');
+    } catch (\Aws\Exception\AwsException $e) {
+        // Handle the exception, log, or display the error message
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+?>
