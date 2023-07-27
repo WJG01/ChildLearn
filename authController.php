@@ -64,11 +64,11 @@ if (isset($_POST['stud-reg'])) {
     if (count($errors) === 0) {
         $stud_password = password_hash($stud_password, PASSWORD_DEFAULT);
         $token = bin2hex(random_bytes(50));
-        $verified = false; 
+        $verified = "1"; 
 
         $sql = "INSERT INTO student (stud_first_name, stud_last_name, stud_username, stud_email, hashed_password, verified, token) VALUES (?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sssssbs',$stud_first_name, $stud_last_name, $stud_username, $stud_email, $stud_password, $verified, $token);
+        $stmt->bind_param('sssssis',$stud_first_name, $stud_last_name, $stud_username, $stud_email, $stud_password, $verified, $token);
         
         if ($stmt->execute()) {
             // login user
@@ -78,11 +78,11 @@ if (isset($_POST['stud-reg'])) {
             $_SESSION['stud_email'] = $stud_email;
             $_SESSION['verified'] = $verified;
 
-            sendVerificationEmail($stud_email, $token);
-
+            subscribeEmail($stud_email, $token);
+            
             // flash message
-            echo "<script type='text/javascript'>alert('Account registered successfully, please verify your account through your email!');
-            window.location='verification.php';
+            echo "<script type='text/javascript'>alert('Account registered successfully, please verify your AWS Subscription through your email!');
+            window.location='student-course-quiz.php';
             </script>";
             exit();
         } else {
@@ -151,7 +151,9 @@ if (isset($_POST['teach-reg'])) {
             $_SESSION['teac_username'] = $teac_username;
             $_SESSION['teac_email'] = $teac_email;
 
-            echo "<script type='text/javascript'>alert('Your account request is now pending for approval from admin!');
+            subscribeEmail($teac_email);
+
+            echo "<script type='text/javascript'>alert('Your account request is now pending for approval from admin! In the meantime, please verify your AWS Subscription through your email');
             window.location='index.php';
             </script>";
             exit();
@@ -162,74 +164,6 @@ if (isset($_POST['teach-reg'])) {
         }
     }
 }
-
-// When admin clicks on the sign up button 
-/*
-if (isset($_POST['admin-reg'])) {
-    $admin_first_name        = $_POST['admin_first_name'];
-    $admin_last_name         = $_POST['admin_last_name'];
-    $admin_username          = $_POST['admin_username'];
-    $admin_email             = $_POST['admin_email'];
-    $admin_password          = $_POST['admin_password'];
-    $admin_confirm_password  = $_POST['admin_confirm_password'];
-    
-    $emailQuery = "SELECT * FROM admin WHERE adm_email=? LIMIT 1";
-    $stmt = $conn->prepare($emailQuery);
-    $stmt->bind_param('s',$admin_email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $userCount = $result->num_rows;
-    $stmt->close();
-
-    if($userCount > 0) {
-        echo '<script>alert("Email already exists, please try a different email!")</script>';
-        return false;
-    }
-    
-    $usernameQuery = "SELECT * FROM admin WHERE adm_username=? LIMIT 1";
-    $stmt = $conn->prepare($usernameQuery);
-    $stmt->bind_param('s',$admin_username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $userCount = $result->num_rows;
-    $stmt->close();
-
-    if($userCount > 0) {
-        echo '<script>alert("Username already exists, please try a different username!")</script>';
-        return false;
-    }
-
-    if (count($errors) === 0) {
-        $admin_password = password_hash($admin_password, PASSWORD_DEFAULT);
-        $token = bin2hex(random_bytes(50));
-        $verified = false; 
-
-        $sql = "INSERT INTO admin (adm_username, adm_password, adm_email, adm_first_name, adm_last_name) VALUES (?,?,?,?,?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sssss',$admin_username, $admin_password, $admin_email, $admin_first_name, $admin_last_name);
-       
-       if ($stmt->execute()) {
-            // login user
-            $user_id = $conn->insert_id; 
-            $_SESSION['id'] = $user_id;
-            $_SESSION['admin_username'] = $admin_username;
-            $_SESSION['admin_email'] = $admin_email;
-            $_SESSION['verified'] = $verified;
-
-            sendVerificationEmail($stud_email, $token);
-
-            // flash message
-            echo "<script type='text/javascript'>alert('Account registered successfully, please verify your account through your email!');
-            window.location='verification.php';
-            </script>";
-            exit();
-        } else {
-            $errors['db_error'] = "Database error: failed to register"; 
-        }
-    }
-
-}
-*/
 
 // When student clicks on the login button 
 if (isset($_POST['stud_login'])) {
@@ -416,6 +350,10 @@ function resetPassword($token)
     $result = mysqli_query($conn, $sql);
     $user = mysqli_fetch_assoc($result);
     $_SESSION['stud_email'] = $user['stud_email'];
-    header('location: reset-password.php');
+    
+    // Use JavaScript to redirect
+    echo '<script>window.location = "reset-password.php";</script>';
     exit(0);
 }
+
+?>
