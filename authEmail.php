@@ -73,23 +73,13 @@ function sendPasswordResetLink($userEmail, $token)
         'region' => 'us-east-1', // Change this to your desired AWS region
     ]);
 
-    $body = '<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTD-8">
-        <title>Verify Email</title>
-    </head>
-    <body>
-        <div class="wrapper">
-            <p>
-                Hello there, 
+    $body = '
+            Hello there, 
 
-                Please click on the link below to reset your password.
-            </p>
-            <a href="http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com/ChildLearn-sns/verification.php?password-token=' . $token .'">Reset your password</a>
-        </div>
-    </body>
-    </html>'; 
+            Please click on the link below to reset your password.
+          
+            http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com/ChildLearn-sns/verification.php?password-token=' . $token .'
+            '; 
 
     try {
     // Publish the email to the topic
@@ -153,4 +143,3 @@ function subscribeEmail($userEmail, $token)
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-?>
