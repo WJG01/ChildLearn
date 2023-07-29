@@ -31,6 +31,38 @@
     </div>
 
     <div class="quiz-list-column" id="quiz-list-column">
+        <h1>Courses</h1>
+        <div class="quiz-box">
+            <?php
+            include("config.php");
+            $sql = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count FROM course
+            INNER JOIN course_chapter ON course.course_id = course_chapter.course_id
+            GROUP BY course.course_id
+            ORDER BY RAND()
+            LIMIT 4";
+            $result = mysqli_query($conn, $sql);
+            while ($row = mysqli_fetch_array($result)) {
+            ?>
+                <a class="quiz-link" href="student-course-details.php?course_id=<?php echo $row['course_id']; ?>">
+                    <div class="quiz-card">
+                        <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
+                        <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                        <div class="quiz-tag">
+                            <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
+                            <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
+                        </div>
+                    </div>
+                </a>
+            <?php
+            }
+            ?>
+        </div>
+        <div class="view-more-btn">
+            <a href="student-course-quiz.php">View More</a>
+        </div>
+    </div>
+
+    <div class="quiz-list-column" id="quiz-list-column">
         <h1>Quizzes</h1>
         <div class="quiz-box">
             <?php

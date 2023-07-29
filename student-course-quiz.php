@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 
 if (!isset($_SESSION['id'])) {
@@ -6,6 +8,7 @@ if (!isset($_SESSION['id'])) {
     echo '<script>location.href="index.php"</script>';
 }
 include("config.php");
+include("awsCode/S3operation.php");
 
 $log_userid = $_SESSION['id'];
 $sql = "SELECT * FROM student WHERE stud_id = '$log_userid' LIMIT 1";
@@ -45,6 +48,7 @@ $row = mysqli_fetch_array($result);
         </div>
     </div>
 
+
     <!-- Course tab -->
     <div id="all-course" class="tabcontent">
         <div class="quiz-container">
@@ -66,8 +70,7 @@ $row = mysqli_fetch_array($result);
                     ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
-                                <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                            <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">                                <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
                                     <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>

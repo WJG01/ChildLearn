@@ -230,7 +230,7 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['log_username'] = $user['teac_username'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                window.location='teacher-quiz.php';
+                window.location='teacher-course.php';
                 </script>";
                 exit();
             } 

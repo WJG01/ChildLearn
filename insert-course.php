@@ -1,7 +1,7 @@
 <?php
 
 require 'config.php';
-require 'awsCode/uploadToS3.php';
+require 'awsCode/S3operation.php';
 
 if (isset($_POST['insert-course'])) {
 	$title  		= $_POST['course_title'];
@@ -19,7 +19,7 @@ if (isset($_POST['insert-course'])) {
 		if ($uploadResult) {
 			echo 'File uploaded successfully to S3!';
 			// Save the uploaded file name to the $image variable
-			$image = basename($uploadedFile['name']);
+            $image = 'courseCover_' . $title . '_' . basename($uploadedFile['name']);
 		} else {
 			echo 'File upload failed.';
 		}
