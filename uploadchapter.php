@@ -17,7 +17,7 @@ if(isset($_POST['insert-chapter']))
     }
 
     if (isset($_FILES['video'])) {
-        $target_dir = "Images/";
+        $target_dir = "Videos/";
         $target_file = $target_dir.basename($_FILES['video']['name']);
         move_uploaded_file($_FILES['video']['tmp_name'], $target_file);
         $video = $_FILES['video']['name'];
