@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheets/visi-faq.css">
+    <link rel="stylesheet" href="stylesheets/visi-nav.css">
+    <link rel="stylesheet" href="stylesheets/visi-footer.css">
+    <link rel="icon" type="image/png" href="../Images/skillsoft-favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/8e94eefdff.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>FAQ Page</title>
+</head>
+
+<body>
+
+    <!-- Top Nav Bar  -->
+    <section class="top-nav-bar" style="z-index:50;" id="top-nav-bar">
+        <div class="left-nav" id="left-nav">
+            <a class="skillsoft-logo" href="/index.php">Child<b>Learn.</b></a>
+            <a href="#" class="icon" id="menu-btn">
+                <i class="fa fa-bars"></i>
+            </a>
+            <nav>
+                <ul class="main-menu">
+                    <li><a href="student-course-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
+                        <ul class="sub-menu" style="z-index:50;">
+                            <li><a href="show-quiz.php?cat=Language and Literacy">Language and Literacy Quiz</a></li>
+                            <li><a href="show-quiz.php?cat=Mathematics and Logic">Mathematics and Logic Quiz</a></li>
+                            <li><a href="show-quiz.php?cat=Science and Discovery">Science and Discovery Quiz</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="student-forum.php">Forum</a></li>
+                    <li><a href="visitor-faq.php">FAQ</a></li>
+                    <li><a href="visitor-aboutus.php">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right-nav" id="right-nav">
+            <a id="signin-btn" class="sign-in" href="#">Sign In</a>
+            <a id="signup-btn" class="sign-up" href="#">Sign Up</a>
+        </div>
+
+        <div id="signin-modal" class="signin-modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="signin-close">&times;</span>
+                <p>Sign In</p>
+                <div class="account-login-information">
+                    <!--Form to collect data when login, username and password-->
+
+                    <form class="signin-form" method="POST" id="signup">
+                        <div class="selection">
+                            <div class="selector-div">
+                                <input type="radio" id="roleStud" class="role-selection" name="roleSelector" value="student" checked>
+                                <label class="selection-label" for="roleStud">Student</label>
+                            </div>
+                            <div class=seperateline-stu-and-tea></div>
+                            <div class="selector-div">
+                                <input type="radio" id="roleTea" class="role-selection" name="roleSelector" value="teacher">
+                                <label class="selection-label" for="roleTea">Teacher</label>
+                            </div>
+                        </div>
+                        <div class="acc-details">
+                            <i class="fas fa-user-circle"></i>
+                            <input class="acc-username" type="text" id="student" name="log_username" placeholder="Username" required>
+                        </div>
+                        <div class="acc-details">
+                            <i class="fas fa-unlock-alt icon"></i>
+                            <input class="acc-password" type="password" id="password" name="log_password" placeholder="Password" required>
+                        </div>
+                        <div class="showpass">
+                            <input type="checkbox" id="showPass">
+                            <label for="terms">
+                                View your password
+                            </label>
+                        </div>
+                        <div class="sign-in-btn">
+                            <input type="submit" name="stud_login" value="Sign In">
+                        </div>
+                    </form>
+                    <div class="forgot-pass">
+                        <span>Forgot Password?<a href="forgot-password.php">&nbspReset your Password</a></span>
+                    </div>
+                    <hr class="divide-line-signin">
+                    <div class="have-account">
+                        <label for="have-an-account">
+                            Don't have an account? <a class="signup-btn" href="#" id="signup-btn">&nbspSign Up</a>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="signup-modal" class="signup-modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="signup-close">&times;</span>
+                <p>Choose your account type</p>
+                <div class="signup-option">
+                    <div class="left-teac-ops">
+                        <a class="teac-signup-link" href="teacher-signup.php">
+                            <div class="teac-card">
+                                <div class="teac-img">
+                                    <img src="Images/teac-signup.png">
+                                </div>
+                                <div class="teac-title">
+                                    <h2>Teacher</h2>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="right-stud-ops">
+                        <a class="stud-signup-link" href="student-signup.php">
+                            <div class="stud-card">
+                                <div class="stud-img">
+                                    <img src="Images/stud-signup.png">
+                                </div>
+                                <div class="stud-title">
+                                    <h2>Student</h2>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <hr class="divide-line">
+                <p class="have-an-account" style="text-align:center;">
+                    Already have an account?<a href="#" class="signin-btn">&nbspSign In</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Body Content  -->
+    <div class="faq-title" id="faq-title">
+        <p>How can we help you?</p>
+    </div>
+
+    <div class="faq-help" id="faq-help">
+        <div class="faq-box">
+            <div class="account-setup">
+                <i class="fas fa-user"></i>
+                <h1>Account Setup</h1>
+                <h2>Get started on <br>ChildLearn</h2>
+                <div class="overlay">
+                    <p>Account Setup</p>
+                    <div class="questions">
+                        <h2><a href="#1">Create a ChildLearn Account</a></h2>
+                        <h3><a href="#2">Update Account Info</a></h3>
+                        <h4><a href="#3">Delete an Account</a></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-box">
+            <div class="enrollment">
+                <i class="fas fa-layer-group"></i>
+                <h1>Join Quiz</h1>
+                <h2>Join a quiz on <br>ChildLearn</h2>
+                <div class="overlay">
+                    <p>Join Quiz</p>
+                    <div class="questions">
+                        <h2><a href="#4">Join a Quiz</a></h2>
+                        <h3><a href="#5">Search a Quiz</a></h3>
+                        <h4><a href="#6">View Quiz Result</a></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-box">
+            <div class="troubleshooting">
+                <i class="fas fa-wrench"></i>
+                <h1>General</h1>
+                <h2>Common Problems</h2>
+                <div class="overlay">
+                    <p>Trouble Shooting</p>
+                    <div class="questions">
+                        <h2><a href="#7">Unable to Login Account</a></h2>
+                        <h3><a href="#8">Can't Solve Your Issues?</a></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="faq-word" id="faq-word">Frequently Asked Questions</p>
+    <div class="faq-container" id="faq-container">
+        <div class="faq-content">
+            <details id="1">
+                <summary id="faq-question">
+                    <span>
+                        Create a ChildLearn Account
+                    </span>
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 10px; font-size: 18px;">Here are the steps to create an account with SkillSoft</p>
+                <li>1. Login to childLearn from a browser, and click on the sign-up on the top right corner.</li>
+                <li>2. Select the type of Account best suitable to you. Types of accounts include: Student and Teacher.</li>
+                <li style="list-style-type: none;">For students, you can register as a "Student" where you can test some quiz questions.</li>
+                <li style="list-style-type: none;">For teacher, you can register as a "Teacher" to start create your own quiz!</li>
+                <li>3. Fill in all the require information.</li>
+                <li>4. Click on "Sign Up" and you are all set! Cheers.</li>
+                <li>5. After that, a verification link will send to your registered email address to verify your account.</li>
+                <li>6. Once account has been verified, you can now login to your account.</li>
+            </details>
+            <details id="2">
+                <summary id="faq-question">
+                    <span>
+                        Update Account Info
+                    </span>
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 10px; font-size: 18px;">Here are the steps to update your account</p>
+                <li>1. Login to your ChildLearn account, mouse over to "My Account" and click on "Profile" from the drop down list.</li>
+                <li style="list-style-type: none;">In profile settings, you can upload your profile picture, update your username and update your name.</li>
+                <li style="list-style-type: none;">In account settings, you can update you login information such as password and email address.</li>
+                <li>2. Make sure to click on "Save" to update your latest info.</li>
+            </details>
+            <details id="3">
+                <summary id="faq-question">
+                    <span>
+                        Delete an Account
+                    </span>
+                </summary>
+                <li>To delete your account, just a simple click on "Delete Account" from Account Settings Page.</li>
+                <li style="list-style-type: none;">Please take note that all of your account data including running and completed quizzes, etc.
+                    will be deleted and you will not be able to sign in to this account. You will be logged out from this account once you click on the confirm button below.</li>
+            </details>
+            <details id="4">
+                <summary id="faq-question">
+                    <span>
+                        Join a Quiz
+                    </span>
+                </summary>
+                <li>1. Search or browse a Quiz.</li>
+                <li style="list-style-type: none;">In ChildLearn, we provide Language and Literacy, Mathematics and Logic, Science and Discovery and more quizzes for all the students.</li>
+                <li>2. Click on the quiz card, to start the quiz.</li>
+                <li>3. You will be redirected and start to attempt your quiz, a timer will notify you when the time is up.</li>
+                <li style="list-style-type: none;">Start a quiz now! Enjoy.</li>
+            </details>
+            <details id="5">
+                <summary id="faq-question">
+                    <span>
+                        Search a Quiz
+                    </span>
+                </summary>
+                <li>1. To search for a quiz, just simply browse into the quiz category you looking for.</li>
+                <li style="list-style-type: none;">For examples: Mathematics and Logic Quiz => Click on "View More" button and it will only
+                    show related quiz to you. In the search column, enter the keywords and click on the search icon. The related or similar
+                    result will list down to you.</li>
+            </details>
+            <details id="6">
+                <summary id="faq-question">
+                    <span>
+                        View Quiz Result
+                    </span>
+                </summary>
+                <li>1. Click on the "Complete" button once you complete a quiz.</li>
+                <li>2. You will be redirected to a result page where you can view your:</li>
+                <li style="list-style-type: none;">Ranking, Score, Correct and Incorrect information.</li>
+                <li>3. Once you have review all the questions and answers, click on "Back" to the Quiz Homepage.</li>
+            </details>
+            <details id="7">
+                <summary id="faq-question">
+                    <span>
+                        Unable to Login Account
+                    </span>
+                </summary>
+                <li>1. If you unable to login with the registered information, check the steps below:</li>
+                <li style="list-style-type: none;">Make sure to click on the verification link to verify your account. </li>
+                <li style="list-style-type: none;">Still unable to login? Try to reset your password.</li>
+                <li>2. If you have try the steps above but still unable to login at the end. Please drop us an email to
+                    <a style="color: #FA8334" href="mailto: childlearndaycare@gmail.com">childlearndaycare@gmail.com</a>
+                </li>
+            </details>
+            <details id="8">
+                <summary id="faq-question">
+                    <span>
+                        Can't Solve Your Issues?
+                    </span>
+                </summary>
+                <li style="list-style-type: none;">Please contact us at: <a style="color: #FA8334" href="mailto: childlearndaycare@gmail.com">childlearndaycare@gmail.com</a></li>
+            </details>
+        </div>
+    </div>
+
+
+    <!-- Bottom Footer Bar  -->
+    <footer>
+        <hr class="seperate-line">
+        <div class="skillsoft-footer" id="skillsoft-footer">
+            <div class="logo-and-social">
+                <a class="skillsoft-logo" href="#">Child<b>Learn.</b></a>
+                <p class="company-des">ChildLearn provide multiple features to make a classroom fun, interactive and engaging. Quizzes for everyone in anywhere.</p>
+                <div class="social-icon">
+                    <div class="facebook social-odd">
+                        <a href="https://www.facebook.com/apuniversity" target="_NEW"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                    <div class="insta social-odd">
+                        <a href="https://www.instagram.com/asiapacificuniversity/" target="_NEW"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    <div class="twitter social-odd">
+                        <a href="https://twitter.com/apumalaysia" target="_NEW"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-menu">
+                <a href="#">Quizzes</a>
+                <a href="#">Forum</a>
+                <a href="#">FAQ</a>
+                <a href="https://childlearn-bucket.s3.amazonaws.com/aboutus/visitor-aboutus.html" target="_blank">About Us</a>
+                <a href="https://childlearn-bucket.s3.amazonaws.com/aboutus/visitor-term.html" target="_blank">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

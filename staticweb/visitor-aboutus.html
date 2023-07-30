@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheets/visi-aboutus.css">
+    <link rel="stylesheet" href="stylesheets/visi-nav.css">
+    <link rel="stylesheet" href="stylesheets/visi-footer.css">
+    <link rel="icon" type="image/png" href="../Images/skillsoft-favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/8e94eefdff.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>About Us Page</title>
+</head>
+
+<body>
+
+    <!-- Top Nav Bar  -->
+    <section class="top-nav-bar" style="z-index:50;" id="top-nav-bar">
+        <div class="left-nav" id="left-nav">
+            <a class="skillsoft-logo" href="/index.php">Child<b>Learn.</b></a>
+            <a href="#" class="icon" id="menu-btn">
+                <i class="fa fa-bars"></i>
+            </a>
+            <nav>
+                <ul class="main-menu">
+                    <li><a href="student-course-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
+                        <ul class="sub-menu" style="z-index:50;">
+                            <li><a href="show-quiz.php?cat=Language and Literacy">Language and Literacy Quiz</a></li>
+                            <li><a href="show-quiz.php?cat=Mathematics and Logic">Mathematics and Logic Quiz</a></li>
+                            <li><a href="show-quiz.php?cat=Science and Discovery">Science and Discovery Quiz</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="student-forum.php">Forum</a></li>
+                    <li><a href="visitor-faq.php">FAQ</a></li>
+                    <li><a href="visitor-aboutus.php">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right-nav" id="right-nav">
+            <a id="signin-btn" class="sign-in" href="#">Sign In</a>
+            <a id="signup-btn" class="sign-up" href="#">Sign Up</a>
+        </div>
+
+        <div id="signin-modal" class="signin-modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="signin-close">&times;</span>
+                <p>Sign In</p>
+                <div class="account-login-information">
+                    <!--Form to collect data when login, username and password-->
+
+                    <form class="signin-form" method="POST" id="signup">
+                        <div class="selection">
+                            <div class="selector-div">
+                                <input type="radio" id="roleStud" class="role-selection" name="roleSelector"
+                                    value="student" checked>
+                                <label class="selection-label" for="roleStud">Student</label>
+                            </div>
+                            <div class=seperateline-stu-and-tea></div>
+                            <div class="selector-div">
+                                <input type="radio" id="roleTea" class="role-selection" name="roleSelector"
+                                    value="teacher">
+                                <label class="selection-label" for="roleTea">Teacher</label>
+                            </div>
+                        </div>
+                        <div class="acc-details">
+                            <i class="fas fa-user-circle"></i>
+                            <input class="acc-username" type="text" id="student" name="log_username"
+                                placeholder="Username" required>
+                        </div>
+                        <div class="acc-details">
+                            <i class="fas fa-unlock-alt icon"></i>
+                            <input class="acc-password" type="password" id="password" name="log_password"
+                                placeholder="Password" required>
+                        </div>
+                        <div class="showpass">
+                            <input type="checkbox" id="showPass">
+                            <label for="terms">
+                                View your password
+                            </label>
+                        </div>
+                        <div class="sign-in-btn">
+                            <input type="submit" name="stud_login" value="Sign In">
+                        </div>
+                    </form>
+                    <div class="forgot-pass">
+                        <span>Forgot Password?<a href="forgot-password.php">&nbspReset your Password</a></span>
+                    </div>
+                    <hr class="divide-line-signin">
+                    <div class="have-account">
+                        <label for="have-an-account">
+                            Don't have an account? <a class="signup-btn" href="#" id="signup-btn">&nbspSign Up</a>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="signup-modal" class="signup-modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="signup-close">&times;</span>
+                <p>Choose your account type</p>
+                <div class="signup-option">
+                    <div class="left-teac-ops">
+                        <a class="teac-signup-link" href="teacher-signup.php">
+                            <div class="teac-card">
+                                <div class="teac-img">
+                                    <img src="Images/teac-signup.png">
+                                </div>
+                                <div class="teac-title">
+                                    <h2>Teacher</h2>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="right-stud-ops">
+                        <a class="stud-signup-link" href="student-signup.php">
+                            <div class="stud-card">
+                                <div class="stud-img">
+                                    <img src="Images/stud-signup.png">
+                                </div>
+                                <div class="stud-title">
+                                    <h2>Student</h2>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <hr class="divide-line">
+                <p class="have-an-account" style="text-align:center;">
+                    Already have an account?<a href="#" class="signin-btn">&nbspSign In</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="" id="dropdown-list">
+        <a class="skillsoft-logo" href="index.php">SkillSoft.</a>
+        <ul class="main-menu">
+            <li><a href="student-course-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
+                <ul class="sub-menu" style="z-index:50;">
+                    <li><a href="show-quiz.php?cat=Language and Literacy">Language and Literacy Quiz</a></li>
+                    <li><a href="show-quiz.php?cat=Mathematics and Logic">Mathematics and Logic Quiz</a></li>
+                    <li><a href="show-quiz.php?cat=Science and Discovery">Science and Discovery Quiz</a></li>
+                </ul>
+            </li>
+            <li><a href="student-forum.php">Forum</a></li>
+            <li><a href="visitor-faq.php">FAQ</a></li>
+            <li><a href="visitor-aboutus.php">About Us</a></li>
+        </ul>
+    </div>
+
+
+
+    <!-- Body Content  -->
+    <div class="about-cover" id="about-cover">
+        <img src="../Images/about-cover.png">
+    </div>
+
+    <div class="about-container" id="about-container">
+        <h1 class="about-title">About Us</h1>
+        <span>Jump to:</span>
+        <div class="jump-btn">
+            <a href="#jump-to-mission">Mission</a>
+            <a class="value-btn" href="#jump-to-values">Values</a>
+        </div>
+        <div class="about-content">
+            <p>
+                ChildLearn is a responsive online learning website that aims to enhance student’s learning
+                quality from different educational backgrounds such as students from the Information Technology course,
+                Mathematics and Logic course, Language and Literacy course and much more. The main objective of
+                ChildLearn is to assess students’ knowledge towards a
+                specific academic domain while having a major goal to spark interest in subjects such as information
+                technology. ChildLearn also
+                hopes to assist students to grasp technical concepts while preparing them for real university exams as
+                an effort in increasing their
+                problem solving and critical thinking skills. ChildLearn, similarly like Kahoot specializes in providing
+                various quizzes for users to answer
+                questions and gain new knowledge. It contains different quizzes in a multiple-choice question (MCQ)
+                format where students would be able to choose one
+                correct answer out of a total of four choices which are A, B, C, and D. Each quiz has a specific time
+                limit and points would be accumulated
+                for every question that were answered correctly within the specific quiz. Students would also be able to
+                view their results once they have completed the quiz.
+            </p>
+        </div>
+        <div class="mission-content">
+            <h1 id="jump-to-mission">Mission</h1>
+            <h3>Make learning awesome!</h3>
+            <p>
+                To make learning awesome! At ChildLearn!, we are all about lifelong learning. In life, we learn new
+                skills through curiosity and play.
+                By combining the two, in a fun and social way, we can unlock the learning potential within all of us, no
+                matter the subject, age or ability.
+                <br><br>
+                Unleashing this potential within every learner is what drives us, which is why we are on a mission to
+                make learning awesome. We do this by creating
+                engaging and impactful experiences for our users, and through our vision of building the leading
+                learning platform in the world.
+            </p>
+        </div>
+        <div class="values-content">
+            <h1 id="jump-to-values">Values</h1>
+            <div class="values-column-3">
+                <div class="val-col-left">
+                    <div class="col-img">
+                        <img src="../Images/about-us-1.png">
+                    </div>
+                    <span>We are playful</span>
+                    <p>
+                        Play is the first language we learn.
+                        When we make learning fun, we make it engaging for everyone.
+                    </p>
+                </div>
+                <div class="val-col-middle">
+                    <div class="col-img">
+                        <img src="../Images/about-us-2.png">
+                    </div>
+                    <span>We are curious</span>
+                    <p>
+                        Curiosity is part of human nature, and it lies at the heart of all great endeavors.
+                    </p>
+                </div>
+                <div class="val-col-right">
+                    <div class="col-img">
+                        <img src="../Images/about-us-3.png">
+                    </div>
+                    <span>We are inclusive</span>
+                    <p>
+                        We’re team players and ChildLearn strives to ensure that everyone has the chance to succeed.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Footer Bar  -->
+    <footer>
+        <hr class="seperate-line">
+        <div class="skillsoft-footer" id="skillsoft-footer">
+            <div class="logo-and-social">
+                <a class="skillsoft-logo" href="#">Child<b>Learn.</b></a>
+                <p class="company-des">ChildLearn provide multiple features to make a classroom fun, interactive and
+                    engaging. Quizzes for everyone in anywhere.</p>
+                <div class="social-icon">
+                    <div class="facebook social-odd">
+                        <a href="https://www.facebook.com/apuniversity" target="_NEW"><i
+                                class="fab fa-facebook-f"></i></a>
+                    </div>
+                    <div class="insta social-odd">
+                        <a href="https://www.instagram.com/asiapacificuniversity/" target="_NEW"><i
+                                class="fab fa-instagram"></i></a>
+                    </div>
+                    <div class="twitter social-odd">
+                        <a href="https://twitter.com/apumalaysia" target="_NEW"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-menu">
+                <a href="#">Quizzes</a>
+                <a href="#">Forum</a>
+                <a href=" https://childlearn-bucket.s3.amazonaws.com/aboutus/visitor-faq.html" target="_blank">FAQ</a>
+                <a href="#">About Us</a>
+                <a href="https://childlearn-bucket.s3.amazonaws.com/aboutus/visitor-term.html" target="_blank">Terms</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
