@@ -1,3 +1,28 @@
+<?php
+require 'vendor/autoload.php'; // Include the AWS SDK for PHP
+
+
+use Pkerrigan\Xray\Trace;
+use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
+
+Trace::getInstance()
+    ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+    ->setName('FirstTesting')
+    ->setUrl($_SERVER['REQUEST_URI'])
+    ->setMethod($_SERVER['REQUEST_METHOD'])
+    ->begin(100);
+
+$_SESSION['traceID'] = Trace::getInstance()->getTraceId();
+$_SESSION['parentID'] = Trace::getInstance()->getId();
+
+
+?>
+
+<?php
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,3 +189,16 @@
 </body>
 
 </html>
+
+
+
+<?php
+
+Trace::getInstance()
+    ->end()
+    ->setResponseCode(http_response_code())
+    ->setError(http_response_code() >= 400 && http_response_code() < 500)
+    ->setFault(http_response_code() >= 500)
+    ->submit(new DaemonSegmentSubmitter());
+
+?>
