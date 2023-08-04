@@ -34,6 +34,7 @@ class ComposerStaticInit5db7c2cd3f2c2a85d774205f2a8541b4
         array (
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
+            'Pkerrigan\\Xray\\' => 15,
         ),
         'J' => 
         array (
@@ -89,6 +90,10 @@ class ComposerStaticInit5db7c2cd3f2c2a85d774205f2a8541b4
         'Psr\\Http\\Client\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'Pkerrigan\\Xray\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pkerrigan/xray/src',
         ),
         'JmesPath\\' => 
         array (

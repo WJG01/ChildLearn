@@ -751,6 +751,60 @@
             "install-path": "../mtdowling/jmespath.php"
         },
         {
+            "name": "pkerrigan/xray",
+            "version": "v1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/patrickkerrigan/php-xray.git",
+                "reference": "424ce104a936502f6350caf404e7e0f95d08ca7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/patrickkerrigan/php-xray/zipball/424ce104a936502f6350caf404e7e0f95d08ca7f",
+                "reference": "424ce104a936502f6350caf404e7e0f95d08ca7f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6"
+            },
+            "time": "2018-05-19T14:30:32+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Pkerrigan\\Xray\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Kerrigan",
+                    "homepage": "https://patrickkerrigan.uk/"
+                }
+            ],
+            "description": "A basic PHP instrumentation library for AWS X-Ray",
+            "keywords": [
+                "AWS X-Ray",
+                "X-Ray",
+                "apm",
+                "aws",
+                "tracing"
+            ],
+            "support": {
+                "issues": "https://github.com/patrickkerrigan/php-xray/issues",
+                "source": "https://github.com/patrickkerrigan/php-xray/tree/master"
+            },
+            "install-path": "../pkerrigan/xray"
+        },
+        {
             "name": "psr/http-client",
             "version": "1.0.2",
             "version_normalized": "1.0.2.0",

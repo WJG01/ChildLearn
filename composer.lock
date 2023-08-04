@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c35122408ec420f8ddfe47755a310fd",
+    "content-hash": "18a3b6b34233f9840eefd70d00cac21f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -728,6 +728,57 @@
                 "source": "https://github.com/jmespath/jmespath.php/tree/2.6.1"
             },
             "time": "2021-06-14T00:11:39+00:00"
+        },
+        {
+            "name": "pkerrigan/xray",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/patrickkerrigan/php-xray.git",
+                "reference": "424ce104a936502f6350caf404e7e0f95d08ca7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/patrickkerrigan/php-xray/zipball/424ce104a936502f6350caf404e7e0f95d08ca7f",
+                "reference": "424ce104a936502f6350caf404e7e0f95d08ca7f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pkerrigan\\Xray\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Kerrigan",
+                    "homepage": "https://patrickkerrigan.uk/"
+                }
+            ],
+            "description": "A basic PHP instrumentation library for AWS X-Ray",
+            "keywords": [
+                "AWS X-Ray",
+                "X-Ray",
+                "apm",
+                "aws",
+                "tracing"
+            ],
+            "support": {
+                "issues": "https://github.com/patrickkerrigan/php-xray/issues",
+                "source": "https://github.com/patrickkerrigan/php-xray/tree/master"
+            },
+            "time": "2018-05-19T14:30:32+00:00"
         },
         {
             "name": "psr/http-client",
