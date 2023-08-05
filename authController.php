@@ -12,7 +12,6 @@ use Pkerrigan\Xray\Trace;
 use Pkerrigan\Xray\SqlSegment;
 use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 
-
 // Trace::getInstance()
 //     ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
 //     ->setParentId($_SESSION['parent_id'])
@@ -22,6 +21,17 @@ use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 //     ->setUrl($_SERVER['REQUEST_URI'])
 //     ->setMethod($_SERVER['REQUEST_METHOD'])
 //     ->begin(100);
+
+
+// Trace::getInstance()
+//     ->getCurrentSegment()
+//     ->addSubsegment(
+//         (new SqlSegment())
+//             ->setName('cleanconnect1')
+//             ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+//             ->setDatabaseType('MySQL Community')
+//             ->begin(100)
+//     );
 
 // // Start X-Ray for load data from RDS
 // $sqlSegment = (new SqlSegment())
@@ -215,28 +225,28 @@ if (isset($_POST['teach-reg'])) {
 //X-Ray Tracking RDS
 // When student / teacher clicks on the login button 
 if (isset($_POST['stud_login'])) {
-    Trace::getInstance()
-        ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-        ->setParentId($_SESSION['parent_id'])
-        ->setTraceId($_SESSION['trace_id'])
-        ->setIndependent(true)
-        ->setName('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
-        ->setUrl($_SERVER['REQUEST_URI'])
-        ->setMethod($_SERVER['REQUEST_METHOD'])
-        ->begin(100);
+    // Trace::getInstance()
+    //     ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+    //     ->setParentId($_SESSION['parent_id'])
+    //     ->setTraceId($_SESSION['trace_id'])
+    //     ->setIndependent(true)
+    //     ->setName('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+    //     ->setUrl($_SERVER['REQUEST_URI'])
+    //     ->setMethod($_SERVER['REQUEST_METHOD'])
+    //     ->begin(100);
 
-    // Start X-Ray for load data from RDS
-    $sqlSegment = (new SqlSegment())
-        ->setName('load user data from RDS')
-        ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
-        ->setDatabaseType('MySQL Community');
+    // // Start X-Ray for load data from RDS
+    // $sqlSegment = (new SqlSegment())
+    //     ->setName('load user data from RDS')
+    //     ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+    //     ->setDatabaseType('MySQL Community');
 
-    Trace::getInstance()
-        ->getCurrentSegment()
-        ->addSubsegment(
-            $sqlSegment
-                ->begin(100)
-        );
+    // Trace::getInstance()
+    //     ->getCurrentSegment()
+    //     ->addSubsegment(
+    //         $sqlSegment
+    //             ->begin(100)
+    //     );
 
     $role = $_POST['roleSelector'];
     $log_username = $_POST['log_username'];
@@ -245,6 +255,32 @@ if (isset($_POST['stud_login'])) {
     if ($role === 'student') {
         // validation
         if (count($errors) === 0) {
+
+            Trace::getInstance()
+                ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+                ->setParentId($_SESSION['parent_id'])
+                ->setTraceId($_SESSION['trace_id'])
+                ->setIndependent(true)
+                ->setName('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+                ->setUrl($_SERVER['REQUEST_URI'])
+                ->setMethod($_SERVER['REQUEST_METHOD'])
+                ->begin(100);
+
+
+            Trace::getInstance()
+                ->getCurrentSegment()
+                ->addSubsegment(
+                    (new SqlSegment())
+                        ->setName('cleanconnect1')
+                        ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+                        ->setDatabaseType('MySQL Community')
+                        ->begin(100)
+                );
+
+
+
+
+
             $sql = "SELECT * FROM student WHERE stud_email=? OR stud_username=? LIMIT 1";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('ss', $log_username, $log_username);
@@ -252,8 +288,6 @@ if (isset($_POST['stud_login'])) {
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
 
-            $sqlSegment->setQuery($sql)
-                ->end();
 
             Trace::getInstance()
                 ->end()

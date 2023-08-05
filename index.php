@@ -57,7 +57,6 @@ Trace::getInstance()
         <h1>Courses</h1>
         <div class="quiz-box">
             <?php
-            include("config.php");
             $sql = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count FROM course
             INNER JOIN course_chapter ON course.course_id = course_chapter.course_id
             GROUP BY course.course_id
@@ -89,7 +88,6 @@ Trace::getInstance()
         <h1>Quizzes</h1>
         <div class="quiz-box">
             <?php
-            include("config.php");
             $sql = "SELECT *, (SELECT COUNT(quques_id) FROM quiz_question qq WHERE (qq.quiz_id = q.quiz_id)) AS totalquestion 
                 , (SELECT COUNT(stud_id) FROM history h WHERE (h.quques_id = qq.quques_id)) AS totalplays FROM quiz q INNER JOIN quiz_question qq 
                 WHERE (qq.quiz_id = q.quiz_id) ORDER BY RAND() LIMIT 4";
