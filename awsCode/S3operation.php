@@ -4,14 +4,22 @@ require 'vendor/autoload.php'; // Include the AWS SDK for PHP
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
+use Pkerrigan\Xray\Trace;
+use Pkerrigan\Xray\RemoteSegment;
+use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // AWS credentials (Access Key and Secret Key)
 $credentials = new Aws\Credentials\Credentials(
-    'ASIA5WKXJVR5DOYHZGHC',
-    'dHJB1Pwb56U1xXuJvczjqltW3E/a/BY3HWm8wywp',
-    'FwoGZXIvYXdzEAEaDNTXdmyCWoPzCBeVFyK8AfZ3gVkSZl4ZR7N2GlOH75ZvRFk/eyqdc9NH207hemW0wGX04Exx3AYN5KeK9aQTM/tSxArKc6vcuaXcSMXsBkXJmAGlk9HCR/RgwWb10dEle1jEq8qpaM0bwqgC4cPhVz1A2Z7+hJe0b/J1hko5bmk135TbOVTA09h8bEvDL57KQmotrygWHl5JiTAnb7q+DQvqxPCAFdw2weyYt4NMMqhfIKUqcTfStaDWrLZRotRhGgL5TJMFQ/UP6+KDKNX/kqYGMi2xUD7EhRdCUi5yxnCDpzwjgFj+toqvfma7kPSqy0Yem1gDtr/SVjBQQ99TrgI='
+    'ASIA5WKXJVR5DUOGVQED',
+    'igAwC+f+073AIkduEuXkjZdzAKX9KGzkEvrNBWmQ',
+    'FwoGZXIvYXdzEKT//////////wEaDIB+pnOgFlJIuSbSdyK8AXgTY6umnT9bPC+zcmMjjrRe53+jshzF5eBd+CMsd6u1qpB1icnCOS64Wsujh3ucH2Z2MPSl29AlOEfYyKk4AowjoCPMfGYdf3lyCng+UlNnl0a3rUscFzwSjLoWOFpqAEGWPq6zQhnN234SDB5DFe0woX4CqyDYEvEL5WiKYHONrkDgOiG/X9JWiR/oQa9/zlVk/wW8WVG5sQrWoSebhYPjxmz5A9LOc8rUS6YC1WDXVmBMQjNMTRZS8TJWKJHutqYGMi0bLhYUYehx9S2ZDvXBVAJvNVoiETY6SjRK1YRuwMTZdTy4exji5cn7rlrPIYI='
 );
 
 // AWS region where your S3 bucket is located
@@ -19,6 +27,9 @@ $region = 'us-east-1';
 
 // S3 bucket name
 $bucketName = 'childlearn-bucket';
+
+
+
 
 function uploadToS3($fileType, $file)
 {
@@ -38,27 +49,89 @@ function uploadToS3($fileType, $file)
         die('Invalid fileType. Must be "image" or "video".');
     }
 
+
     try {
+        // Start X-Ray Tracing for S3
+        Trace::getInstance()
+            ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+            ->setParentId($_SESSION['parent_id'])
+            ->setTraceId($_SESSION['trace_id'])
+            ->setIndependent(true)
+            ->setName('cleanconnect-image')
+            ->setUrl($_SERVER['REQUEST_URI'])
+            ->setMethod($_SERVER['REQUEST_METHOD'])
+            ->begin(100);
+
+        Trace::getInstance()
+            ->getCurrentSegment()
+            ->addSubsegment(
+                (new RemoteSegment())
+                    ->setName('s3://cleanconnect-image/images/')
+                    ->begin(100)
+            );
+
         // Create an S3 client
         $s3Client = new S3Client([
             'version' => 'latest',
-            'region' => $region,
-            'credentials' => $credentials,
+            'region' => $region
         ]);
 
-        // Upload the file to the specified S3 bucket and folder
-        $result = $s3Client->putObject([
-            'Bucket' => $bucketName,
-            'Key' => $targetFolder . basename($file['name']),
-            'Body' => fopen($file['tmp_name'], 'rb'),
-            'ACL' => 'public-read', // Optional: Set the ACL to make the uploaded file publicly accessible
-            'ContentType' => $file['type'], // Set the content type based on the file type (e.g., image/jpeg, video/mp4)
-            'ContentDisposition' => 'inline', // Set the Content-Disposition header to display the file inline
-        ]);
 
-        return $result;
-    } catch (S3Exception $e) {
-        echo 'Error uploading file to S3: ' . $e->getMessage();
+        try {
+
+            // Upload the file to the specified S3 bucket and folder
+            $result = $s3Client->putObject([
+                'Bucket' => $bucketName,
+                'Key' => $targetFolder . basename($file['name']),
+                'Body' => fopen($file['tmp_name'], 'rb'),
+                'ACL' => 'public-read', // Optional: Set the ACL to make the uploaded file publicly accessible
+                'ContentType' => $file['type'], // Set the content type based on the file type (e.g., image/jpeg, video/mp4)
+                'ContentDisposition' => 'inline', // Set the Content-Disposition header to display the file inline
+            ]);
+
+            // End X-Ray for upload image to S3
+            Trace::getInstance()
+                ->getCurrentSegment()
+                ->end();
+
+            Trace::getInstance()
+                ->end()
+                ->setResponseCode(http_response_code())
+                ->submit(new DaemonSegmentSubmitter());
+
+
+            print_r('s3 traces i print' . Trace::getInstance());
+
+            return $result;
+        } catch (S3Exception $e) {
+            echo 'Error uploading file to S3: ' . $e->getMessage();
+
+            //  End X-Ray Tracing: Error to Upload Image
+            Trace::getInstance()
+                ->getCurrentSegment()
+                ->setError(true)
+                ->addAnnotation('error', 'Error uploading image. Error code: ')
+                ->end();
+
+            Trace::getInstance()
+                ->end()
+                ->setResponseCode(http_response_code())
+                ->submit(new DaemonSegmentSubmitter());
+        }
+    } catch (Aws\Exception\AwsException $e) {
+        echo 'Error creating S3 client: ' . $e->getMessage();
+
+        //End X-Ray Tracing: Error to Upload Image
+        Trace::getInstance()
+            ->getCurrentSegment()
+            ->setError(true)
+            ->addAnnotation('error', 'Error creating S3 client: ' . $e->getMessage())
+            ->end();
+
+        Trace::getInstance()
+            ->end()
+            ->setResponseCode(http_response_code())
+            ->submit(new DaemonSegmentSubmitter());
     }
 }
 

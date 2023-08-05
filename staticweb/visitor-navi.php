@@ -167,9 +167,7 @@
                 signinmodal.style.display = "none";
             }
 
-            <
-            !--Modal Box
-        for Sign Up-- >
+
         var signupmodal = document.getElementById("signup-modal");
         var signupbtn = document.getElementById("signup-btn");
         var signupspan = document.getElementsByClassName("signup-close")[0];

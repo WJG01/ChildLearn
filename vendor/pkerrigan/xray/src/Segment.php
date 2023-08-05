@@ -9,6 +9,8 @@ use Pkerrigan\Xray\Submission\SegmentSubmitter;
  *
  * @author Patrick Kerrigan (patrickkerrigan.uk)
  * @since 13/05/2018
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Segment implements JsonSerializable
 {
@@ -21,6 +23,10 @@ class Segment implements JsonSerializable
      * @var string
      */
     protected $parentId;
+    /**
+     * @var string
+     */
+    protected $traceId;
     /**
      * @var string|null
      */
@@ -49,6 +55,26 @@ class Segment implements JsonSerializable
      * @var bool
      */
     protected $sampled = false;
+    /**
+     * @var bool
+     */
+    protected $independent = false;
+    /**
+     * @var int|null
+     */
+    protected $awsAccountId = null;
+    /**
+     * @var string[]
+     */
+    private $annotations;
+    /**
+     * @var string[]
+     */
+    private $metadata;
+    /**
+     * @var int
+     */
+    private $lastOpenSegment = 0;
 
     public function __construct()
     {
@@ -175,6 +201,25 @@ class Segment implements JsonSerializable
     }
 
     /**
+     * @param string $traceId
+     * @return static
+     */
+    public function setTraceId(string $traceId)
+    {
+        $this->traceId = $traceId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTraceId(): string
+    {
+        return $this->traceId;
+    }
+
+    /**
      * @return bool
      */
     public function isOpen(): bool
@@ -183,13 +228,59 @@ class Segment implements JsonSerializable
     }
 
     /**
+     * @param bool $independent
+     * @return static
+     */
+    public function setIndependent(bool $independent)
+    {
+        $this->independent = $independent;
+
+        return $this;
+    }
+
+    /**
+     * @param int $awsAccountId
+     * @return $this
+     */
+    public function setAwsAccountId(int $awsAccountId)
+    {
+        $this->awsAccountId = $awsAccountId;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     * @return static
+     */
+    public function addAnnotation(string $key, string $value)
+    {
+        $this->annotations[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param $value
+     * @return static
+     */
+    public function addMetadata(string $key, $value)
+    {
+        $this->metadata[$key] = $value;
+
+        return $this;
+    }
+
+    /**
      * @return Segment
      */
     public function getCurrentSegment(): Segment
     {
-        foreach ($this->subsegments as $subsegment) {
-            if ($subsegment->isOpen()) {
-                return $subsegment->getCurrentSegment();
+        for ($max = count($this->subsegments); $this->lastOpenSegment < $max; $this->lastOpenSegment++) {
+            if ($this->subsegments[$this->lastOpenSegment]->isOpen()) {
+                return $this->subsegments[$this->lastOpenSegment]->getCurrentSegment();
             }
         }
 
@@ -199,17 +290,30 @@ class Segment implements JsonSerializable
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_filter([
             'id' => $this->id,
             'parent_id' => $this->parentId,
+            'trace_id' => $this->traceId,
             'name' => $this->name ?? null,
             'start_time' => $this->startTime,
             'end_time' => $this->endTime,
             'subsegments' => empty($this->subsegments) ? null : $this->subsegments,
+            'type' => $this->independent ? 'subsegment' : null,
             'fault' => $this->fault,
-            'error' => $this->error
+            'error' => $this->error,
+            'annotations' => empty($this->annotations) ? null : $this->annotations,
+            'metadata' => empty($this->metadata) ? null : $this->metadata,
+            'aws' => $this->serialiseAwsData(),
+        ]);
+    }
+
+    protected function serialiseAwsData(): array
+    {
+        return array_filter([
+            'account_id' => $this->awsAccountId,
         ]);
     }
 }

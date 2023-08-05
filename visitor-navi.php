@@ -149,7 +149,7 @@
     <script>
         const targetDiv = document.getElementById("dropdown-list");
         const btn = document.getElementById("menu-btn");
-        btn.onclick = function() {
+        btn.onclick = function () {
             if (targetDiv.style.display !== "none") {
                 targetDiv.style.display = "none";
             } else {
@@ -167,9 +167,7 @@
                 signinmodal.style.display = "none";
             }
 
-            <
-            !--Modal Box
-        for Sign Up-- >
+        <!--Modal Box for Sign Up-->
         var signupmodal = document.getElementById("signup-modal");
         var signupbtn = document.getElementById("signup-btn");
         var signupspan = document.getElementsByClassName("signup-close")[0];
@@ -205,11 +203,12 @@
 
         //show and hide password jquery
         $(document).ready(function() {
-            $("#showPass").change(function() {
-                $(this).prop("checked") ? $("#password").prop("type", "text") : $("#password").prop("type", "password");
+            $("#showPass").change(function(){
+                $(this).prop("checked") ?  $("#password").prop("type", "text") : $("#password").prop("type", "password");    
             });
         });
     </script>
 </body>
-
 </html>
+
+
