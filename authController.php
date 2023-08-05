@@ -1,8 +1,7 @@
 <?php
 
-if (!isset($_SESSION)) {
-    session_start();
-}
+session_start();
+
 
 require 'db.php';
 require_once 'authEmail.php';
@@ -13,28 +12,35 @@ use Pkerrigan\Xray\Trace;
 use Pkerrigan\Xray\SqlSegment;
 use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 
-Trace::getInstance()
-    ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-    ->setParentId($_SESSION['parent_id'])
-    ->setTraceId($_SESSION['trace_id'])
-    ->setIndependent(true)
-    ->setName('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
-    ->setUrl($_SERVER['REQUEST_URI'])
-    ->setMethod($_SERVER['REQUEST_METHOD'])
-    ->begin(100);
 
-// Start X-Ray for load data from RDS
-Trace::getInstance()
-    ->getCurrentSegment()
-    ->addSubsegment(
-        (new SqlSegment())
-            ->setName('load user data from RDS')
-            ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
-            ->setDatabaseType('MySQL Community')
-            ->begin(100)
-    );
+// Trace::getInstance()
+//     ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+//     ->setParentId($_SESSION['parent_id'])
+//     ->setTraceId($_SESSION['trace_id'])
+//     ->setIndependent(true)
+//     ->setName('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+//     ->setUrl($_SERVER['REQUEST_URI'])
+//     ->setMethod($_SERVER['REQUEST_METHOD'])
+//     ->begin(100);
+
+// // Start X-Ray for load data from RDS
+// $sqlSegment = (new SqlSegment())
+//     ->setName('load user data from RDS')
+//     ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+//     ->setDatabaseType('MySQL Community');
+
+// Trace::getInstance()
+//     ->getCurrentSegment()
+//     ->addSubsegment(
+//         $sqlSegment
+//             ->begin(100)
+//     );
 
 
+// Trace::getInstance()
+//     ->getCurrentSegment()
+//     ->setQuery($query)
+//     ->end();
 
 $errors = array();
 
@@ -71,6 +77,8 @@ if (isset($_POST['stud-reg'])) {
     $result = $stmt->get_result();
     $userCount = $result->num_rows;
     $stmt->close();
+
+    // collect_db_xray_traces($carry_forward_query);
 
     if ($userCount > 0) {
         echo '<script>alert("Email already exists, please try a different email!")</script>';
@@ -190,7 +198,7 @@ if (isset($_POST['teach-reg'])) {
             $_SESSION['teac_username'] = $teac_username;
             $_SESSION['teac_email'] = $teac_email;
 
-            subscribeEmail($teac_email);
+            // subscribeEmail($teac_email);
 
             echo "<script type='text/javascript'>alert('Your account request is now pending for approval from admin! In the meantime, please verify your AWS Subscription through your email');
             window.location='index.php';
@@ -204,8 +212,32 @@ if (isset($_POST['teach-reg'])) {
     }
 }
 
+//X-Ray Tracking RDS
 // When student / teacher clicks on the login button 
 if (isset($_POST['stud_login'])) {
+    Trace::getInstance()
+        ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+        ->setParentId($_SESSION['parent_id'])
+        ->setTraceId($_SESSION['trace_id'])
+        ->setIndependent(true)
+        ->setName('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+        ->setUrl($_SERVER['REQUEST_URI'])
+        ->setMethod($_SERVER['REQUEST_METHOD'])
+        ->begin(100);
+
+    // Start X-Ray for load data from RDS
+    $sqlSegment = (new SqlSegment())
+        ->setName('load user data from RDS')
+        ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+        ->setDatabaseType('MySQL Community');
+
+    Trace::getInstance()
+        ->getCurrentSegment()
+        ->addSubsegment(
+            $sqlSegment
+                ->begin(100)
+        );
+
     $role = $_POST['roleSelector'];
     $log_username = $_POST['log_username'];
     $log_password = $_POST['log_password'];
@@ -219,6 +251,17 @@ if (isset($_POST['stud_login'])) {
             $stmt->execute();
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
+
+            $sqlSegment->setQuery($sql)
+                ->end();
+
+            Trace::getInstance()
+                ->end()
+                ->setResponseCode(http_response_code())
+                ->submit(new DaemonSegmentSubmitter());
+
+            echo 'HELLO';
+            print_r(Trace::getInstance());
 
             if ($user['verified'] == "0" && password_verify($log_password, $user['hashed_password'])) {
                 // login success
@@ -241,7 +284,6 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['verified'] = $user['verified'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                window.location='student-course-quiz.php';
                 </script>";
                 exit();
             } else {
@@ -340,6 +382,8 @@ function verifyUser($token)
 if (isset($_POST['forgot-password'])) {
     $stud_email = $_POST['stud_email'];
 
+    echo 'EMAIL PASSED ISS' . $stud_email;
+
     if (!filter_var($stud_email, FILTER_VALIDATE_EMAIL)) {
         echo "<script type='text/javascript'>alert('Email address is invalid!');
             window.location='forgot_password.php';
@@ -351,9 +395,34 @@ if (isset($_POST['forgot-password'])) {
         $result = mysqli_query($conn, $sql);
         $user = mysqli_fetch_assoc($result);
         $token = $user['token'];
+
+
+        // Start X-Ray for sending email using SNS
+        // Trace::getInstance()
+        //     ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+        //     ->setParentId($_SESSION['parent_id'])
+        //     ->setTraceId($_SESSION['trace_id'])
+        //     ->setIndependent(true)
+        //     ->setName('Send Email using SNS')
+        //     ->setUrl($_SERVER['REQUEST_URI'])
+        //     ->setMethod($_SERVER['REQUEST_METHOD'])
+        //     ->begin(100);
+
+        // echo 'HELLO';
+        // // Print the Trace ID
+        // print_r(Trace::getInstance());
+
+        //sending email here
         sendPasswordResetLink($stud_email, $token);
+
+        // End X-Ray for sending email using SNS
+        // Trace::getInstance()
+        //     ->end()
+        //     ->setResponseCode(http_response_code())
+        //     ->submit(new DaemonSegmentSubmitter());
+
         echo "<script type='text/javascript'>alert('An email has been successfully sent to your email address with a link to reset your password.');
-            window.location='index.php';
+            
             </script>";
         exit(0);
     }
@@ -391,3 +460,16 @@ function resetPassword($token)
     echo '<script>window.location = "reset-password.php";</script>';
     exit(0);
 }
+
+// function collect_db_xray_traces($query)
+// {
+//     Trace::getInstance()
+//         ->getCurrentSegment()
+//         ->setQuery($query)
+//         ->end();
+
+//     Trace::getInstance()
+//         ->end()
+//         ->setResponseCode(http_response_code())
+//         ->submit(new DaemonSegmentSubmitter());
+// }

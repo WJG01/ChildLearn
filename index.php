@@ -2,9 +2,9 @@
 include("config.php");
 require 'vendor/autoload.php'; // Include the AWS SDK for PHP
 
-if (!isset($_SESSION)) {
-    session_start();
-}
+
+session_start();
+
 
 
 use Pkerrigan\Xray\Trace;
@@ -17,16 +17,6 @@ Trace::getInstance()
     ->setMethod($_SERVER['REQUEST_METHOD'])
     ->begin(100);
 
-$_SESSION['trace_id'] = Trace::getInstance()->getTraceId();
-$_SESSION['parent_id'] = Trace::getInstance()->getId();
-
-echo 'HELLO';
-// Print the Trace ID
-print_r(Trace::getInstance());
-
-?>
-
-<?php
 
 
 ?>
@@ -206,5 +196,12 @@ Trace::getInstance()
     ->end()
     ->setResponseCode(http_response_code())
     ->submit(new DaemonSegmentSubmitter());
+
+$_SESSION['trace_id'] = Trace::getInstance()->getTraceId();
+$_SESSION['parent_id'] = Trace::getInstance()->getId();
+
+echo 'HELLO';
+// Print the Trace ID
+print_r(Trace::getInstance());
 
 ?>
