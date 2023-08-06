@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
 include('config.php');
 require_once 'authController.php';
 
@@ -44,7 +46,6 @@ $sid = $row['stud_id'];
                         <i class=" fas fa-caret-right"></i>
                     </button>
                     <input type="email" name="stud_email" value="<?php echo $row['stud_email']; ?>" id="email" hidden>
-                    <?php echo $row['stud_email']; ?>
                     <button type="submit" value="forgot password" class="name-3-set" name="forgot-password">
                         Forget Password
                         <i class="fas fa-caret-right"></i>

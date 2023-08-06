@@ -13,7 +13,7 @@ use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 Trace::getInstance()
     ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
     ->setName('ElasticBeanStalk')
-    ->setUrl($_SERVER['REQUEST_URI'])
+    ->setUrl('http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com')
     ->setMethod($_SERVER['REQUEST_METHOD'])
     ->begin(100);
 

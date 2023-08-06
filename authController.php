@@ -196,14 +196,14 @@ if (isset($_POST['stud_login'])) {
         ->setParentId($_SESSION['parent_id'])
         ->setTraceId($_SESSION['trace_id'])
         ->setIndependent(true)
-        ->setName('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+        ->setName('Amazon RDS Service')
         ->setUrl($_SERVER['REQUEST_URI'])
         ->setMethod($_SERVER['REQUEST_METHOD'])
         ->begin(100);
 
     $sqlSegment = new SqlSegment();
     $sqlSegment
-        ->setName('childlearndb-1')
+        ->setName('rds: load data')
         ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
         ->setDatabaseType('MySQL Community')
         //->setQuery("SELECT * FROM student")
@@ -248,7 +248,7 @@ if (isset($_POST['stud_login'])) {
 
             Trace::getInstance()
                 ->end()
-                ->setResponseCode("400")
+                ->setResponseCode(http_response_code())
                 ->submit(new DaemonSegmentSubmitter());
 
             echo 'HELLO';
@@ -317,6 +317,22 @@ if (isset($_POST['stud_login'])) {
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
 
+            echo 'Success run result';
+
+            $sqlSegment->setQuery("SELECT * FROM student;");
+            $sqlSegment->end();
+
+            sleep(3);
+
+
+            Trace::getInstance()
+                ->end()
+                ->setResponseCode(http_response_code())
+                ->submit(new DaemonSegmentSubmitter());
+
+            echo 'HELLO';
+            print_r(Trace::getInstance());
+
             if ($user['teac_status'] == "Verified" && password_verify($log_password, $user['teac_password'])) {
                 // login success
                 $_SESSION['teach_id'] = $user['teac_id'];
@@ -324,7 +340,6 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['log_username'] = $user['teac_username'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                window.location='teacher-course.php';
                 </script>";
                 exit();
             } else if ($user['teac_status'] == "Not Verified" && password_verify($log_password, $user['teac_password'])) {
@@ -403,18 +418,30 @@ function verifyUser($token)
 
 // if user clicks on the forgot password button
 if (isset($_POST['forgot-password'])) {
-    $stud_email = $_POST['stud_email'];
+
+    echo 'WHAT INSIDE HERE' . $_POST['teac_email'];
+
+
+    if (isset($_POST['stud_email'])) {
+        $passed_email = $_POST['stud_email'];
+        $sql = "SELECT * FROM student WHERE stud_email='$passed_email' LIMIT 1";
+    } else if (isset($_POST['teac_email'])) {
+        $passed_email = $_POST['teac_email'];
+        $sql = "SELECT * FROM teacher WHERE teac_email='$passed_email' LIMIT 1";
+    } else {
+        echo "<script type='text/javascript'>alert('Please select an email address!');
+                </script>";
+    }
 
     echo 'EMAIL PASSED ISS' . $stud_email;
 
-    if (!filter_var($stud_email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($passed_email, FILTER_VALIDATE_EMAIL)) {
         echo "<script type='text/javascript'>alert('Email address is invalid!');
             window.location='forgot_password.php';
             </script>";
     }
 
     if (count($errors) == 0) {
-        $sql = "SELECT * FROM student WHERE stud_email='$stud_email' LIMIT 1";
         $result = mysqli_query($conn, $sql);
         $user = mysqli_fetch_assoc($result);
         $token = $user['token'];
@@ -427,23 +454,38 @@ if (isset($_POST['forgot-password'])) {
             ->setParentId($_SESSION['parent_id'])
             ->setTraceId($_SESSION['trace_id'])
             ->setIndependent(true)
-            ->setName('Send Email using SNS')
+            ->setName('Simple Notification Service')
             ->setUrl($_SERVER['REQUEST_URI'])
             ->setMethod($_SERVER['REQUEST_METHOD'])
             ->begin(100);
 
+        // Set the trace ID and parent ID on the Trace object
+        // Trace::getInstance()
+        //     ->setTraceId($_SESSION['trace_id'])
+        //     ->setParentId($_SESSION['parent_id']);
 
+        // Start a new X-Ray trace
+        // Trace::getInstance()
+        //     ->begin(100);
+
+        // Add a remote segment for the SNS call
+        // Trace::getInstance()->getCurrentSegment()->addSubsegment(
+        //     (new RemoteSegment())
+        //         ->setName('forgot password')
+        //         ->begin(100)
+        // );
 
         Trace::getInstance()
-        ->getCurrentSegment()
-        ->addSubsegment(
-            (new RemoteSegment())
-                ->setName('forgot password')
-                ->begin()
-        );
+            ->getCurrentSegment()
+            ->addSubsegment(
+                (new RemoteSegment())
+                    ->setName('sns: send email')
+                    ->setClientName('SNS')
+                    ->begin()
+            );
 
         //sending email here
-        sendPasswordResetLink($stud_email, $token);
+        sendPasswordResetLink($passed_email, $token);
 
         Trace::getInstance()
             ->getCurrentSegment()
