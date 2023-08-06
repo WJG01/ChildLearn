@@ -239,7 +239,7 @@ if (isset($_POST['stud_login'])) {
             $sqlSegment->setQuery("SELECT * FROM student;");
             $sqlSegment->end();
 
-            sleep(3); 
+            sleep(3);
 
             // Trace::getInstance()
             //     ->getCurrentSegment()
@@ -432,28 +432,22 @@ if (isset($_POST['forgot-password'])) {
             ->setMethod($_SERVER['REQUEST_METHOD'])
             ->begin(100);
 
-        // Set the trace ID and parent ID on the Trace object
-        // Trace::getInstance()
-        //     ->setTraceId($_SESSION['trace_id'])
-        //     ->setParentId($_SESSION['parent_id']);
 
-        // Start a new X-Ray trace
-        // Trace::getInstance()
-        //     ->begin(100);
 
-        // Add a remote segment for the SNS call
-        // Trace::getInstance()->getCurrentSegment()->addSubsegment(
-        //     (new RemoteSegment())
-        //         ->setName('SNSSubscription')
-        //         ->begin(100)
-        // );
+        Trace::getInstance()
+        ->getCurrentSegment()
+        ->addSubsegment(
+            (new RemoteSegment())
+                ->setName('forgot password')
+                ->begin()
+        );
 
         //sending email here
         sendPasswordResetLink($stud_email, $token);
 
-        // Trace::getInstance()
-        //     ->getCurrentSegment()
-        //     ->end();
+        Trace::getInstance()
+            ->getCurrentSegment()
+            ->end();
 
         // End X-Ray for sending email using SNS
         Trace::getInstance()
