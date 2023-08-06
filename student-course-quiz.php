@@ -3,6 +3,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 
+require 'vendor/autoload.php'; // Include the AWS SDK for PHP
+use Pkerrigan\Xray\Trace;
+use Pkerrigan\Xray\RemoteSegment;
+use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
+
 if (!(isset($_SESSION['id']) || $_SESSION['teach_id'])) {
     echo '<script>alert("You must log in to your account first.")</script>';
     echo '<script>location.href="index.php"</script>';
@@ -87,6 +92,26 @@ $row = mysqli_fetch_array($result);
                     GROUP BY course.course_id
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
+
+                    // Start X-Ray Tracing for CloudFront- section-1
+                    Trace::getInstance()
+                        ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+                        ->setParentId($_SESSION['parent_id'])
+                        ->setTraceId($_SESSION['trace_id'])
+                        ->setIndependent(true)
+                        ->setName('Cloudfront Service')
+                        ->setUrl($_SERVER['REQUEST_URI'])
+                        ->setMethod($_SERVER['REQUEST_METHOD'])
+                        ->begin(100);
+
+                    Trace::getInstance()
+                        ->getCurrentSegment()
+                        ->addSubsegment(
+                            (new RemoteSegment())
+                                ->setName('cloudfront: load image')
+                                ->begin(100)
+                        );
+
                     while ($row = mysqli_fetch_array($result)) {
                     ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
@@ -101,6 +126,13 @@ $row = mysqli_fetch_array($result);
                         </a>
                     <?php
                     }
+
+                    //End X-Ray Tracing for CloudFront-section-1
+                    Trace::getInstance()
+                        ->getCurrentSegment()
+                        ->end();
+
+                    // print_r(Trace::getInstance());
                     ?>
                 </div>
             </div>
@@ -118,6 +150,11 @@ $row = mysqli_fetch_array($result);
                     GROUP BY course.course_id
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
+
+                    Trace::getInstance()
+                        ->getCurrentSegment()
+                        ->begin();
+
                     while ($row = mysqli_fetch_array($result)) {
                     ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
@@ -132,6 +169,9 @@ $row = mysqli_fetch_array($result);
                         </a>
                     <?php
                     }
+                    Trace::getInstance()
+                        ->getCurrentSegment()
+                        ->end();
                     ?>
                 </div>
             </div>
@@ -149,6 +189,10 @@ $row = mysqli_fetch_array($result);
                     GROUP BY course.course_id
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
+                    Trace::getInstance()
+                        ->getCurrentSegment()
+                        ->begin();
+
                     while ($row = mysqli_fetch_array($result)) {
                     ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
@@ -163,6 +207,17 @@ $row = mysqli_fetch_array($result);
                         </a>
                     <?php
                     }
+                    Trace::getInstance()
+                        ->getCurrentSegment()
+                        ->end();
+
+                    Trace::getInstance()
+                        ->end()
+                        ->setResponseCode(http_response_code())
+                        ->submit(new DaemonSegmentSubmitter());
+
+                    print_r(Trace::getInstance());
+
                     ?>
                 </div>
             </div>

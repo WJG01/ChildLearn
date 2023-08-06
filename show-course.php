@@ -1,6 +1,12 @@
 <?php
 session_start();
+
+use Pkerrigan\Xray\Trace;
+use Pkerrigan\Xray\RemoteSegment;
+use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
+
 include("config.php");
+include("awsCode/S3operation.php");
 
 if (isset($_SESSION['id'])) {
     $nav = "student-navi.php";
@@ -94,7 +100,6 @@ function executeQuery($query)
 
 <body>
     <section class="show-all-quiz" id="show-all-quiz">
-        <?php include("backBtn.php"); ?>
         <!-- <div class="title-and-search">
             <p class="show-quiz"><?php echo $row['course_category'] ?> Course</p>
             <div class="search-bar">
@@ -124,11 +129,31 @@ function executeQuery($query)
         <div class="quiz-card-list-all" id="quiz-card-list-all">
             <div class="quiz-box">
                 <?php
+
+                //Start X-Ray Tracing for CloudFront- section-1
+                Trace::getInstance()
+                    ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
+                    ->setParentId($_SESSION['parent_id'])
+                    ->setTraceId($_SESSION['trace_id'])
+                    ->setIndependent(true)
+                    ->setName('Cloudfront Service')
+                    ->setUrl($_SERVER['REQUEST_URI'])
+                    ->setMethod($_SERVER['REQUEST_METHOD'])
+                    ->begin(100);
+
+                Trace::getInstance()
+                    ->getCurrentSegment()
+                    ->addSubsegment(
+                        (new RemoteSegment())
+                            ->setName('cloudfront: load image')
+                            ->begin(100)
+                    );
+
                 while ($row = mysqli_fetch_array($result)) {
                 ?>
-                    <a class="quiz-link" href="student-course-details.php?course_id=<?php echo $row['course_id']; ?>">
+                    <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                         <div class="quiz-card">
-                            <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
+                            <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
                             <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                             <div class="quiz-tag">
                                 <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
@@ -165,6 +190,18 @@ function executeQuery($query)
                     </script>
                 <?php
                 }
+
+                //End X-Ray Tracing for CloudFront-section-1
+                Trace::getInstance()
+                    ->getCurrentSegment()
+                    ->end();
+
+                Trace::getInstance()
+                    ->end()
+                    ->setResponseCode(http_response_code())
+                    ->submit(new DaemonSegmentSubmitter());
+
+                print_r(Trace::getInstance());
                 ?>
             </div>
         </div>

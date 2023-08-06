@@ -65,7 +65,7 @@ Trace::getInstance()
             $result = mysqli_query($conn, $sql);
             while ($row = mysqli_fetch_array($result)) {
             ?>
-                <a class="quiz-link" href="student-course-details.php?course_id=<?php echo $row['course_id']; ?>">
+                <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                     <div class="quiz-card">
                         <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
                         <p class="quiz-title"><?php echo $row['course_title'] ?></p>
