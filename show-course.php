@@ -4,6 +4,8 @@ include("config.php");
 
 if (isset($_SESSION['id'])) {
     $nav = "student-navi.php";
+} else if (isset($_SESSION['teach_id'])) {
+    $nav = "teacher-navi.php";
 } else {
     echo '<script>alert("You must log in to your account first.")</script>';
     echo '<script>location.href="index.php"</script>';

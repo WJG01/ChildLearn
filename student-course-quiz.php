@@ -3,15 +3,21 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 
-if (!isset($_SESSION['id'])) {
+if (!(isset($_SESSION['id']) || $_SESSION['teach_id'])) {
     echo '<script>alert("You must log in to your account first.")</script>';
     echo '<script>location.href="index.php"</script>';
 }
 include("config.php");
 include("awsCode/S3operation.php");
 
-$log_userid = $_SESSION['id'];
-$sql = "SELECT * FROM student WHERE stud_id = '$log_userid' LIMIT 1";
+if (isset($_SESSION['id'])) {
+    $log_userid = $_SESSION['id'];
+    $sql = "SELECT * FROM student WHERE stud_id = '$log_userid' LIMIT 1";
+} else if (isset($_SESSION['teach_id'])) {
+    $log_userid = $_SESSION['teach_id'];
+    $sql = "SELECT * FROM teacher WHERE teac_id = '$log_userid' LIMIT 1";
+}
+
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_array($result);
 
@@ -33,10 +39,25 @@ $row = mysqli_fetch_array($result);
 </head>
 
 <body>
-    <?php include("student-navi.php"); ?>
+    <?php
+    if (isset($_SESSION['teach_id'])) {
+        include("teacher-navi.php");
+    } else {
+        include("student-navi.php");
+    }
+    ?>
 
     <div class="quiz-greetings" id="quiz-greetings">
-        <span class="quiz-greetings-title">Welcome Back, <b><?php echo $row['stud_first_name']; ?>&nbsp;<?php echo $row['stud_last_name']; ?></b></span>
+        <span class="quiz-greetings-title">Welcome Back, <b>
+                <?php
+                if (isset($_SESSION['id'])) {
+                    echo $row['stud_first_name']; ?>&nbsp;<?php echo $row['stud_last_name'];
+                                                        } else if (isset($_SESSION['teach_id'])) {
+                                                            echo $row['teac_first_name']; ?>&nbsp;<?php echo $row['teac_last_name'];
+                                                                                                }
+
+                                                                                                    ?>
+            </b></span>
     </div>
 
     <div class="student-quiz-tab" id="student-quiz-tab">
@@ -70,7 +91,8 @@ $row = mysqli_fetch_array($result);
                     ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                             <div class="quiz-card">
-                            <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">                                <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                                <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
+                                <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
                                     <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
