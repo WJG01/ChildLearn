@@ -12,23 +12,39 @@ use Pkerrigan\Xray\RemoteSegment;
 use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 
 
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
+
 include('config.php');
+
+// Get the trace ID and parent ID from the session
+// $traceId = $_SESSION['trace_id'];
+// $parentId = $_SESSION['parent_id'];
+
+
+// echo 'SESSION obtained' . $traceId . $parentId;
 
 
 function sendPasswordResetLink($userEmail, $token)
 {
     try {
-        // Start X-Ray for sending email using SNS
+
+        // // Set the trace ID and parent ID on the Trace object
         // Trace::getInstance()
-        //     ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-        //     ->setParentId($_SESSION['parent_id'])
         //     ->setTraceId($_SESSION['trace_id'])
-        //     ->setIndependent(true)
-        //     ->setName('Send Email using SNS')
-        //     ->setUrl($_SERVER['REQUEST_URI'])
-        //     ->setMethod($_SERVER['REQUEST_METHOD'])
+        //     ->setParentId($_SESSION['parent_id']);
+
+        // // Start a new X-Ray trace
+        // Trace::getInstance()
         //     ->begin(100);
+
+        // // Add a remote segment for the SNS call
+        // Trace::getInstance()->getCurrentSegment()->addSubsegment(
+        //     (new RemoteSegment())
+        //         ->setName('SNSSubscription')
+        //         ->begin()
+        // );
 
         // echo 'HELLO';
         // // Print the Trace ID
@@ -65,6 +81,9 @@ function sendPasswordResetLink($userEmail, $token)
                 ],
             ],
         ]);
+        // Trace::getInstance()
+        //     ->getCurrentSegment()
+        //     ->end();
 
         // End X-Ray for sending email using SNS
         // Trace::getInstance()
