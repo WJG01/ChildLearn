@@ -51,25 +51,6 @@ function uploadToS3($fileType, $file)
 
 
     try {
-        // Start X-Ray Tracing for S3
-        // Trace::getInstance()
-        //     ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-        //     ->setParentId($_SESSION['parent_id'])
-        //     ->setTraceId($_SESSION['trace_id'])
-        //     ->setIndependent(true)
-        //     ->setName('cleanconnect-image')
-        //     ->setUrl($_SERVER['REQUEST_URI'])
-        //     ->setMethod($_SERVER['REQUEST_METHOD'])
-        //     ->begin(100);
-
-        // Trace::getInstance()
-        //     ->getCurrentSegment()
-        //     ->addSubsegment(
-        //         (new RemoteSegment())
-        //             ->setName('s3://cleanconnect-image/images/')
-        //             ->begin(100)
-        //     );
-
         // Create an S3 client
         $s3Client = new S3Client([
             'version' => 'latest',
@@ -89,49 +70,14 @@ function uploadToS3($fileType, $file)
                 'ContentDisposition' => 'inline', // Set the Content-Disposition header to display the file inline
             ]);
 
-            // End X-Ray for upload image to S3
-            // Trace::getInstance()
-            //     ->getCurrentSegment()
-            //     ->end();
-
-            // Trace::getInstance()
-            //     ->end()
-            //     ->setResponseCode(http_response_code())
-            //     ->submit(new DaemonSegmentSubmitter());
-
-
-            // print_r('s3 traces i print' . Trace::getInstance());
-
             return $result;
         } catch (S3Exception $e) {
             echo 'Error uploading file to S3: ' . $e->getMessage();
 
-            //  End X-Ray Tracing: Error to Upload Image
-            // Trace::getInstance()
-            //     ->getCurrentSegment()
-            //     ->setError(true)
-            //     ->addAnnotation('error', 'Error uploading image. Error code: ')
-            //     ->end();
-
-            // Trace::getInstance()
-            //     ->end()
-            //     ->setResponseCode(http_response_code())
-            //     ->submit(new DaemonSegmentSubmitter());
         }
     } catch (Aws\Exception\AwsException $e) {
         echo 'Error creating S3 client: ' . $e->getMessage();
 
-        //End X-Ray Tracing: Error to Upload Image
-        // Trace::getInstance()
-        //     ->getCurrentSegment()
-        //     ->setError(true)
-        //     ->addAnnotation('error', 'Error creating S3 client: ' . $e->getMessage())
-        //     ->end();
-
-        // Trace::getInstance()
-        //     ->end()
-        //     ->setResponseCode(http_response_code())
-        //     ->submit(new DaemonSegmentSubmitter());
     }
 }
 
@@ -152,8 +98,6 @@ function getImageFromS3($fileName)
         die('Invalid file extension.');
     }
 
-    // echo $fileName;
-    // echo $targetFolder;
 
     try {
         // Create an S3 client

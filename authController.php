@@ -230,20 +230,12 @@ if (isset($_POST['stud_login'])) {
             $user = $result->fetch_assoc();
 
 
-            echo 'Success run result';
+            // echo 'Success run result';
 
-            // Trace::getInstance()
-            //     ->getCurrentSegment()
-            //     ->setQuery($sql)
-            //     ->end();
             $sqlSegment->setQuery("SELECT * FROM student;");
             $sqlSegment->end();
 
             sleep(3);
-
-            // Trace::getInstance()
-            //     ->getCurrentSegment()
-            //     ->end();
 
 
             Trace::getInstance()
@@ -251,8 +243,7 @@ if (isset($_POST['stud_login'])) {
                 ->setResponseCode(http_response_code())
                 ->submit(new DaemonSegmentSubmitter());
 
-            echo 'HELLO';
-            print_r(Trace::getInstance());
+            // print_r(Trace::getInstance());
 
 
 
@@ -331,8 +322,7 @@ if (isset($_POST['stud_login'])) {
                 ->setResponseCode(http_response_code())
                 ->submit(new DaemonSegmentSubmitter());
 
-            echo 'HELLO';
-            print_r(Trace::getInstance());
+            // print_r(Trace::getInstance());
 
             if ($user['teac_status'] == "Verified" && password_verify($log_password, $user['teac_password'])) {
                 // login success
@@ -364,8 +354,7 @@ if (isset($_POST['stud_login'])) {
         ->setResponseCode(http_response_code())
         ->submit(new DaemonSegmentSubmitter());
 
-    echo 'HELLO';
-    print_r(Trace::getInstance());
+    // print_r(Trace::getInstance());
 }
 
 //logout user 
@@ -461,22 +450,6 @@ if (isset($_POST['forgot-password'])) {
             ->setMethod($_SERVER['REQUEST_METHOD'])
             ->begin(100);
 
-        // Set the trace ID and parent ID on the Trace object
-        // Trace::getInstance()
-        //     ->setTraceId($_SESSION['trace_id'])
-        //     ->setParentId($_SESSION['parent_id']);
-
-        // Start a new X-Ray trace
-        // Trace::getInstance()
-        //     ->begin(100);
-
-        // Add a remote segment for the SNS call
-        // Trace::getInstance()->getCurrentSegment()->addSubsegment(
-        //     (new RemoteSegment())
-        //         ->setName('forgot password')
-        //         ->begin(100)
-        // );
-
         Trace::getInstance()
             ->getCurrentSegment()
             ->addSubsegment(
@@ -499,9 +472,8 @@ if (isset($_POST['forgot-password'])) {
             ->setResponseCode(http_response_code())
             ->submit(new DaemonSegmentSubmitter());
 
-        echo 'HELLO';
         // Print the Trace ID
-        print_r(Trace::getInstance());
+        // print_r(Trace::getInstance());
 
         echo "<script type='text/javascript'>alert('An email has been successfully sent to your email address with a link to reset your password.');
             window.location='index.php';
@@ -542,16 +514,3 @@ function resetPassword($token)
     echo '<script>window.location = "reset-password.php";</script>';
     exit(0);
 }
-
-// function collect_db_xray_traces($query)
-// {
-//     Trace::getInstance()
-//         ->getCurrentSegment()
-//         ->setQuery($query)
-//         ->end();
-
-//     Trace::getInstance()
-//         ->end()
-//         ->setResponseCode(http_response_code())
-//         ->submit(new DaemonSegmentSubmitter());
-// }

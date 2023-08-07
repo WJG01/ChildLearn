@@ -198,8 +198,8 @@ Trace::getInstance()
 $_SESSION['trace_id'] = Trace::getInstance()->getTraceId();
 $_SESSION['parent_id'] = Trace::getInstance()->getId();
 
-echo 'HELLO';
+
 // Print the Trace ID
-print_r(Trace::getInstance());
+// print_r(Trace::getInstance());
 
 ?>

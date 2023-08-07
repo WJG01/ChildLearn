@@ -201,7 +201,7 @@ function executeQuery($query)
                     ->setResponseCode(http_response_code())
                     ->submit(new DaemonSegmentSubmitter());
 
-                print_r(Trace::getInstance());
+                // print_r(Trace::getInstance());
                 ?>
             </div>
         </div>

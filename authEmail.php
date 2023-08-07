@@ -30,26 +30,6 @@ function sendPasswordResetLink($userEmail, $token)
 {
     try {
 
-        // // Set the trace ID and parent ID on the Trace object
-        // Trace::getInstance()
-        //     ->setTraceId($_SESSION['trace_id'])
-        //     ->setParentId($_SESSION['parent_id']);
-
-        // // Start a new X-Ray trace
-        // Trace::getInstance()
-        //     ->begin(100);
-
-        // // Add a remote segment for the SNS call
-        // Trace::getInstance()->getCurrentSegment()->addSubsegment(
-        //     (new RemoteSegment())
-        //         ->setName('SNSSubscription')
-        //         ->begin()
-        // );
-
-        // echo 'HELLO';
-        // // Print the Trace ID
-        // print_r(Trace::getInstance());
-
 
         $sns = new SnsClient([
             'version' => 'latest',
@@ -81,15 +61,7 @@ function sendPasswordResetLink($userEmail, $token)
                 ],
             ],
         ]);
-        // Trace::getInstance()
-        //     ->getCurrentSegment()
-        //     ->end();
 
-        // End X-Ray for sending email using SNS
-        // Trace::getInstance()
-        //     ->end()
-        //     ->setResponseCode(http_response_code())
-        //     ->submit(new DaemonSegmentSubmitter());
     } catch (AwsException $e) {
         // Catch any AWS-related exceptions and log the error message
         $errorMessage = 'AWS Exception: ' . $e->getMessage();

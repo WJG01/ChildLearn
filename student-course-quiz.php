@@ -216,7 +216,7 @@ $row = mysqli_fetch_array($result);
                         ->setResponseCode(http_response_code())
                         ->submit(new DaemonSegmentSubmitter());
 
-                    print_r(Trace::getInstance());
+                    // print_r(Trace::getInstance());
 
                     ?>
                 </div>
