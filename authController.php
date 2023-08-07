@@ -173,7 +173,7 @@ if (isset($_POST['teach-reg'])) {
             $_SESSION['teac_username'] = $teac_username;
             $_SESSION['teac_email'] = $teac_email;
 
-            // subscribeEmail($teac_email);
+            subscribeEmail($teac_email);
 
             echo "<script type='text/javascript'>alert('Your account request is now pending for approval from admin! In the meantime, please verify your AWS Subscription through your email');
             window.location='index.php';
@@ -288,6 +288,7 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['verified'] = $user['verified'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
+                window.location='student-course-quiz.php';
                 </script>";
 
                 Trace::getInstance()
@@ -340,6 +341,7 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['log_username'] = $user['teac_username'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
+                window.location='teacher-course.php';
                 </script>";
                 exit();
             } else if ($user['teac_status'] == "Not Verified" && password_verify($log_password, $user['teac_password'])) {
@@ -502,7 +504,7 @@ if (isset($_POST['forgot-password'])) {
         print_r(Trace::getInstance());
 
         echo "<script type='text/javascript'>alert('An email has been successfully sent to your email address with a link to reset your password.');
-            
+            window.location='index.php';
             </script>";
         exit(0);
     }
