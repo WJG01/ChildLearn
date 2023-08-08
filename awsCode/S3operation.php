@@ -17,9 +17,9 @@ ini_set('display_errors', 1);
 
 // AWS credentials (Access Key and Secret Key)
 $credentials = new Aws\Credentials\Credentials(
-    'ASIA5WKXJVR5DUOGVQED',
-    'igAwC+f+073AIkduEuXkjZdzAKX9KGzkEvrNBWmQ',
-    'FwoGZXIvYXdzEKT//////////wEaDIB+pnOgFlJIuSbSdyK8AXgTY6umnT9bPC+zcmMjjrRe53+jshzF5eBd+CMsd6u1qpB1icnCOS64Wsujh3ucH2Z2MPSl29AlOEfYyKk4AowjoCPMfGYdf3lyCng+UlNnl0a3rUscFzwSjLoWOFpqAEGWPq6zQhnN234SDB5DFe0woX4CqyDYEvEL5WiKYHONrkDgOiG/X9JWiR/oQa9/zlVk/wW8WVG5sQrWoSebhYPjxmz5A9LOc8rUS6YC1WDXVmBMQjNMTRZS8TJWKJHutqYGMi0bLhYUYehx9S2ZDvXBVAJvNVoiETY6SjRK1YRuwMTZdTy4exji5cn7rlrPIYI='
+    'ASIA5WKXJVR5C3TTBEQW',
+    'arMGD1A81KwrvlkOMc43Xeb44N2m54BpBJ9da+fJ',
+    'FwoGZXIvYXdzEPj//////////wEaDNR7JmKUNuqFKkbHwSK8AYOnyUfbauY96DUokdU809r0IBu6oTfezJm6gNN+LzX2Q6RtWluCXhPITCB4jprFjG61VSQTJ02auLyc/hyHrQUIp6tlsnZCyDDX9SBBXRrMA+6kxyEhixL3QAOrlgayhWxIukGSPc0DkZQxOHFf1fUBy8X7PclVdY6OaGSr2At0Fzjwaguz7d8713rfni49WyPfHXnAWjzbnOKaf6l3wDzOPKtcjgcLsd2ttBXPUA17Dy2vLnI6BLkJ57HwKOiiyaYGMi0V4IJ7z6+KX2ojTZ1bXDIxlcjdvfDnCXapR8am/Swe03/T07YeaxOqEKtRg4Y='
 );
 
 // AWS region where your S3 bucket is located
@@ -49,14 +49,13 @@ function uploadToS3($fileType, $file)
         die('Invalid fileType. Must be "image" or "video".');
     }
 
-
     try {
         // Create an S3 client
         $s3Client = new S3Client([
             'version' => 'latest',
-            'region' => $region
+            'region' => $region,
+            'credentials' => $credentials
         ]);
-
 
         try {
 
@@ -73,11 +72,9 @@ function uploadToS3($fileType, $file)
             return $result;
         } catch (S3Exception $e) {
             echo 'Error uploading file to S3: ' . $e->getMessage();
-
         }
     } catch (Aws\Exception\AwsException $e) {
         echo 'Error creating S3 client: ' . $e->getMessage();
-
     }
 }
 
@@ -104,11 +101,8 @@ function getImageFromS3($fileName)
         $s3Client = new S3Client([
             'version' => 'latest',
             'region' => $region,
-            'credentials' => $credentials,
+            'credentials' => $credentials
         ]);
-
-        // Debug statement to check successful connection
-        // echo 'S3 client created successfully!';
 
         // Get the file from the S3 bucket
         $result = $s3Client->getObject([

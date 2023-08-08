@@ -159,7 +159,7 @@ $row = mysqli_fetch_array($result);
                     ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
+                                <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
                                 <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
@@ -197,7 +197,7 @@ $row = mysqli_fetch_array($result);
                     ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
+                                <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
                                 <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
@@ -250,7 +250,7 @@ $row = mysqli_fetch_array($result);
                     ?>
                         <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
+                                <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
                                 <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
@@ -287,7 +287,7 @@ $row = mysqli_fetch_array($result);
                     ?>
                         <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
+                                <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
                                 <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
@@ -324,7 +324,7 @@ $row = mysqli_fetch_array($result);
                     ?>
                         <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
+                                <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
                                 <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
@@ -349,14 +349,14 @@ $row = mysqli_fetch_array($result);
                 include("config.php");
                 $sql = "SELECT *, (SELECT COUNT(quques_id) FROM quiz_question qq WHERE (qq.quiz_id = q.quiz_id)) AS totalquestion 
                     , (SELECT COUNT(stud_id) FROM history h WHERE (h.quques_id = qq.quques_id)) AS totalplays FROM quiz q INNER JOIN quiz_question qq, history h 
-                    WHERE (qq.quiz_id = q.quiz_id) AND (qq.quques_id = h.quques_id) AND (h.stud_id = '$sid') GROUP BY q.quiz_id ORDER BY RAND()";
+                    WHERE (qq.quiz_id = q.quiz_id) AND (qq.quques_id = h.quques_id) AND (h.stud_id = ' $log_userid') GROUP BY q.quiz_id ORDER BY RAND()";
                 $result = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
                 ?>
                         <a class="quiz-link completed" href="student-result.php?qid=<?php echo $row['quiz_id']; ?>" id="<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
+                                <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
                                 <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
                                 <div class="quiz-tag">
                                     <p class="quiz-subject"><?php echo $row['quiz_category'] ?></p>

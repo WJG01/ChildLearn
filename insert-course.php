@@ -63,7 +63,7 @@ if (isset($_POST['insert-course'])) {
 		if ($uploadResult) {
 			echo 'File uploaded successfully to S3!';
 			// Save the uploaded file name to the $image variable
-			$image = 'courseCover_' . $title . '_' . basename($uploadedFile['name']);
+			$image = basename($uploadedFile['name']);
 		} else {
 			echo 'File upload failed.';
 		}
