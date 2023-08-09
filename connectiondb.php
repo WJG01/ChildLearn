@@ -4,7 +4,7 @@
 /*$serverURL = "localhost";
 $username = "root";
 $password ="";*/
-$serverURL = "childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com";
+$serverURL = "awseb-e-ecfp7dp5pn-stack-awsebrdsdatabase-3kt0ellbqgdt.c1cevqakx6ry.us-east-1.rds.amazonaws.com";
 $username = "admin";
 $password ="Admin123#";
 $database ="childlearn";

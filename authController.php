@@ -204,7 +204,7 @@ if (isset($_POST['stud_login'])) {
     $sqlSegment = new SqlSegment();
     $sqlSegment
         ->setName('rds: load data')
-        ->setUrl('childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
+        ->setUrl('awseb-e-ecfp7dp5pn-stack-awsebrdsdatabase-3kt0ellbqgdt.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
         ->setDatabaseType('MySQL Community')
         //->setQuery("SELECT * FROM student")
         ->begin(100);

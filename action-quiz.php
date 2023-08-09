@@ -10,7 +10,7 @@ if (isset($_POST['search'])) {
 }
 
 function executeQuery($query) {
-    $connect = mysqli_connect("childlearn-database.c1cevqakx6ry.us-east-1.rds.amazonaws.com", "admin", "Admin123#", "childlearn");
+    $connect = mysqli_connect("awseb-e-ecfp7dp5pn-stack-awsebrdsdatabase-3kt0ellbqgdt.c1cevqakx6ry.us-east-1.rds.amazonaws.com", "admin", "Admin123#", "childlearn");
     $result = mysqli_query($connect, $query);
     return $result;
 }
