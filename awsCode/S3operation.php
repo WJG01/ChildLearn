@@ -78,7 +78,7 @@ function uploadToS3($fileType, $file)
     }
 }
 
-function getImageFromS3($fileName)
+function getMediaFromS3($fileName)
 {
     global $credentials, $region, $bucketName, $defaultMediaFile;
 
@@ -128,7 +128,7 @@ function getImageFromS3($fileName)
     return $bucketBaseUrl . $defaultMediaFile;
 }
 
-function getImageFromCloudFront($fileName)
+function getMediaFromCloudFront($fileName)
 {
     $cloudFrontDomain = 'd2hmz1phin01an.cloudfront.net';
 

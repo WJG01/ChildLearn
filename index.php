@@ -1,9 +1,12 @@
 <?php
 include("config.php");
-require 'vendor/autoload.php'; // Include the AWS SDK for PHP
+require 'vendor/autoload.php'; 
+include("awsCode/S3operation.php");
 
 
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
 
 
 
@@ -67,7 +70,7 @@ Trace::getInstance()
             ?>
                 <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                     <div class="quiz-card">
-                        <img class="quiz-cover-pic" src="Images/<?php echo $row['course_cover'] ?>" alt="Course cover picture">
+                        <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
                         <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                         <div class="quiz-tag">
                             <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
@@ -96,7 +99,7 @@ Trace::getInstance()
             ?>
                 <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                     <div class="quiz-card">
-                        <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
+                        <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
                         <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
                         <div class="quiz-tag">
                             <p class="quiz-subject"><?php echo $row['quiz_category'] ?></p>

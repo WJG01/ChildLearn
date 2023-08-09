@@ -59,7 +59,7 @@ include("awsCode/S3operation.php");
 									<td><?php echo $row['quiz_description'] ?></td>
 									<td><?php echo $items ?></td>
 									<td>
-										<img class="quiz-cover-pic" src="<?php echo getImageFromS3($row['quiz_cover']); ?>" alt="Quiz cover picture" style="max-width: 100px; max-height: 100px; object-fit: contain;">
+										<img class="quiz-cover-pic" src="<?php echo getMediaFromS3($row['quiz_cover']); ?>" alt="Quiz cover picture" style="max-width: 100px; max-height: 100px; object-fit: contain;">
 									</td>
 
 									<td>

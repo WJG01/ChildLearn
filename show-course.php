@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
 
 use Pkerrigan\Xray\Trace;
 use Pkerrigan\Xray\RemoteSegment;
@@ -153,7 +155,7 @@ function executeQuery($query)
                 ?>
                     <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                         <div class="quiz-card">
-                            <img class="quiz-cover-pic" src="<?php echo getImageFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
+                            <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
                             <p class="quiz-title"><?php echo $row['course_title'] ?></p>
                             <div class="quiz-tag">
                                 <p class="quiz-subject"><?php echo $row['course_category'] ?></p>

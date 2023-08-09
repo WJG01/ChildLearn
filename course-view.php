@@ -50,13 +50,13 @@ include("awsCode/S3operation.php");
 								<div class="media align-items-center"> <!-- Add align-items-center class here -->
 									<div class="chapter-image-video-container mr-3"> <!-- Add a common container for both image and video -->
 										<div class="chapter-image-container">
-											<img src="<?php echo getImageFromS3($row['content_image']); ?>" alt="Chapter Image" class="chapter-media">
+											<img src="<?php echo getMediaFromS3($row['content_image']); ?>" alt="Chapter Image" class="chapter-media">
 											<div class="label">Image</div>
 										</div>
 										<div class="chapter-video-container">
 											<!-- Video player here -->
 											<video controls class="chapter-media">
-												<source src="<?php echo getImageFromS3($row['content_video']); ?>" type="video/mp4">
+												<source src="<?php echo getMediaFromS3($row['content_video']); ?>" type="video/mp4">
 												Your browser does not support the video tag.
 											</video>
 											<div class="label">Video</div>
