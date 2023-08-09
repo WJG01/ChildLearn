@@ -15,7 +15,7 @@
 <body>
     <section class="top-nav-bar" style="z-index:50;" id="top-nav-bar">
         <div class="left-nav" id="left-nav">
-            <a class="skillsoft-logo" href="index.php">Skill<b>Soft.</b></a>
+            <a class="skillsoft-logo" href="index.php">Child<b>Learn.</b></a>
             <a href="#" class="icon" id="menu-btn">
                 <i class="fa fa-bars"></i>
             </a>
@@ -130,7 +130,7 @@
     </section>
 
     <div class="" id="dropdown-list">
-        <a class="skillsoft-logo" href="index.php">SkillSoft.</a>
+        <a class="skillsoft-logo" href="index.php">ChildLearn.</a>
         <ul class="main-menu">
             <li><a href="student-course-quiz.php" name="all_quiz">Quizzes <i class="fas fa-caret-down"></i></a>
                 <ul class="sub-menu" style="z-index:50;">

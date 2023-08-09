@@ -23,7 +23,7 @@ $tid = $row['teac_id'];
     <body>
         <section class="top-nav-bar" style="z-index:50;">
             <div class="left-nav">
-                <a class="skillsoft-logo" href="teacher-quiz.php">Skill<b>Soft.</b></a>
+                <a class="skillsoft-logo" href="teacher-quiz.php">Child<b>Learn.</b></a>
                 <nav>
                     <ul class="main-menu">
                         <li><a href="teacher-course.php">Course</a></li>

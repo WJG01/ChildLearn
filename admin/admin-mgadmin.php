@@ -76,7 +76,7 @@ function executeQuery($query) {
     </div>
     <div class="admin-footer">
         <div class="foo-des">
-            <p>Mathematics and Logic and Develop by Win Yip & Jordan - FWDD Assignment</p>
+            <p>Mathematics and Logic and Developed by Wei Jun & Jordan - DDAC Assignment</p>
         </div>
     </div>
 

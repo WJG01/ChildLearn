@@ -13,7 +13,7 @@
         <hr class="seperate-line">
         <div class="skillsoft-footer" id="skillsoft-footer">
             <div class="logo-and-social">
-                <a class="skillsoft-logo" href="#">Skill<b>Soft.</b></a>
+                <a class="skillsoft-logo" href="#">Child<b>Learn.</b></a>
                 <p class="company-des">ChildLearn provide multiple features to make a classroom fun, interactive and engaging. Quizzes for everyone in anywhere.</p>
                 <div class="social-icon">
                     <div class="facebook social-odd">

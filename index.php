@@ -121,7 +121,7 @@ Trace::getInstance()
         <!--How does Learneasy work? (description)-->
         <div class="des-learneasy">
             <div class="des-content">
-                <p>How does Skill<b>Soft.</b> works?</p>
+                <p>How does Child<b>Learn.</b> works?</p>
                 <h3>
                     It only takes minutes to create a learning game or trivia quiz on
                     any topic, in any language. Sign Up now as a teacher and start
