@@ -143,7 +143,7 @@ include("awsCode/S3operation.php");
 						</div>
 						<div class="form-group">
 							<label>Course Cover</label>
-							<input type="file" required accept="image/*,.png,.jpeg,.jpg" name="image">
+							<input type="file"  accept="image/*,.png,.jpeg,.jpg" name="image">
 						</div>
 					</div>
 					<div class="modal-footer">

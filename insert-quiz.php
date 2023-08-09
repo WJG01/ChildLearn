@@ -12,12 +12,22 @@ if(isset($_POST['insert-quiz']))
 	$date			= $_POST['quiz_create_date'];
 	$tid			= $_POST['tid'];
 
+	
 	if (isset($_FILES['image'])) {
-        $target_dir = "Images/";
-        $target_file = $target_dir.basename($_FILES['image']['name']);
-        move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
-        $image = $_FILES['image']['name'];
-    }
+	  $fileType = 'image'; 
+	  $uploadedFile = $_FILES['image'];
+  
+	  $uploadResult = uploadToS3($fileType, $uploadedFile);
+  
+  
+	  if ($uploadResult) {
+		echo 'File uploaded successfully to S3!';
+		// Save the uploaded file name to the $udpate_image variable
+		$image = basename($uploadedFile['name']);
+	  } else {
+		echo 'File upload failed.';
+	  }
+	}
 
 	$query = "INSERT INTO quiz (`quiz_title`, `quiz_category`, `quiz_cover`, `quiz_timer`, `quiz_point`, `quiz_description`, `quiz_create_date`, `teac_id`) VALUES ('$title', '$category', '$image', '$timer', '$points', '$description', '$date', '$tid')";
 	$execute = mysqli_query($conn, $query);
@@ -33,5 +43,3 @@ if(isset($_POST['insert-quiz']))
 		echo '<script> alert("An error has occured!"); </script>';
 	}
 }
-
-?>

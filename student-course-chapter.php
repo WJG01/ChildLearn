@@ -74,6 +74,39 @@ $course_title = $course_row['course_title'];
         }
         ?>
 
+        <?php
+        $quiz_query = "SELECT * FROM quiz WHERE course_id=? LIMIT 1";
+        $stmt = $conn->prepare($quiz_query);
+        $stmt->bind_param('s', $course_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $quizCount = $result->num_rows;
+
+        // Check if there is at least one quiz available
+        if ($quizCount > 0) {
+            $quiz_row = $result->fetch_assoc(); // Fetch the row
+            $quiz_id = $quiz_row['quiz_id'];
+            $quiz_title = $quiz_row['quiz_title'];
+        ?>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="mb-0">Final Assessment :</h2>
+                </div>
+                <div class="card-body slim-card-body">
+                    <i class="bi bi-link-45deg">
+                        <a href="student-quizquestion.php?quizid=<?php echo $quiz_id; ?>" target="_blank">
+                            <?php echo $quiz_title; ?>
+                        </a>
+                    </i>
+                </div>
+            </div>
+        <?php
+        } else {
+            echo '<div class="alert alert-info">No quiz found for this course.</div>';
+        }
+
+        $stmt->close(); // Close the statement
+        ?>
     </div>
 
     <!-- Bootstrap JS -->

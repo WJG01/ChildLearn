@@ -1,27 +1,31 @@
-<?php 
+<?php
 include("teacher-session.php");
-require 'config.php'; 
+require 'config.php';
+include("awsCode/S3operation.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="stylesheets/student-signups.css">
-        <link rel="icon" type="image/png" href="Images/skillsoft-favicon.png">
-        <?php include('header.php') ?>
-        <title>Teacher Course Page</title>
-    </head>
-    <body>
-        <?php include("teacher-navi.php");?>
-        <div style="margin-left: 170px;" class="container-fluid admin">
-        <?php 
-			$id = mysqli_real_escape_string($conn,$_GET['id']);
-	        $qry = "SELECT * FROM course where course_id = $id";
-			$result = mysqli_query($conn, $qry);
-			$row = mysqli_fetch_array($result);
-			$qid = $row['course_id'];
-        ?>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="stylesheets/course-view.css">
+	<link rel="stylesheet" href="stylesheets/student-signups.css">
+	<link rel="icon" type="image/png" href="Images/skillsoft-favicon.png">
+	<?php include('header.php') ?>
+	<title>Teacher Course Page</title>
+</head>
+
+<body>
+	<?php include("teacher-navi.php"); ?>
+	<div style="margin-left: 170px;" class="container-fluid admin">
+		<?php
+		$id = mysqli_real_escape_string($conn, $_GET['id']);
+		$qry = "SELECT * FROM course where course_id = $id";
+		$result = mysqli_query($conn, $qry);
+		$row = mysqli_fetch_array($result);
+		$qid = $row['course_id'];
+		?>
 		<div class="col-md-12 alert alert-warning"><?php echo $row['course_title'] ?></div>
 		<button class="btn btn-warning bt-sm" id="new_question"><i class="fa fa-plus"></i> Add Chapters</button>
 		<br>
@@ -32,92 +36,117 @@ require 'config.php';
 			</div>
 			<div class="card-body">
 				<ul class="list-group">
-				<?php
-					$qry = $conn->query("SELECT * FROM course_chapter where course_id = ".$_GET['id']." ORDER BY chapter_order ASC");
-                    while($row=$qry->fetch_array()){
+					<?php
+					$qry = $conn->query("SELECT * FROM course_chapter where course_id = " . $_GET['id'] . " ORDER BY chapter_order ASC");
+					$rowNumber = 1; // Initialize row number
+
+					while ($row = $qry->fetch_array()) {
 						$id = $row['chapter_id'];
-						?>
-						<li class="list-group-item"><?php echo $row['chapter_order'] ?>. <?php echo $row['chapter_title'] ?><br>
-							<center>
-								<button class="btn btn-sm btn-outline-primary edit_question" id="<?php echo $row['chapter_id']?>" type="button"><i class="fa fa-edit"></i></button>
-								<button class="btn btn-sm btn-outline-danger remove_question" data-id="<?php echo $row['chapter_id']?>" type="button"><i class="fa fa-trash"></i></button>							
-							</center>
+					?>
+						<li class="list-group-item">
+							<div class="chapter-info">
+								<div class="chapter-number">Chapter <?php echo $rowNumber ?>: <b><?php echo $row['chapter_title'] ?></b></div>
+								<br><br>
+								<div class="media align-items-center"> <!-- Add align-items-center class here -->
+									<div class="chapter-image-video-container mr-3"> <!-- Add a common container for both image and video -->
+										<div class="chapter-image-container">
+											<img src="<?php echo getImageFromS3($row['content_image']); ?>" alt="Chapter Image" class="chapter-media">
+											<div class="label">Image</div>
+										</div>
+										<div class="chapter-video-container">
+											<!-- Video player here -->
+											<video controls class="chapter-media">
+												<source src="<?php echo getImageFromS3($row['content_video']); ?>" type="video/mp4">
+												Your browser does not support the video tag.
+											</video>
+											<div class="label">Video</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="chapter-actions">
+								<center>
+									<button class="btn btn-sm btn-outline-primary edit_question" id="<?php echo $row['chapter_id'] ?>" type="button"><i class="fa fa-edit"></i></button>
+									<button class="btn btn-sm btn-outline-danger remove_question" data-id="<?php echo $row['chapter_id'] ?>" type="button"><i class="fa fa-trash"></i></button>
+								</center>
+							</div>
 						</li>
-				<?php
+					<?php
+						$rowNumber++; // Increment row number for the next iteration
 					}
-				?>
+					?>
 				</ul>
 			</div>
 		</div>
 
-		<?php 
-			$query = $conn->query("SELECT MAX(chapter_order) FROM `course_chapter` WHERE course_id = ".$_GET['id']."");
-			while($row=$query->fetch_array()){
+		<?php
+		$query = $conn->query("SELECT MAX(chapter_order) FROM `course_chapter` WHERE course_id = " . $_GET['id'] . "");
+		while ($row = $query->fetch_array()) {
 			$cur_auto_id = $row['MAX(chapter_order)'] + 1;
-        ?>
-	
-		<div class="modal fade" id="manage_question" tabindex="-1" role="dialog" >
-			<div class="modal-dialog modal-centered" role="document">
-				<div style="width: 100%;" class="modal-content">
-					<div class="modal-header">
-						<h4 class="modal-title" id="myModallabel">Add New Chapters</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					</div>
-					<form action="uploadchapter.php" method="POST" id='question-frm' enctype="multipart/form-data">
-						<div class ="modal-body" id="edit-question">
-							<div id="msg"></div>
-							<div class="form-group">
-								<label>Chapter</label> <input type="number" value="<?php echo $cur_auto_id ?>" class="quiz-number" min="1" max="10" name="chapter_order" readonly required>
-								<input type="hidden" name="qid" value="<?php echo $_GET['id'] ?>" />
+		?>
+
+			<div class="modal fade" id="manage_question" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-centered" role="document">
+					<div style="width: 100%;" class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="myModallabel">Add New Chapters</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<form action="uploadchapter.php" method="POST" id='question-frm' enctype="multipart/form-data">
+							<div class="modal-body" id="edit-question">
+								<div id="msg"></div>
+								<div class="form-group">
+									<label>Chapter</label> <input type="number" value="<?php echo $cur_auto_id ?>" class="quiz-number" min="1" max="10" name="chapter_order" readonly required>
+									<input type="hidden" name="qid" value="<?php echo $_GET['id'] ?>" />
 								<?php
-									}
+							}
 								?>
+								</div>
+								<div class="form-group">
+									<label>Chapter Title</label>
+									<input type="text" name="chapter_title" required class="form-control" />
+								</div>
+								<div class="form-group">
+									<label>Content Text</label>
+									<textarea rows='3' name="content_text" required class="form-control"></textarea>
+								</div>
+								<div class="form-group">
+									<label>Chapter Cover Image</label>
+									<input type="file" required accept="image/*,.png,.jpeg,.jpg" name="image">
+								</div>
+								<div class="form-group">
+									<label>Chapter Content Video</label>
+									<input type="file" required accept="video/mp4" name="video">
+								</div>
 							</div>
-                            <div class="form-group">
-                                <label>Chapter Title</label>
-                                <input type="text" name="chapter_title" required class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label>Content Text</label>
-                                <textarea rows='3' name="content_text" required class="form-control" ></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Chapter Cover Image</label>
-                                <input type="file" required accept="image/*,.png,.jpeg,.jpg" name="image">
-                            </div>
-                            <div class="form-group">
-                                <label>Chapter Content Video</label>
-                                <input type="file" required accept="video/mp4" name="video">
-                            </div>
-						</div>
-						<div class="modal-footer">
-							<button type="submit" name="insert-chapter" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
-							<input type="hidden" value="<?php echo $qid; ?>" name="course_id">
-						</div>
-					</form>
+							<div class="modal-footer">
+								<button type="submit" name="insert-chapter" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
+								<input type="hidden" value="<?php echo $qid; ?>" name="course_id">
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div id="dataModal" class="modal fade">  
-            <div class="modal-dialog">  
-              <div style="width: 100%" class="modal-content">  
-                <div class="modal-header">  
-                    <?php echo '<h4 align="center" class="modal-title">Edit Chapter</h4>';?>
-                </div>  
-                <div class="modal-body" id="edit_ques"></div>  
-              <div class="modal-footer">   
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
-                <div id="target">
-                  <a href="" id = "update_chapter" class="btn btn-success">Confirm Changes</a>
-                </div>
-              </div>  
-            </div>  
-        </div>
+			<div id="dataModal" class="modal fade">
+				<div class="modal-dialog">
+					<div style="width: 100%" class="modal-content">
+						<div class="modal-header">
+							<?php echo '<h4 align="center" class="modal-title">Edit Chapter</h4>'; ?>
+						</div>
+						<div class="modal-body" id="edit_ques"></div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<div id="target">
+								<a href="" id="update_chapter" class="btn btn-success">Confirm Changes</a>
+							</div>
+						</div>
+					</div>
+				</div>
 
 		
-			
-    <script>
+
+			<script>
 	$(document).ready(function(){
 		$('#table').DataTable();
 		$('#new_question').click(function(){
@@ -134,48 +163,48 @@ require 'config.php';
                 method:"post",  
                 data:{id:id},
 				success:function(data){
-					$('#edit_ques').html(data);  
-                    $('#dataModal').modal("show"); 
-				}
-			})
+								$('#edit_ques').html(data);
+								$('#dataModal').modal("show");
+							}
+						})
 		})
 
 		$('#update_chapter').click(function(event){
         var chapter_title   = $("#chapter_title").val();
         var content_text 	= $("textarea#content_text").val();
         var id 			    = $("#id").val();
-			$.ajax({
+						$.ajax({
 			url:'updatechapter.php',
 			method:'post',
-			data: {
+							data: {
 					'chapter_title' : chapter_title,
 					'content_text' 	: content_text,
 					'id'            : id
-				},
+							},
 			success:function(response){
 				if(response == true)
 					location.reload()
 					alert( "Chapter has been successfully edited!" );
-				}
-			});
-      	});
+							}
+						});
+					});
 
 		$('.remove_question').click(function(){
 			var id = $(this).attr('data-id')
 			var conf = confirm('Are you sure you want to delete this chapter?');
 			if(conf == true){
-				$.ajax({
+							$.ajax({
 				url:'./delete-chapter.php?id='+id,
 				error:err=>console.log(err),
 				success:function(resp){
 					if(resp == true)
-						location.reload()
+										location.reload()
 						alert( "Chapter has been successfully deleted!" );
-					}
+								}
+							})
+						}
+					})
 				})
-			}
-		})
-	})
-</script>
-    </body>
+			</script>
+</body>
 </html>

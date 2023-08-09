@@ -1,0 +1,23 @@
+.chapter-image-video-container {
+  display: flex;
+  align-items: center;
+}
+
+.chapter-image-container,
+.chapter-video-container {
+  flex: 1;
+  text-align: center;
+  max-height: 200px; /* Adjust this value as needed */
+  display: flex;
+  flex-direction: column;
+}
+
+.chapter-media {
+  width: 200px;
+  height: 200px;
+  margin-left: 10px; /* Center the media within the container */
+}
+
+.label {
+  margin-top: 8px;
+}

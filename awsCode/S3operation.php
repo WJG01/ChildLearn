@@ -17,9 +17,9 @@ ini_set('display_errors', 1);
 
 // AWS credentials (Access Key and Secret Key)
 $credentials = new Aws\Credentials\Credentials(
-    'ASIA5WKXJVR5C3TTBEQW',
-    'arMGD1A81KwrvlkOMc43Xeb44N2m54BpBJ9da+fJ',
-    'FwoGZXIvYXdzEPj//////////wEaDNR7JmKUNuqFKkbHwSK8AYOnyUfbauY96DUokdU809r0IBu6oTfezJm6gNN+LzX2Q6RtWluCXhPITCB4jprFjG61VSQTJ02auLyc/hyHrQUIp6tlsnZCyDDX9SBBXRrMA+6kxyEhixL3QAOrlgayhWxIukGSPc0DkZQxOHFf1fUBy8X7PclVdY6OaGSr2At0Fzjwaguz7d8713rfni49WyPfHXnAWjzbnOKaf6l3wDzOPKtcjgcLsd2ttBXPUA17Dy2vLnI6BLkJ57HwKOiiyaYGMi0V4IJ7z6+KX2ojTZ1bXDIxlcjdvfDnCXapR8am/Swe03/T07YeaxOqEKtRg4Y='
+    'ASIA5WKXJVR5EGD7MYUV',
+    'IJn8rQKsRIVgJ7xrTLc/IYAIrJCLLjBK+eHnvsQX',
+    'FwoGZXIvYXdzEAkaDI4MD6YZvC+DFcnM1yK8AXhoagHbBgK7nFKxbnFD9asBfNWsfSG5rpwq+9h5Poee3I9gnTSME/gToKn1q7A6FS0hchGeLky3eTq30OjgzhSx7J0/v/ptDRftCs5WzGyMY1yq+ZyA7Gqn0eWEh5FUQWwrFd1moZTiBI8X/qRMjOOExIBYV6fDtVj7l27ZA9mw3U1sUsZ5yeQGzwFel3yi9Psyp1MEZjEH33AB3yLJ76MBYPZRwV7k+PjA7QokQ/jrXFxAm8Sw4JjNrLnaKL2MzaYGMi3p/k9iDqXoCRjkMGsZChIMVaug4phEVIQ5VZsSlJJU8PK+61TlfWScqNErcY8='
 );
 
 // AWS region where your S3 bucket is located
@@ -80,7 +80,7 @@ function uploadToS3($fileType, $file)
 
 function getImageFromS3($fileName)
 {
-    global $credentials, $region, $bucketName;
+    global $credentials, $region, $bucketName, $defaultMediaFile;
 
     // Determine the file extension from the file name
     $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -89,11 +89,16 @@ function getImageFromS3($fileName)
     $targetFolder = '';
     if (in_array($fileExtension, ['png', 'jpg', 'jpeg'])) {
         $targetFolder = 'Images/';
+        $defaultMediaFile = 'defaultcoursecover.jpg';
     } elseif ($fileExtension === 'mp4') {
         $targetFolder = 'Videos/';
+        $defaultMediaFile = 'default_video.mp4';
     } else {
         die('Invalid file extension.');
     }
+
+    // Get the base URL of the S3 bucket
+    $bucketBaseUrl = "https://childlearn-bucket.s3.amazonaws.com/" . $targetFolder;
 
 
     try {
@@ -116,9 +121,11 @@ function getImageFromS3($fileName)
 
         return $fileUrl;
     } catch (S3Exception $e) {
-        echo 'Error getting file ' . $fileName . ' from S3: ' . $e->getMessage();
-        return 'Images/defaultcoursecover.jpg';
+        //echo 'Error getting file ' . $fileName . ' from S3: ' . $e->getMessage();
+        return $bucketBaseUrl . $defaultMediaFile;
     }
+
+    return $bucketBaseUrl . $defaultMediaFile;
 }
 
 function getImageFromCloudFront($fileName)
@@ -130,10 +137,14 @@ function getImageFromCloudFront($fileName)
 
     // Determine the CloudFront folder based on the file extension
     $targetFolder = '';
+    $defaultMediaFile = '';
+
     if (in_array($fileExtension, ['png', 'jpg', 'jpeg'])) {
         $targetFolder = 'Images/';
+        $defaultMediaFile = 'defaultcoursecover.jpg';
     } elseif ($fileExtension === 'mp4') {
         $targetFolder = 'Videos/';
+        $defaultMediaFile = 'default_video.mp4';
     } else {
         die('Invalid file extension.');
     }
@@ -144,7 +155,7 @@ function getImageFromCloudFront($fileName)
 
         return $fileUrl;
     } catch (Exception $e) {
-        echo 'Error getting file ' . $fileName . ' from CloudFront: ' . $e->getMessage();
-        return 'Images/defaultcoursecover.jpg';
+        // echo 'Error getting file ' . $fileName . ' from CloudFront: ' . $e->getMessage();
+        return 'https://' . $cloudFrontDomain . '/' . $targetFolder . $defaultMediaFile;
     }
 }
