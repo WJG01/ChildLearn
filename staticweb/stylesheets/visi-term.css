@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600&family=Roboto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+            
+@media screen and (max-width: 850px) {
+    #term-container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    #term-container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.term-container {
+    width: 1308px;
+    height: 100%;
+    margin-left: 119px;
+    margin-right: 119px;
+    margin-bottom: 99px;
+}
+
+.term-container h1 {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 49px;
+    color: #50514F;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.term-content {
+    margin-bottom: 35px;
+}
+
+.term-content h2 {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    color: #50514F;
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+.term-content p {
+    max-width: 878px;
+    word-wrap: break-word;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: justify;
+    text-transform: capitalize;
+    color: #50514F;
+    margin-top: 0;
+    margin-bottom: 0;
+}
