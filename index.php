@@ -1,27 +1,15 @@
 <?php
 include("config.php");
-require 'vendor/autoload.php'; 
+require 'vendor/autoload.php';
 include("awsCode/S3operation.php");
-
+include("awsCode/XrayOperation.php");
 
 if (!isset($_SESSION)) {
     session_start();
 }
 
 
-
-use Pkerrigan\Xray\Trace;
-use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
-
-Trace::getInstance()
-    ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-    ->setName('ElasticBeanStalk')
-    ->setUrl('http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com')
-    ->setMethod($_SERVER['REQUEST_METHOD'])
-    ->begin(100);
-
-
-
+createNewXrayTracing();
 ?>
 
 <!DOCTYPE html>
@@ -193,16 +181,6 @@ Trace::getInstance()
 
 <?php
 
-Trace::getInstance()
-    ->end()
-    ->setResponseCode(http_response_code())
-    ->submit(new DaemonSegmentSubmitter());
-
-$_SESSION['trace_id'] = Trace::getInstance()->getTraceId();
-$_SESSION['parent_id'] = Trace::getInstance()->getId();
-
-
-// Print the Trace ID
-// print_r(Trace::getInstance());
+submitXrayTracing();
 
 ?>

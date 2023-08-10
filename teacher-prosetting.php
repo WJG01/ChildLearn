@@ -47,7 +47,6 @@ $tid = $row['teac_id'];
                         <i class="fas fa-caret-right"></i>
                     </button>
                     <input type="email" name="teac_email" value="<?php echo $row['teac_email']; ?>" id="teac_email" hidden>
-                    <?php echo $row['teac_email']; ?>
                     <button type="submit" value="forgot password" class="name-3-set" name="forgot-password">
                         Forget Password
                         <i class="fas fa-caret-right"></i>

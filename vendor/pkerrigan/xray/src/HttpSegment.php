@@ -14,7 +14,6 @@ class HttpSegment extends RemoteSegment
     /**
      * @inheritdoc
      */
-    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $data = parent::jsonSerialize();
@@ -22,16 +21,5 @@ class HttpSegment extends RemoteSegment
         $data['http'] = $this->serialiseHttpData();
 
         return array_filter($data);
-    }
-
-    /**
-     * @param bool $traced
-     * @return static
-     */
-    public function setTraced(bool $traced)
-    {
-        $this->traced = $traced;
-
-        return $this;
     }
 }

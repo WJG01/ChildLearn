@@ -4,10 +4,6 @@ require 'vendor/autoload.php'; // Include the AWS SDK for PHP
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
-use Pkerrigan\Xray\Trace;
-use Pkerrigan\Xray\RemoteSegment;
-use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
-
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -54,7 +50,6 @@ function uploadToS3($fileType, $file)
         $s3Client = new S3Client([
             'version' => 'latest',
             'region' => $region,
-            'credentials' => $credentials
         ]);
 
         try {
@@ -105,8 +100,7 @@ function getMediaFromS3($fileName)
         // Create an S3 client
         $s3Client = new S3Client([
             'version' => 'latest',
-            'region' => $region,
-            'credentials' => $credentials
+            'region' => $region
         ]);
 
         // Get the file from the S3 bucket

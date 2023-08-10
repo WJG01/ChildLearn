@@ -8,6 +8,7 @@ require 'vendor/autoload.php'; // Include the AWS SDK for PHP
 
 require 'config.php';
 require 'awsCode/S3operation.php';
+require 'awsCode/XrayOperation.php';
 
 use Pkerrigan\Xray\Trace;
 use Pkerrigan\Xray\RemoteSegment;

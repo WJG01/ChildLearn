@@ -15,8 +15,6 @@ class RemoteSegment extends Segment
     protected $traced = false;
 
     /**
-     * @deprecated Please use HttpSegment.setTraced
-     *
      * @param bool $traced
      * @return static
      */
@@ -30,7 +28,6 @@ class RemoteSegment extends Segment
     /**
      * @inheritdoc
      */
-    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $data = parent::jsonSerialize();

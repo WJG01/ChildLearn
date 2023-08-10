@@ -18,21 +18,9 @@ trait HttpTrait
      */
     protected $method;
     /**
-     * @var string
-     */
-    protected $clientIpAddress;
-    /**
-     * @var string
-     */
-    protected $userAgent;
-    /**
      * @var int
      */
     protected $responseCode;
-    /**
-     * @var bool
-     */
-    protected $traced = false;
 
     /**
      * @param string $url
@@ -73,16 +61,13 @@ trait HttpTrait
     protected function serialiseHttpData(): array
     {
         return [
-            'request' => array_filter([
+            'request' => [
                 'url' => $this->url,
-                'method' => $this->method,
-                'client_ip' => $this->clientIpAddress,
-                'user_agent' => $this->userAgent,
-                'traced' => $this->traced
-            ]),
-            'response' => array_filter([
+                'method' => $this->method
+            ],
+            'response' => [
                 'status' => $this->responseCode
-            ])
+            ]
         ];
     }
 }
