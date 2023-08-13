@@ -3,7 +3,7 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-
+require 'config.php';
 require_once 'authController.php';
 
 ?>
@@ -30,7 +30,7 @@ require_once 'authController.php';
                     <label for="email">
                         <span>Enter your registered email:</span>
                     </label>
-                    <input type="email" name="stud_email" value="<?php echo $stud_email; ?>" id="email" required>
+                    <input type="email" name="general_email"  id="email" required>
                 </div>
                 <div class="signup-button">
                     <input type="submit" value="recover account" name="forgot-password">

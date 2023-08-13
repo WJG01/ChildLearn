@@ -1,0 +1,64 @@
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
+--
+-- Host: awseb-e-ecfp7dp5pn-stack-awsebrdsdatabase-3kt0ellbqgdt.c1cevqakx6ry.us-east-1.rds.amazonaws.com    Database: childlearn
+-- ------------------------------------------------------
+-- Server version	8.0.33
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+SET @@SESSION.SQL_LOG_BIN= 0;
+
+--
+-- GTID state at the beginning of the backup 
+--
+
+SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
+
+--
+-- Table structure for table `history`
+--
+
+DROP TABLE IF EXISTS `history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `history` (
+  `his_id` int NOT NULL AUTO_INCREMENT,
+  `quques_id` int NOT NULL,
+  `his_answer` char(2) NOT NULL,
+  `his_is_right` int NOT NULL,
+  `his_date_time` timestamp NOT NULL,
+  `stud_id` int NOT NULL,
+  PRIMARY KEY (`his_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `history`
+--
+
+LOCK TABLES `history` WRITE;
+/*!40000 ALTER TABLE `history` DISABLE KEYS */;
+INSERT INTO `history` VALUES (1,6,'2',1,'2022-05-25 11:16:54',2),(2,7,'3',0,'2022-05-25 11:16:54',2),(3,8,'4',1,'2022-05-25 11:16:54',2),(4,9,'2',0,'2022-05-25 11:16:54',2),(5,10,'2',1,'2022-05-25 11:16:54',2),(6,11,'3',1,'2022-05-27 06:20:20',1),(7,12,'3',0,'2022-05-27 06:20:20',1),(8,13,'3',1,'2022-05-27 06:20:20',1),(9,14,'1',0,'2022-05-27 06:20:20',1),(10,15,'2',0,'2022-05-27 06:20:20',1),(11,6,'3',0,'2022-05-27 06:23:03',1),(12,7,'1',0,'2022-05-27 06:23:03',1),(13,8,'2',0,'2022-05-27 06:23:03',1),(14,9,'5',0,'2022-05-27 06:23:03',1),(15,10,'5',0,'2022-05-27 06:23:03',1),(16,62,'1',1,'2022-05-27 06:53:10',1),(17,62,'1',1,'2023-06-10 17:07:30',3),(18,11,'4',0,'2023-07-29 22:13:24',13),(19,12,'2',1,'2023-07-29 22:13:24',13),(20,13,'3',1,'2023-07-29 22:13:24',13),(21,14,'3',1,'2023-07-29 22:13:24',13),(22,15,'4',0,'2023-07-29 22:13:24',13);
+/*!40000 ALTER TABLE `history` ENABLE KEYS */;
+UNLOCK TABLES;
+SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-08-10 17:11:33

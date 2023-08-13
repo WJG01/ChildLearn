@@ -93,6 +93,8 @@ $row = mysqli_fetch_array($result);
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
 
+
+
                     // Start X-Ray Tracing for CloudFront- section-1
                     Trace::getInstance()
                         ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)

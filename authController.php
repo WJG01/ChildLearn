@@ -20,30 +20,30 @@ use Pkerrigan\Xray\RemoteSegment;
 $errors = array();
 
 // Prevent student signup form refresh
-$stud_first_name        = "";
-$stud_last_name         = "";
-$stud_username          = "";
-$stud_email             = "";
-$stud_password          = "";
-$stud_confirm_password  = "";
+$stud_first_name = "";
+$stud_last_name = "";
+$stud_username = "";
+$stud_email = "";
+$stud_password = "";
+$stud_confirm_password = "";
 
 // Prevent teacher form refresh
-$teac_first_name        = "";
-$teac_last_name         = "";
-$teac_username          = "";
-$teac_email             = "";
-$teac_password          = "";
-$teac_confirm_password  = "";
-$image                  = "";
+$teac_first_name = "";
+$teac_last_name = "";
+$teac_username = "";
+$teac_email = "";
+$teac_password = "";
+$teac_confirm_password = "";
+$image = "";
 
 // When student clicks on the sign up button
 if (isset($_POST['stud-reg'])) {
-    $stud_first_name        = $_POST['stud_first_name'];
-    $stud_last_name         = $_POST['stud_last_name'];
-    $stud_username          = $_POST['stud_username'];
-    $stud_email             = $_POST['stud_email'];
-    $stud_password          = $_POST['stud_password'];
-    $stud_confirm_password  = $_POST['stud_confirm_password'];
+    $stud_first_name = $_POST['stud_first_name'];
+    $stud_last_name = $_POST['stud_last_name'];
+    $stud_username = $_POST['stud_username'];
+    $stud_email = $_POST['stud_email'];
+    $stud_password = $_POST['stud_password'];
+    $stud_confirm_password = $_POST['stud_confirm_password'];
 
     $emailQuery = "SELECT * FROM student WHERE stud_email=? LIMIT 1";
     $stmt = $conn->prepare($emailQuery);
@@ -66,15 +66,6 @@ if (isset($_POST['stud-reg'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // End X-Ray for load data from RDS
-    Trace::getInstance()
-        ->getCurrentSegment()
-        ->end();
-
-    Trace::getInstance()
-        ->end()
-        ->setResponseCode(http_response_code())
-        ->submit(new DaemonSegmentSubmitter());
 
     $userCount = $result->num_rows;
     $stmt->close();
@@ -116,13 +107,13 @@ if (isset($_POST['stud-reg'])) {
 
 // When teacher clicks on the sign up button
 if (isset($_POST['teach-reg'])) {
-    $teac_first_name        = $_POST['teac_first_name'];
-    $teac_last_name         = $_POST['teac_last_name'];
-    $teac_username          = $_POST['teac_username'];
-    $teac_email             = $_POST['teac_email'];
-    $teac_password          = $_POST['teac_password'];
-    $teac_confirm_password  = $_POST['teac_confirm_password'];
-    $teac_status            = "Not Verified";
+    $teac_first_name = $_POST['teac_first_name'];
+    $teac_last_name = $_POST['teac_last_name'];
+    $teac_username = $_POST['teac_username'];
+    $teac_email = $_POST['teac_email'];
+    $teac_password = $_POST['teac_password'];
+    $teac_confirm_password = $_POST['teac_confirm_password'];
+    $teac_status = "Not Verified";
 
     if (isset($_FILES['image'])) {
         $target_dir = "Images/";
@@ -191,33 +182,16 @@ if (isset($_POST['teach-reg'])) {
 // When student / teacher clicks on the login button 
 if (isset($_POST['stud_login'])) {
 
-    Trace::getInstance()
-        ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-        ->setParentId($_SESSION['parent_id'])
-        ->setTraceId($_SESSION['trace_id'])
-        ->setIndependent(true)
-        ->setName('Amazon RDS Service')
-        ->setUrl($_SERVER['REQUEST_URI'])
-        ->setMethod($_SERVER['REQUEST_METHOD'])
-        ->begin(100);
 
-    $sqlSegment = new SqlSegment();
-    $sqlSegment
-        ->setName('rds: load data')
-        ->setUrl('awseb-e-ecfp7dp5pn-stack-awsebrdsdatabase-3kt0ellbqgdt.c1cevqakx6ry.us-east-1.rds.amazonaws.com')
-        ->setDatabaseType('MySQL Community')
-        //->setQuery("SELECT * FROM student")
-        ->begin(100);
-
-    Trace::getInstance()
-        ->getCurrentSegment()
-        ->addSubsegment($sqlSegment);
 
     $role = $_POST['roleSelector'];
     $log_username = $_POST['log_username'];
     $log_password = $_POST['log_password'];
 
     if ($role === 'student') {
+        createFromExistingXrayTracing('RDS service');
+        createNewSQLSegment('rds: student login');
+
         // validation
         if (count($errors) === 0) {
 
@@ -230,20 +204,11 @@ if (isset($_POST['stud_login'])) {
             $user = $result->fetch_assoc();
 
 
-            // echo 'Success run result';
 
-            $sqlSegment->setQuery("SELECT * FROM student;");
-            $sqlSegment->end();
+            set_SQLSegmentQuery($sql);
 
-            sleep(3);
+            submitXrayTracing();
 
-
-            Trace::getInstance()
-                ->end()
-                ->setResponseCode(http_response_code())
-                ->submit(new DaemonSegmentSubmitter());
-
-            // print_r(Trace::getInstance());
 
 
 
@@ -259,16 +224,8 @@ if (isset($_POST['stud_login'])) {
                 window.location='verification.php';
                 </script>";
 
-                Trace::getInstance()
-                    ->getCurrentSegment()
-                    ->end();
 
-                Trace::getInstance()
-                    ->end()
-                    ->setResponseCode(http_response_code())
-                    ->submit(new DaemonSegmentSubmitter());
-
-                // exit();
+                exit();
             }
 
             if (password_verify($log_password, $user['hashed_password'])) {
@@ -279,17 +236,8 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['verified'] = $user['verified'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                window.location='student-course-quiz.php';
+                // window.location='student-course-quiz.php';
                 </script>";
-
-                Trace::getInstance()
-                    ->getCurrentSegment()
-                    ->end();
-
-                Trace::getInstance()
-                    ->end()
-                    ->setResponseCode(http_response_code())
-                    ->submit(new DaemonSegmentSubmitter());
 
                 exit();
             } else {
@@ -300,8 +248,13 @@ if (isset($_POST['stud_login'])) {
             }
         }
     } else if ($role === 'teacher') { // When teacher clicks on the login button
+
+        createFromExistingXrayTracing('RDS service');
+        createNewSQLSegment('rds: teacher login');
         // validation
         if (count($errors) === 0) {
+
+
             $sql = "SELECT * FROM teacher WHERE teac_email=? OR teac_username=? LIMIT 1";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('ss', $log_username, $log_username);
@@ -311,18 +264,14 @@ if (isset($_POST['stud_login'])) {
 
             echo 'Success run result';
 
-            $sqlSegment->setQuery("SELECT * FROM student;");
-            $sqlSegment->end();
+            // $sqlSegment->setQuery("SELECT * FROM student;");
+            // $sqlSegment->end();
 
-            sleep(3);
+            // sleep(3);
+            set_SQLSegmentQuery($sql);
+            submitXrayTracing();
 
 
-            Trace::getInstance()
-                ->end()
-                ->setResponseCode(http_response_code())
-                ->submit(new DaemonSegmentSubmitter());
-
-            // print_r(Trace::getInstance());
 
             if ($user['teac_status'] == "Verified" && password_verify($log_password, $user['teac_password'])) {
                 // login success
@@ -331,7 +280,7 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['log_username'] = $user['teac_username'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                window.location='teacher-course.php';
+                // window.location='teacher-course.php';
                 </script>";
                 exit();
             } else if ($user['teac_status'] == "Not Verified" && password_verify($log_password, $user['teac_password'])) {
@@ -349,10 +298,10 @@ if (isset($_POST['stud_login'])) {
     }
 
 
-    Trace::getInstance()
-        ->end()
-        ->setResponseCode(http_response_code())
-        ->submit(new DaemonSegmentSubmitter());
+    // Trace::getInstance()
+    //     ->end()
+    //     ->setResponseCode(http_response_code())
+    //     ->submit(new DaemonSegmentSubmitter());
 
     // print_r(Trace::getInstance());
 }
@@ -410,21 +359,36 @@ function verifyUser($token)
 // if user clicks on the forgot password button
 if (isset($_POST['forgot-password'])) {
 
-    echo 'WHAT INSIDE HERE' . $_POST['teac_email'];
-
 
     if (isset($_POST['stud_email'])) {
         $passed_email = $_POST['stud_email'];
         $sql = "SELECT * FROM student WHERE stud_email='$passed_email' LIMIT 1";
+
     } else if (isset($_POST['teac_email'])) {
         $passed_email = $_POST['teac_email'];
         $sql = "SELECT * FROM teacher WHERE teac_email='$passed_email' LIMIT 1";
+
+    } else if (isset($_POST['general_email'])) {
+        $passed_email = $_POST['general_email'];
+
+        // Try to find the email in the student table first
+        $sql = "SELECT * FROM student WHERE stud_email='$passed_email' LIMIT 1";
+        $result = mysqli_query($conn, $sql);
+        $user = mysqli_fetch_assoc($result);
+
+       // echo 'RETURNING STUDENT RECORD', $user['stud_first_name'];
+
+        // If not found in the teacher table, then try the student table
+        if (!$user) {
+            $sql = "SELECT * FROM teacher WHERE teac_email='$passed_email' LIMIT 1";
+        }
     } else {
         echo "<script type='text/javascript'>alert('Please select an email address!');
                 </script>";
     }
 
-    echo 'EMAIL PASSED ISS' . $stud_email;
+    echo 'EMAIL PASSED ISS' . $passed_email;
+    echo 'CURRENT TRACE ID IS ' . $_SESSION['trace_id'];
 
     if (!filter_var($passed_email, FILTER_VALIDATE_EMAIL)) {
         echo "<script type='text/javascript'>alert('Email address is invalid!');
@@ -438,45 +402,20 @@ if (isset($_POST['forgot-password'])) {
         $token = $user['token'];
 
 
-        // Start X-Ray for sending email using SNS
+        createFromExistingXrayTracing('Simple Notification Service');
+        createNewRemoteSegment('sns: send email');
 
-        Trace::getInstance()
-            ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-            ->setParentId($_SESSION['parent_id'])
-            ->setTraceId($_SESSION['trace_id'])
-            ->setIndependent(true)
-            ->setName('Simple Notification Service')
-            ->setUrl($_SERVER['REQUEST_URI'])
-            ->setMethod($_SERVER['REQUEST_METHOD'])
-            ->begin(100);
-
-        Trace::getInstance()
-            ->getCurrentSegment()
-            ->addSubsegment(
-                (new RemoteSegment())
-                    ->setName('sns: send email')
-                    ->setClientName('SNS')
-                    ->begin()
-            );
 
         //sending email here
         sendPasswordResetLink($passed_email, $token);
 
-        Trace::getInstance()
-            ->getCurrentSegment()
-            ->end();
+        end_Segment();
+        submitXrayTracing();
 
-        // End X-Ray for sending email using SNS
-        Trace::getInstance()
-            ->end()
-            ->setResponseCode(http_response_code())
-            ->submit(new DaemonSegmentSubmitter());
 
-        // Print the Trace ID
-        // print_r(Trace::getInstance());
 
         echo "<script type='text/javascript'>alert('An email has been successfully sent to your email address with a link to reset your password.');
-            window.location='index.php';
+            // window.location='index.php';
             </script>";
         exit(0);
     }

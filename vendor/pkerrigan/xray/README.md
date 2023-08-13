@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/patrickkerrigan/php-xray.svg?style=flat-square)](https://travis-ci.org/patrickkerrigan/php-xray) [![Maintainability](https://api.codeclimate.com/v1/badges/548ad6b7c25bef8004cd/maintainability)](https://codeclimate.com/github/patrickkerrigan/php-xray/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/548ad6b7c25bef8004cd/test_coverage)](https://codeclimate.com/github/patrickkerrigan/php-xray/test_coverage) [![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg?style=flat-square)](http://php.net/)  [![Packagist](https://img.shields.io/packagist/v/pkerrigan/xray.svg?style=flat-square)](https://packagist.org/packages/pkerrigan/xray)
+[![Build Status](https://img.shields.io/github/workflow/status/patrickkerrigan/php-xray/Tests.svg?style=flat-square)](https://github.com/patrickkerrigan/php-xray/actions/workflows/tests.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/548ad6b7c25bef8004cd/maintainability)](https://codeclimate.com/github/patrickkerrigan/php-xray/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/548ad6b7c25bef8004cd/test_coverage)](https://codeclimate.com/github/patrickkerrigan/php-xray/test_coverage) [![PHP >=7.1](https://img.shields.io/badge/php-%3E%3D7.1-blue.svg?style=flat-square)](http://php.net/)  [![Packagist](https://img.shields.io/packagist/v/pkerrigan/xray.svg?style=flat-square)](https://packagist.org/packages/pkerrigan/xray)
 
 # pkerrigan\xray
 A basic PHP instrumentation library for AWS X-Ray
@@ -12,7 +12,7 @@ Please note that no automatic instrumentation of popular libraries is provided. 
 The recommended way to install this library is using Composer:
 
 ```bash
-$ composer require pkerrigan/xray ^1.0
+$ composer require pkerrigan/xray ^1
 ```
 
 ## Usage
@@ -73,6 +73,5 @@ Trace::getInstance()
 
 ## Features not yet implemented
 
-* Sending user info such as IP address and User Agent with a trace
 * Exception and stack trace support
 * Submission of incomplete segments

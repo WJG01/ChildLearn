@@ -2,6 +2,6 @@
     "require": {
         "aws/aws-sdk-php": "^3.276",
         "swiftmailer/swiftmailer": "^6.3",
-        "pkerrigan/xray": "1"
+        "pkerrigan/xray": "1.4.0"
     }
 }

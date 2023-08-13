@@ -287,13 +287,6 @@ class Segment implements JsonSerializable
         return $this;
     }
 
-    public function setClientName(string $clientName)
-    {
-        $this->annotations['aws:client_name'] = $clientName;
-
-        return $this;
-    }
-
     /**
      * @inheritdoc
      */

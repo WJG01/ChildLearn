@@ -2,6 +2,11 @@
 
 namespace Pkerrigan\Xray;
 
+/**
+ *
+ * @author Patrick Kerrigan (patrickkerrigan.uk)
+ * @since 13/05/2018
+ */
 class Trace extends Segment
 {
     use HttpTrait;
@@ -10,11 +15,14 @@ class Trace extends Segment
      * @var static
      */
     private static $instance;
-
     /**
      * @var string
      */
-    protected $traceId;
+    private $serviceVersion;
+    /**
+     * @var string
+     */
+    private $user;
 
     /**
      * @return static
@@ -46,9 +54,55 @@ class Trace extends Segment
 
         $variables = array_column($variables, 1, 0);
 
-        $this->traceId = $variables['Root'] ?? null;
+        if (isset($variables['Root'])) {
+            $this->setTraceId($variables['Root']);
+        }
         $this->setSampled($variables['Sampled'] ?? false);
         $this->setParentId($variables['Parent'] ?? null);
+
+        return $this;
+    }
+
+    /**
+     * @param string $serviceVersion
+     * @return static
+     */
+    public function setServiceVersion(string $serviceVersion)
+    {
+        $this->serviceVersion = $serviceVersion;
+
+        return $this;
+    }
+
+    /**
+     * @param string $user
+     * @return static
+     */
+    public function setUser(string $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @param string $clientIpAddress
+     * @return static
+     */
+    public function setClientIpAddress(string $clientIpAddress)
+    {
+        $this->clientIpAddress = $clientIpAddress;
+
+        return $this;
+    }
+
+    /**
+     * @param string $userAgent
+     * @return static
+     */
+    public function setUserAgent(string $userAgent)
+    {
+        $this->userAgent = $userAgent;
 
         return $this;
     }
@@ -72,31 +126,25 @@ class Trace extends Segment
     }
 
     /**
-     * @return string
-     */
-    public function getTraceId(): string
-    {
-        return $this->traceId;
-    }
-
-    /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $data = parent::jsonSerialize();
 
-        $data['trace_id'] = $this->traceId;
         $data['http'] = $this->serialiseHttpData();
+        $data['service'] = empty($this->serviceVersion) ? null : ['version' => $this->serviceVersion];
+        $data['user'] = $this->user;
 
         return array_filter($data);
     }
 
-    private function generateTraceId()
+    private function generateTraceId(): void
     {
         $startHex = dechex((int)$this->startTime);
         $uuid = bin2hex(random_bytes(12));
 
-        $this->traceId = "1-{$startHex}-{$uuid}";
+        $this->setTraceId("1-{$startHex}-{$uuid}");
     }
 }

@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "aws/aws-crt-php",
-            "version": "v1.2.1",
-            "version_normalized": "1.2.1.0",
+            "version": "v1.2.2",
+            "version_normalized": "1.2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/awslabs/aws-crt-php.git",
-                "reference": "1926277fc71d253dfa820271ac5987bdb193ccf5"
+                "reference": "2f1dc7b7eda080498be96a4a6d683a41583030e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/1926277fc71d253dfa820271ac5987bdb193ccf5",
-                "reference": "1926277fc71d253dfa820271ac5987bdb193ccf5",
+                "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/2f1dc7b7eda080498be96a4a6d683a41583030e9",
+                "reference": "2f1dc7b7eda080498be96a4a6d683a41583030e9",
                 "shasum": ""
             },
             "require": {
@@ -25,7 +25,7 @@
             "suggest": {
                 "ext-awscrt": "Make sure you install awscrt native extension to use any of the functionality."
             },
-            "time": "2023-03-24T20:22:19+00:00",
+            "time": "2023-07-20T16:49:55+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -53,23 +53,23 @@
             ],
             "support": {
                 "issues": "https://github.com/awslabs/aws-crt-php/issues",
-                "source": "https://github.com/awslabs/aws-crt-php/tree/v1.2.1"
+                "source": "https://github.com/awslabs/aws-crt-php/tree/v1.2.2"
             },
             "install-path": "../aws/aws-crt-php"
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.276.3",
-            "version_normalized": "3.276.3.0",
+            "version": "3.277.12",
+            "version_normalized": "3.277.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "c8b38cfab677a3ec98e3f40bccd1a2bf851a014f"
+                "reference": "2f7c7f7d4c949469eca4e4c18fb5646aafb0375c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c8b38cfab677a3ec98e3f40bccd1a2bf851a014f",
-                "reference": "c8b38cfab677a3ec98e3f40bccd1a2bf851a014f",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2f7c7f7d4c949469eca4e4c18fb5646aafb0375c",
+                "reference": "2f7c7f7d4c949469eca4e4c18fb5646aafb0375c",
                 "shasum": ""
             },
             "require": {
@@ -110,7 +110,7 @@
                 "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
                 "ext-sockets": "To use client-side monitoring"
             },
-            "time": "2023-07-21T18:30:18+00:00",
+            "time": "2023-08-09T18:09:09+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -151,7 +151,7 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.276.3"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.277.12"
             },
             "install-path": "../aws/aws-sdk-php"
         },
@@ -569,17 +569,17 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.5.0",
-            "version_normalized": "2.5.0.0",
+            "version": "2.6.0",
+            "version_normalized": "2.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "b635f279edd83fc275f822a1188157ffea568ff6"
+                "reference": "8bd7c33a0734ae1c5d074360512beb716bef3f77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/b635f279edd83fc275f822a1188157ffea568ff6",
-                "reference": "b635f279edd83fc275f822a1188157ffea568ff6",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/8bd7c33a0734ae1c5d074360512beb716bef3f77",
+                "reference": "8bd7c33a0734ae1c5d074360512beb716bef3f77",
                 "shasum": ""
             },
             "require": {
@@ -600,7 +600,7 @@
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
             },
-            "time": "2023-04-17T16:11:26+00:00",
+            "time": "2023-08-03T15:06:02+00:00",
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -668,7 +668,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.5.0"
+                "source": "https://github.com/guzzle/psr7/tree/2.6.0"
             },
             "funding": [
                 {
@@ -752,27 +752,28 @@
         },
         {
             "name": "pkerrigan/xray",
-            "version": "v1.0.0",
-            "version_normalized": "1.0.0.0",
+            "version": "v1.4.0",
+            "version_normalized": "1.4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/patrickkerrigan/php-xray.git",
-                "reference": "424ce104a936502f6350caf404e7e0f95d08ca7f"
+                "reference": "1258bfcab1398fb98214a9afc1400b64ccc085e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/patrickkerrigan/php-xray/zipball/424ce104a936502f6350caf404e7e0f95d08ca7f",
-                "reference": "424ce104a936502f6350caf404e7e0f95d08ca7f",
+                "url": "https://api.github.com/repos/patrickkerrigan/php-xray/zipball/1258bfcab1398fb98214a9afc1400b64ccc085e6",
+                "reference": "1258bfcab1398fb98214a9afc1400b64ccc085e6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=7.0"
+                "ext-sockets": "*",
+                "php": ">=7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6"
+                "phpunit/phpunit": "^9|^8|^7"
             },
-            "time": "2018-05-19T14:30:32+00:00",
+            "time": "2022-01-09T12:20:51+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -800,7 +801,7 @@
             ],
             "support": {
                 "issues": "https://github.com/patrickkerrigan/php-xray/issues",
-                "source": "https://github.com/patrickkerrigan/php-xray/tree/master"
+                "source": "https://github.com/patrickkerrigan/php-xray/tree/v1.4.0"
             },
             "install-path": "../pkerrigan/xray"
         },

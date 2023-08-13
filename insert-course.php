@@ -17,34 +17,19 @@ use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 
 
 if (isset($_POST['insert-course'])) {
-	$title  		= $_POST['course_title'];
-	$category  		= $_POST['course_category'];
-	$description 	= $_POST['course_description'];
-	$date			= $_POST['course_create_date'];
-	$tid			= $_POST['tid'];
+	$title = $_POST['course_title'];
+	$category = $_POST['course_category'];
+	$description = $_POST['course_description'];
+	$date = $_POST['course_create_date'];
+	$tid = $_POST['tid'];
 
 	if (isset($_FILES['image'])) {
 		$fileType = 'image'; // Change this to 'video' for uploading videos
 		$uploadedFile = $_FILES['image'];
 
-		// Start X-Ray Tracing for S3
-		Trace::getInstance()
-			->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-			->setParentId($_SESSION['parent_id'])
-			->setTraceId($_SESSION['trace_id'])
-			->setIndependent(true)
-			->setName('S3 Bucket Service')
-			->setUrl($_SERVER['REQUEST_URI'])
-			->setMethod($_SERVER['REQUEST_METHOD'])
-			->begin(100);
 
-		Trace::getInstance()
-			->getCurrentSegment()
-			->addSubsegment(
-				(new RemoteSegment())
-					->setName('s3: upload image')
-					->begin(100)
-			);
+		createFromExistingXrayTracing('S3 Bucket Service');
+		createNewRemoteSegment('s3: upload image');
 
 		$uploadResult = uploadToS3($fileType, $uploadedFile);
 
@@ -59,7 +44,7 @@ if (isset($_POST['insert-course'])) {
 			->setResponseCode(http_response_code())
 			->submit(new DaemonSegmentSubmitter());
 
-		// print_r(Trace::getInstance());
+		print_r(Trace::getInstance());
 
 		if ($uploadResult) {
 			echo 'File uploaded successfully to S3!';
@@ -76,7 +61,7 @@ if (isset($_POST['insert-course'])) {
 
 	if ($execute) {
 		echo '<script> alert("Course added successfully!"); 
-		window.location="teacher-course.php";
+		// window.location="teacher-course.php";
 		</script>';
 	} else {
 		echo '<script> alert("An error has occured!"); </script>';
