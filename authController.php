@@ -189,8 +189,8 @@ if (isset($_POST['stud_login'])) {
     $log_password = $_POST['log_password'];
 
     if ($role === 'student') {
-        createFromExistingXrayTracing('RDS service');
-        createNewSQLSegment('rds: student login');
+        // createFromExistingXrayTracing('RDS service');
+        // createNewSQLSegment('rds: student login');
 
         // validation
         if (count($errors) === 0) {
@@ -205,9 +205,9 @@ if (isset($_POST['stud_login'])) {
 
 
 
-            set_SQLSegmentQuery($sql);
+            // set_SQLSegmentQuery($sql);
 
-            submitXrayTracing();
+            // submitXrayTracing();
 
 
 
@@ -249,8 +249,8 @@ if (isset($_POST['stud_login'])) {
         }
     } else if ($role === 'teacher') { // When teacher clicks on the login button
 
-        createFromExistingXrayTracing('RDS service');
-        createNewSQLSegment('rds: teacher login');
+        // createFromExistingXrayTracing('RDS service');
+        // createNewSQLSegment('rds: teacher login');
         // validation
         if (count($errors) === 0) {
 
@@ -268,8 +268,8 @@ if (isset($_POST['stud_login'])) {
             // $sqlSegment->end();
 
             // sleep(3);
-            set_SQLSegmentQuery($sql);
-            submitXrayTracing();
+            // set_SQLSegmentQuery($sql);
+            // submitXrayTracing();
 
 
 
@@ -402,15 +402,15 @@ if (isset($_POST['forgot-password'])) {
         $token = $user['token'];
 
 
-        createFromExistingXrayTracing('Simple Notification Service');
-        createNewRemoteSegment('sns: send email');
+        // createFromExistingXrayTracing('Simple Notification Service');
+        // createNewRemoteSegment('sns: send email');
 
 
         //sending email here
         sendPasswordResetLink($passed_email, $token);
 
-        end_Segment();
-        submitXrayTracing();
+        // end_Segment();
+        // submitXrayTracing();
 
 
 

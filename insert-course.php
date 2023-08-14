@@ -8,7 +8,7 @@ require 'vendor/autoload.php'; // Include the AWS SDK for PHP
 
 require 'config.php';
 require 'awsCode/S3operation.php';
-require 'awsCode/XrayOperation.php';
+require 'awsCode/Xrayoperation.php';
 
 use Pkerrigan\Xray\Trace;
 use Pkerrigan\Xray\RemoteSegment;
@@ -28,23 +28,15 @@ if (isset($_POST['insert-course'])) {
 		$uploadedFile = $_FILES['image'];
 
 
-		createFromExistingXrayTracing('S3 Bucket Service');
-		createNewRemoteSegment('s3: upload image');
+		createFromExistingXrayTracing();
+		createNewS3RemoteSegment();
 
 		$uploadResult = uploadToS3($fileType, $uploadedFile);
 
 
-		// End X-Ray Tracing: Successfully Uploaded Image
-		Trace::getInstance()
-			->getCurrentSegment()
-			->end();
+		end_CurrentSegment();
+		submitXrayTracing();
 
-		Trace::getInstance()
-			->end()
-			->setResponseCode(http_response_code())
-			->submit(new DaemonSegmentSubmitter());
-
-		print_r(Trace::getInstance());
 
 		if ($uploadResult) {
 			echo 'File uploaded successfully to S3!';
@@ -61,7 +53,7 @@ if (isset($_POST['insert-course'])) {
 
 	if ($execute) {
 		echo '<script> alert("Course added successfully!"); 
-		// window.location="teacher-course.php";
+		window.location="teacher-course.php";
 		</script>';
 	} else {
 		echo '<script> alert("An error has occured!"); </script>';

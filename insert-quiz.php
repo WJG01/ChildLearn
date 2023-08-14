@@ -1,6 +1,8 @@
 <?php 
 
 require 'config.php';
+require 'awsCode/S3operation.php';
+require 'awsCode/Xrayoperation.php';
 
 if(isset($_POST['insert-quiz']))
 {

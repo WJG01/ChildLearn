@@ -9,6 +9,8 @@ use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 
 include("config.php");
 include("awsCode/S3operation.php");
+require_once("awsCode/Xrayoperation.php");
+
 
 if (isset($_SESSION['id'])) {
     $nav = "student-navi.php";
@@ -25,10 +27,7 @@ $course_category = $_GET['cat'];
 //Define how many results you want per page
 $result_per_page = 10;
 
-//Find out the number of results stored in the table
-// $sql = "SELECT *, (SELECT COUNT(quques_id) FROM quiz_question qq WHERE (qq.quiz_id = q.quiz_id)) AS totalquestion 
-// , (SELECT COUNT(stud_id) FROM history h WHERE (h.quques_id = qq.quques_id)) AS totalplays FROM quiz q INNER JOIN 
-// quiz_question qq WHERE (qq.quiz_id = q.quiz_id) AND (q.quiz_category = '$quiz_category') GROUP BY q.quiz_id ORDER BY RAND()";
+
 $sql = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count FROM course
 INNER JOIN course_chapter ON course.course_id = course_chapter.course_id
 WHERE course.course_category = '$course_category'
@@ -52,6 +51,9 @@ if (!isset($_GET['page'])) {
 //Determine the SQL LIMIT staring number for the results on the displaying page
 $starting_num = ($page - 1) * $result_per_page;
 
+createFromExistingXrayTracing();
+createNewSQLSegment();
+
 if (isset($_POST['search'])) {
     $search_query = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count 
                      FROM course
@@ -61,6 +63,8 @@ if (isset($_POST['search'])) {
 
     $result = executeQuery($search_query);
     $starting_num = 0;
+
+    set_SQLSegmentQuery($search_query);
 } else {
     //Retreive selected result from the table and display them on page
     $sql = "SELECT course.course_id, course.course_cover, course.course_title, course.course_category, COUNT(*) AS chapter_count 
@@ -71,8 +75,11 @@ if (isset($_POST['search'])) {
             LIMIT " . $starting_num . ',' . $result_per_page;
 
     $result = mysqli_query($conn, $sql);
+
+    set_SQLSegmentQuery($sql);
 }
 
+end_CurrentSegment();
 
 function executeQuery($query)
 {
@@ -97,28 +104,24 @@ function executeQuery($query)
     <link rel="stylesheet" href="stylesheets/quiz-cards.css">
     <link rel="stylesheet" href="stylesheets/show-allquiz.css">
     <link rel="stylesheet" href="stylesheets/paginations.css">
-    <title><?php echo $row['course_category'] ?> Course Page</title>
+    <title>
+        <?php echo $row['course_category'] ?> Course Page
+    </title>
 </head>
 
 <body>
     <section class="show-all-quiz" id="show-all-quiz">
-        <!-- <div class="title-and-search">
-            <p class="show-quiz"><?php echo $row['course_category'] ?> Course</p>
-            <div class="search-bar">
-                <form method="POST" action="show-course.php?cat=<?php echo $course_category; ?>" autocomplete="off">
-                    <input id="search-input" name="search" type="text" placeholder="Search course here...">
-                    <input id="real-submit" type="submit" hidden>
-                    <button id="search-btn" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
-                </form>
-            </div>
-        </div> -->
         <div class="title-and-search">
-            <p class="show-quiz"><?php echo $row['course_category'] ?> Course</p>
+            <p class="show-quiz">
+                <?php echo $row['course_category'] ?> Course
+            </p>
             <div class="search-bar">
                 <form method="POST" action="show-course.php?cat=<?php echo $course_category; ?>" autocomplete="off">
-                    <input id="search-input" name="search" type="text" placeholder="Search course here..." value="<?php echo isset($_POST['search']) ? $_POST['search'] : ''; ?>">
+                    <input id="search-input" name="search" type="text" placeholder="Search course here..."
+                        value="<?php echo isset($_POST['search']) ? $_POST['search'] : ''; ?>">
                     <input id="real-submit" type="submit" hidden>
-                    <button id="search-btn" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
+                    <button id="search-btn" type="submit" name="submit" value="Search"><i
+                            class="fas fa-search"></i></button>
                 </form>
             </div>
         </div>
@@ -133,40 +136,32 @@ function executeQuery($query)
                 <?php
 
                 //Start X-Ray Tracing for CloudFront- section-1
-                Trace::getInstance()
-                    ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-                    ->setParentId($_SESSION['parent_id'])
-                    ->setTraceId($_SESSION['trace_id'])
-                    ->setIndependent(true)
-                    ->setName('Cloudfront Service')
-                    ->setUrl($_SERVER['REQUEST_URI'])
-                    ->setMethod($_SERVER['REQUEST_METHOD'])
-                    ->begin(100);
+                createNewCloudfrontRemoteSegment();
 
-                Trace::getInstance()
-                    ->getCurrentSegment()
-                    ->addSubsegment(
-                        (new RemoteSegment())
-                            ->setName('cloudfront: load image')
-                            ->begin(100)
-                    );
 
                 while ($row = mysqli_fetch_array($result)) {
-                ?>
+                    ?>
                     <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                         <div class="quiz-card">
-                            <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
-                            <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                            <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>"
+                                alt="Course cover picture">
+                            <p class="quiz-title">
+                                <?php echo $row['course_title'] ?>
+                            </p>
                             <div class="quiz-tag">
-                                <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
-                                <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
+                                <p class="quiz-subject">
+                                    <?php echo $row['course_category'] ?>
+                                </p>
+                                <p class="quiz-question">
+                                    <?php echo $row['chapter_count'] ?> Chaps
+                                </p>
                             </div>
                         </div>
                     </a>
 
                     <script type="text/javascript">
-                        $(document).ready(function() {
-                            $("#search-input").keyup(function() {
+                        $(document).ready(function () {
+                            $("#search-input").keyup(function () {
                                 var searchText = $(this).val();
                                 if (searchText != '') {
                                     $.ajax({
@@ -175,7 +170,7 @@ function executeQuery($query)
                                         data: {
                                             query: searchText
                                         },
-                                        success: function(response) {
+                                        success: function (response) {
                                             $("#show-list").html(response);
                                         }
                                     });
@@ -183,27 +178,20 @@ function executeQuery($query)
                                     $("#show-list").html('');
                                 }
                             });
-                            $(document).on('click', 'a', function() {
+                            $(document).on('click', 'a', function () {
                                 $("#search-input").val($(this).text());
                                 $("#show-list").html('');
 
                             });
                         });
                     </script>
-                <?php
+                    <?php
                 }
 
                 //End X-Ray Tracing for CloudFront-section-1
-                Trace::getInstance()
-                    ->getCurrentSegment()
-                    ->end();
+                end_CurrentSegment();
+                submitXrayTracing();
 
-                Trace::getInstance()
-                    ->end()
-                    ->setResponseCode(http_response_code())
-                    ->submit(new DaemonSegmentSubmitter());
-
-                // print_r(Trace::getInstance());
                 ?>
             </div>
         </div>
@@ -212,10 +200,12 @@ function executeQuery($query)
             <?php
             //Display the links to the pages
             for ($page = 1; $page <= $number_of_pages; $page++) {
-            ?>
-                <a class="page-links" href="show-course.php?cat=<?php echo $course_category; ?>&page=<?php echo $page; ?>"><?php echo $page; ?></a>
-            <?php
-            }; ?>
+                ?>
+                <a class="page-links"
+                    href="show-course.php?cat=<?php echo $course_category; ?>&page=<?php echo $page; ?>"><?php echo $page; ?></a>
+                <?php
+            }
+            ; ?>
         </div>
 
     </section>

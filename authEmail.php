@@ -41,7 +41,7 @@ function sendPasswordResetLink($userEmail, $token)
 
             Please click on the link below to reset your password.
           
-            http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com/ChildLearn-sns/verification.php?password-token=' . $token . '
+            http://childlearn-env-1.eba-49nd49e2.us-east-1.elasticbeanstalk.com/ChildLearn/verification.php?password-token=' . $token . '
             ';
 
 

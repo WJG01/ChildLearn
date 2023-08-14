@@ -2,6 +2,9 @@
 include("teacher-session.php");
 require 'config.php';
 include("awsCode/S3operation.php");
+require_once("awsCode/Xrayoperation.php");
+
+createFromExistingXrayTracing();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,36 +46,71 @@ include("awsCode/S3operation.php");
 					</thead>
 					<tbody>
 						<?php
+
+
+
 						$tid = $_SESSION['teach_id'];
 						$qry = $conn->query("SELECT quiz.teac_id, quiz.quiz_description, quiz.quiz_timer, quiz.quiz_point, quiz.quiz_id, quiz.quiz_title, quiz.quiz_category, quiz.quiz_cover, count(*) FROM quiz LEFT JOIN quiz_question ON (quiz.quiz_id = quiz_question.quiz_id) WHERE quiz.teac_id = '$tid' GROUP BY quiz.quiz_id");
 						$i = 1;
 						if ($qry->num_rows > 0) {
 							while ($row = $qry->fetch_assoc()) {
-								$items = $conn->query("SELECT count(quques_id) as item_count from quiz_question where quiz_id = '" . $row['quiz_id'] . "'")->fetch_array()['item_count'];
-						?>
+								$sql = "SELECT count(quques_id) as item_count from quiz_question where quiz_id = '$quizId'";
+								$items = $conn->query($sql)->fetch_array()['item_count'];
+
+								createNewSQLSegment();
+								set_SQLSegmentQuery($sql);
+								end_CurrentSegment();
+
+								createNewCloudfrontRemoteSegment();
+								?>
 								<tr>
-									<td><?php echo $i ?></td>
-									<td><?php echo $row['quiz_title'] ?></td>
-									<td><?php echo $row['quiz_category'] ?></td>
-									<td><?php echo $row['quiz_timer'] ?></td>
-									<td><?php echo $row['quiz_point'] ?></td>
-									<td><?php echo $row['quiz_description'] ?></td>
-									<td><?php echo $items ?></td>
 									<td>
-										<img class="quiz-cover-pic" src="<?php echo getMediaFromS3($row['quiz_cover']); ?>" alt="Quiz cover picture" style="max-width: 100px; max-height: 100px; object-fit: contain;">
+										<?php echo $i ?>
+									</td>
+									<td>
+										<?php echo $row['quiz_title'] ?>
+									</td>
+									<td>
+										<?php echo $row['quiz_category'] ?>
+									</td>
+									<td>
+										<?php echo $row['quiz_timer'] ?>
+									</td>
+									<td>
+										<?php echo $row['quiz_point'] ?>
+									</td>
+									<td>
+										<?php echo $row['quiz_description'] ?>
+									</td>
+									<td>
+										<?php echo $items ?>
+									</td>
+									<td>
+										<img class="quiz-cover-pic" src="<?php echo getMediaFromS3($row['quiz_cover']); ?>"
+											alt="Quiz cover picture"
+											style="max-width: 100px; max-height: 100px; object-fit: contain;">
 									</td>
 
 									<td>
 										<center>
-											<a class="btn btn-sm btn-outline-primary edit_quiz" href="./quiz-view.php?id=<?php echo $row['quiz_id'] ?>"><i class="fa fa-task"></i> Manage</a>
-											<button class="btn btn-sm btn-outline-primary editbtn" data-id="<?php echo $row['quiz_id'] ?>" type="button"><i class="fa fa-edit"></i> Edit</button>
-											<button class="btn btn-sm btn-outline-danger remove_quiz" data-id="<?php echo $row['quiz_id'] ?>" type="button"><i class="fa fa-trash"></i> Delete</button>
+											<a class="btn btn-sm btn-outline-primary edit_quiz"
+												href="./quiz-view.php?id=<?php echo $row['quiz_id'] ?>"><i
+													class="fa fa-task"></i> Manage</a>
+											<button class="btn btn-sm btn-outline-primary editbtn"
+												data-id="<?php echo $row['quiz_id'] ?>" type="button"><i class="fa fa-edit"></i>
+												Edit</button>
+											<button class="btn btn-sm btn-outline-danger remove_quiz"
+												data-id="<?php echo $row['quiz_id'] ?>" type="button"><i
+													class="fa fa-trash"></i> Delete</button>
 										</center>
 									</td>
 								</tr>
 
-						<?php
+								<?php
 								$i++;
+
+								end_CurrentSegment();
+								submitXrayTracing();
 							}
 						}
 						?>
@@ -87,7 +125,8 @@ include("awsCode/S3operation.php");
 			<div style="width: 100%;" class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="myModallabel">Add new quiz</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
 				</div>
 				<form method="POST" action="insert-quiz.php" id='quiz-frm' enctype="multipart/form-data">
 					<div class="modal-body">
@@ -104,7 +143,8 @@ include("awsCode/S3operation.php");
 						</div>
 						<div class="form-group">
 							<label>Quiz Timer</label>
-							<input placeholder="(in minutes)" type="number" min="1" max="60" name="quiz_timer" required class="form-control" />
+							<input placeholder="(in minutes)" type="number" min="1" max="60" name="quiz_timer" required
+								class="form-control" />
 						</div>
 						<div class="form-group">
 							<label>Quiz Points</label>
@@ -121,7 +161,8 @@ include("awsCode/S3operation.php");
 					</div>
 					<div class="modal-footer">
 						<input type="hidden" value="<?php echo date("Y-m-d h:i:s"); ?>" name="quiz_create_date">
-						<button type="submit" class="btn btn-success" name="insert-quiz"><span class="glyphicon glyphicon-save"></span> Save</button>
+						<button type="submit" class="btn btn-success" name="insert-quiz"><span
+								class="glyphicon glyphicon-save"></span> Save</button>
 					</div>
 				</form>
 			</div>
@@ -133,7 +174,8 @@ include("awsCode/S3operation.php");
 			<div style="width: 100%;" class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="myModallabel">Edit quiz</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
 				</div>
 				<form method="POST" action="update-quiz.php" id='quiz-frm' enctype="multipart/form-data">
 					<div class="modal-body">
@@ -148,7 +190,8 @@ include("awsCode/S3operation.php");
 						</div>
 						<div class="form-group">
 							<label>Quiz Timer</label>
-							<input placeholder="(in minutes)" id="quiz_timer" type="number" min="1" max="60" name="quiz_timer" required class="form-control" />
+							<input placeholder="(in minutes)" id="quiz_timer" type="number" min="1" max="60"
+								name="quiz_timer" required class="form-control" />
 						</div>
 						<div class="form-group">
 							<label>Quiz Points</label>
@@ -156,16 +199,18 @@ include("awsCode/S3operation.php");
 						</div>
 						<div class="form-group">
 							<label>Quiz Description</label>
-							<textarea rows='3' name="quiz_description" id="quiz_description" required class="form-control"></textarea>
+							<textarea rows='3' name="quiz_description" id="quiz_description" required
+								class="form-control"></textarea>
 						</div>
 						<div class="form-group">
 							<label>Quiz Cover</label>
-							<input type="file"  accept="image/*,.png,.jpeg,.jpg" name="image" class="form-control">
+							<input type="file" accept="image/*,.png,.jpeg,.jpg" name="image" class="form-control">
 						</div>
 					</div>
 					<div class="modal-footer">
 						<input type="hidden" value="<?php echo date("Y-m-d h:i:s"); ?>" name="quiz_create_date">
-						<button type="submit" class="btn btn-primary" name="update-quiz"><span class="glyphicon glyphicon-save"></span>Update Quiz</button>
+						<button type="submit" class="btn btn-primary" name="update-quiz"><span
+								class="glyphicon glyphicon-save"></span>Update Quiz</button>
 					</div>
 				</form>
 			</div>
@@ -175,19 +220,19 @@ include("awsCode/S3operation.php");
 </body>
 
 <script>
-	$(document).ready(function() {
+	$(document).ready(function () {
 		$('#table').DataTable();
-		$('#new_quiz').click(function() {
+		$('#new_quiz').click(function () {
 			$('#msg').html('')
 			$('#manage_quiz .modal-title').html('Add New quiz')
 			$('#manage_quiz #quiz-frm').get(0).reset()
 			$('#manage_quiz').modal('show')
 		})
 
-		$(document).on("click", ".editbtn", function() {
+		$(document).on("click", ".editbtn", function () {
 			$('#edit_quiz').modal('show');
 			$tr = $(this).closest('tr');
-			var data = $tr.children("td").map(function() {
+			var data = $tr.children("td").map(function () {
 				return $(this).text();
 			}).get();
 			console.log(data);
@@ -199,14 +244,14 @@ include("awsCode/S3operation.php");
 			$('#quiz_description').val(data[5]);
 		});
 
-		$(document).on("click", ".remove_quiz", function() {
+		$(document).on("click", ".remove_quiz", function () {
 			var id = $(this).attr('data-id')
 			var conf = confirm('Are you sure you want to delete this quiz?');
 			if (conf == true) {
 				$.ajax({
 					url: './delete-quiz.php?id=' + id,
 					error: err => console.log(err),
-					success: function(resp) {
+					success: function (resp) {
 						if (resp == true)
 							location.reload()
 						alert("Quiz has been successfully deleted!");

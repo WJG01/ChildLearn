@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("config.php");
+include("awsCode/S3operation.php");
+require_once("awsCode/Xrayoperation.php");
 
 if (isset($_SESSION['id'])) {
     $nav = "student-navi.php";
@@ -10,11 +12,17 @@ if (isset($_SESSION['id'])) {
 }
 include($nav);
 
+createFromExistingXrayTracing();
+createNewSQLSegment();
+
 $log_userid = $_SESSION['id'];
 $quizid = $_GET['quizid'];
 $sql = "SELECT * FROM quiz q INNER JOIN teacher t WHERE (q.teac_id = t.teac_id) AND q.quiz_id = '$quizid'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_array($result);
+
+set_SQLSegmentQuery($sql);
+end_CurrentSegment();
 
 ?>
 
@@ -30,7 +38,9 @@ $row = mysqli_fetch_array($result);
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="icon" type="image/png" href="Images/skillsoft-favicon.png">
     <link rel="stylesheet" href="stylesheets/stud-quizquestion.css">
-    <title><?php echo $row['quiz_title']; ?></title>
+    <title>
+        <?php echo $row['quiz_title']; ?>
+    </title>
 </head>
 
 <body>
@@ -38,10 +48,17 @@ $row = mysqli_fetch_array($result);
         <?php include("backBtn.php"); ?>
         <div class="quiz-list-all">
             <div class="title-col">
-                <p class="quiz-title"><?php echo $row['quiz_title']; ?></p>
+                <p class="quiz-title">
+                    <?php echo $row['quiz_title']; ?>
+                </p>
                 <div class="create-info">
-                    <p>Created By: <?php echo $row['teac_first_name']; ?>&nbsp<?php echo $row['teac_last_name']; ?></p>
-                    <p>Created On: <?php echo $row['quiz_create_date']; ?></p>
+                    <p>Created By:
+                        <?php echo $row['teac_first_name']; ?>&nbsp
+                        <?php echo $row['teac_last_name']; ?>
+                    </p>
+                    <p>Created On:
+                        <?php echo $row['quiz_create_date']; ?>
+                    </p>
                     <h2 id="timer-countdown"></h2>
                 </div>
             </div>
@@ -50,45 +67,67 @@ $row = mysqli_fetch_array($result);
                 <form class="ques-list" method="POST" action="check-answer.php" id="submit">
                     <?php
                     include "config.php";
+                    createNewSQLSegment();
+
                     $sql = "SELECT *, (SELECT COUNT(quques_number) FROM quiz_question qq WHERE (qq.quiz_id = '$quizid')) AS totalquizquestion FROM quiz_question qq INNER JOIN 
                     quiz q WHERE (qq.quiz_id = q.quiz_id) AND q.quiz_id = '$quizid' ORDER BY quques_number ASC";
                     $result = mysqli_query($conn, $sql);
+
+                    set_SQLSegmentQuery($sql);
+                    end_CurrentSegment();
+
                     while ($row = mysqli_fetch_array($result)) {
-                    ?>
+                        ?>
                         <div class="ques-info-box">
                             <div class="ques-title-info">
                                 <p>
-                                    <?php echo $row['quques_number']; ?>/<?php echo $row['totalquizquestion']; ?>
+                                    <?php echo $row['quques_number']; ?>/
+                                    <?php echo $row['totalquizquestion']; ?>
                                 </p>
-                                <h1><?php echo $row['quques_question']; ?></h1>
+                                <h1>
+                                    <?php echo $row['quques_question']; ?>
+                                </h1>
                             </div>
                             <div class="ques-opts-info">
                                 <input type="hidden" name="quiz_id" value="<?php echo $row['quiz_id']; ?>">
                                 <input type="hidden" name="stud_id" value="<?php echo $log_userid; ?>">
-                                <input type="hidden" name="quques_id[<?php echo $row['quques_number']; ?>]" value="<?php echo $row['quques_id']; ?>">
+                                <input type="hidden" name="quques_id[<?php echo $row['quques_number']; ?>]"
+                                    value="<?php echo $row['quques_id']; ?>">
                                 <label class="mcq-choices">
-                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option" value="1">
+                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option"
+                                        value="1">
                                     <span class="checkmark"></span>
-                                    <p><?php echo $row['quques_choices_A']; ?></p>
+                                    <p>
+                                        <?php echo $row['quques_choices_A']; ?>
+                                    </p>
                                 </label>
                                 <label class="mcq-choices">
-                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option" value="2">
+                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option"
+                                        value="2">
                                     <span class="checkmark"></span>
-                                    <p><?php echo $row['quques_choices_B']; ?></p>
+                                    <p>
+                                        <?php echo $row['quques_choices_B']; ?>
+                                    </p>
                                 </label>
                                 <label class="mcq-choices">
-                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option" value="3">
+                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option"
+                                        value="3">
                                     <span class="checkmark"></span>
-                                    <p><?php echo $row['quques_choices_C']; ?></p>
+                                    <p>
+                                        <?php echo $row['quques_choices_C']; ?>
+                                    </p>
                                 </label>
                                 <label class="mcq-choices">
-                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option" value="4">
+                                    <input type="radio" name="answer[<?php echo $row['quques_number']; ?>]" class="option"
+                                        value="4">
                                     <span class="checkmark"></span>
-                                    <p><?php echo $row['quques_choices_D']; ?></p>
+                                    <p>
+                                        <?php echo $row['quques_choices_D']; ?>
+                                    </p>
                                 </label>
                             </div>
                         </div>
-                    <?php
+                        <?php
                     }
                     ?>
                     <div class="btn-column">
@@ -105,20 +144,27 @@ $row = mysqli_fetch_array($result);
             let text = "Are you sure you want to quit the quiz? All process will not be saved!";
             if (confirm(text) == true) {
                 window.history.back();
-            } else {}
+            } else { }
         }
     </script>
 
     <?php
     include "config.php";
+    createNewSQLSegment();
+
+
     $sql = "SELECT *, (SELECT COUNT(quques_number) FROM quiz_question qq WHERE (qq.quiz_id = '$quizid')) AS totalquizquestion FROM quiz_question qq INNER JOIN 
     quiz q WHERE (qq.quiz_id = q.quiz_id) AND q.quiz_id = '$quizid' ORDER BY quques_number ASC";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result);
+
+    set_SQLSegmentQuery($sql);
+    end_CurrentSegment();
+    submitXrayTracing();
     ?>
     <script>
-        $(document).ready(function() {
-            $('#complete-btn').click(function() {
+        $(document).ready(function () {
+            $('#complete-btn').click(function () {
                 checked = ($("input[type=radio]:checked").length >= <?php echo $row['totalquizquestion'] ?>);
 
                 if (!checked) {
@@ -131,7 +177,7 @@ $row = mysqli_fetch_array($result);
     </script>
 
     <script>
-        $(document).scroll(function() {
+        $(document).scroll(function () {
             var y = $(this).scrollTop();
             if (y > 400) {
                 $('#timer-countdown').addClass('fixed-timer');
@@ -144,10 +190,10 @@ $row = mysqli_fetch_array($result);
     <?php
     $query = "SELECT * FROM quiz WHERE quiz_id = '$quizid'";
     $timer_result = mysqli_query($conn, $query);
-    if ($timer_result) :
-        if (mysqli_num_rows($timer_result) > 0) :
-            while ($res = mysqli_fetch_array($timer_result)) :
-    ?>
+    if ($timer_result):
+        if (mysqli_num_rows($timer_result) > 0):
+            while ($res = mysqli_fetch_array($timer_result)):
+                ?>
                 <script>
                     function countdown(elementName, minutes, seconds) {
                         var element, endTime, hours, mins, msLeft, time;
@@ -177,7 +223,7 @@ $row = mysqli_fetch_array($result);
 
                     countdown("timer-countdown", <?php echo $row['quiz_timer']; ?>, 0);
                 </script>
-    <?php
+                <?php
             endwhile;
         endif;
     endif;
