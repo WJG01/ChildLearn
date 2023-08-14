@@ -10,7 +10,7 @@
 <body>
     <section class="top-nav-bar">
         <div class="left-nav">
-            <a id="learneasy-logo" href="admin-home.php"><img src="Images/Learneasy-top-logo.png" alt=""></a>
+            <!-- <a id="learneasy-logo" href="admin-home.php"><img src="Images/Learneasy-top-logo.png" alt=""></a> -->
             <nav>
                 <ul class="main-menu">
                     <li><a href="admin-home.php">Dashboard&nbsp;</a>

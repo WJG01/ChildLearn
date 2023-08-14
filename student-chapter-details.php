@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("config.php");
+include("awsCode/S3operation.php");
+require_once("awsCode/Xrayoperation.php");
 
 if (isset($_SESSION['id'])) {
     $nav = "student-navi.php";
@@ -9,6 +11,9 @@ if (isset($_SESSION['id'])) {
     echo '<script>location.href="index.php"</script>';
 }
 include($nav);
+
+createFromExistingXrayTracing();
+createNewSQLSegment();
 
 // Get the chapter_id from the query string
 $chapter_id = $_GET['chapter_id'];
@@ -21,6 +26,11 @@ $chapter_title = $row['chapter_title'];
 $content_text = $row['content_text'];
 $content_image = $row['content_image'];
 $content_video = $row['content_video'];
+
+set_SQLSegmentQuery($sql);
+end_CurrentSegment();
+
+createNewCloudfrontRemoteSegment();
 ?>
 
 
@@ -37,22 +47,30 @@ $content_video = $row['content_video'];
     <link rel="stylesheet" href="stylesheets/student-chapter-details.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/paginations.css">
-    <title>Chapter <?php echo $chapter_id ?>: <?php echo $chapter_title ?> </title>
+    <title>Chapter
+        <?php echo $chapter_id ?>:
+        <?php echo $chapter_title ?>
+    </title>
 </head>
 
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Chapter <?php echo $chapter_id ?>: <?php echo $chapter_title; ?></h1>
+        <h1 class="mb-4">Chapter
+            <?php echo $chapter_id ?>:
+            <?php echo $chapter_title; ?>
+        </h1>
         <div class="chapter-image">
-            <img src="Images/<?php echo $content_image; ?>" alt="Chapter Image" class="img-fluid">
+            <img src="<?php getMediaFromCloudFront($content_image); ?>" alt="Chapter Image" class="img-fluid">
         </div>
         <div class="chapter-content">
             <div class="content-text" style="white-space: pre-line;">
-                <p><?php echo $content_text; ?></p>
+                <p>
+                    <?php echo $content_text; ?>
+                </p>
             </div>
             <div class="content-video">
                 <h2>Recap Video :</h2> <!-- Added heading for the video section -->
-                <video src="Videos/<?php echo $content_video; ?>" controls class="video-border"></video>
+                <video src="<?php getMediaFromCloudFront($content_video); ?>" controls class="video-border"></video>
 
             </div>
             <div class="end-of-chapter">
@@ -67,3 +85,8 @@ $content_video = $row['content_video'];
 </body>
 
 </html>
+
+<?php
+end_CurrentSegment();
+submitXrayTracing();
+?>

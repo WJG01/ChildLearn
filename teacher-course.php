@@ -2,6 +2,10 @@
 include("teacher-session.php");
 require 'config.php';
 include("awsCode/S3operation.php");
+require_once("awsCode/Xrayoperation.php");
+
+
+createFromExistingXrayTracing();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +47,15 @@ include("awsCode/S3operation.php");
 					<tbody>
 						<?php
 						$tid = $_SESSION['teach_id'];
-						$qry = $conn->query("SELECT course.teac_id, course.course_id, course.course_title, course.course_category, course.course_cover, course.course_description, course.course_create_date, count(*) FROM course LEFT JOIN course_chapter ON (course.course_id = course_chapter.course_id) WHERE course.teac_id = '$tid' GROUP BY course.course_id");
+						$sql = "SELECT course.teac_id, course.course_id, course.course_title, course.course_category, course.course_cover, course.course_description, course.course_create_date, count(*) FROM course LEFT JOIN course_chapter ON (course.course_id = course_chapter.course_id) WHERE course.teac_id = '$tid' GROUP BY course.course_id";
+						$qry = $conn->query($sql);
+
+						createNewSQLSegment();
+						set_SQLSegmentQuery($sql);
+						end_CurrentSegment();
+
+
+						createNewCloudfrontRemoteSegment();
 
 						$i = 1;
 						if ($qry->num_rows > 0) {
@@ -74,6 +86,8 @@ include("awsCode/S3operation.php");
 								$i++;
 							}
 						}
+						end_CurrentSegment();
+						submitXrayTracing();
 						?>
 
 					</tbody>

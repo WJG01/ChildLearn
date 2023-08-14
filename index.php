@@ -1,15 +1,23 @@
 <?php
 include("config.php");
-require 'vendor/autoload.php';
-include("awsCode/S3operation.php");
-include("awsCode/XrayOperation.php");
+require 'vendor/autoload.php'; // Include the AWS SDK for PHP
+require_once 'awsCode/S3operation.php';
+require_once 'awsCode/Xrayoperation.php';
 
 if (!isset($_SESSION)) {
     session_start();
 }
 
 
+
+use Pkerrigan\Xray\Trace;
+use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
+
 createNewXrayTracing();
+
+submitXrayTracing();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -55,18 +63,25 @@ createNewXrayTracing();
             LIMIT 4";
             $result = mysqli_query($conn, $sql);
             while ($row = mysqli_fetch_array($result)) {
-            ?>
+                ?>
                 <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                     <div class="quiz-card">
-                        <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
-                        <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                        <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>"
+                            alt="Course cover picture">
+                        <p class="quiz-title">
+                            <?php echo $row['course_title'] ?>
+                        </p>
                         <div class="quiz-tag">
-                            <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
-                            <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
+                            <p class="quiz-subject">
+                                <?php echo $row['course_category'] ?>
+                            </p>
+                            <p class="quiz-question">
+                                <?php echo $row['chapter_count'] ?> Chaps
+                            </p>
                         </div>
                     </div>
                 </a>
-            <?php
+                <?php
             }
             ?>
         </div>
@@ -84,19 +99,28 @@ createNewXrayTracing();
                 WHERE (qq.quiz_id = q.quiz_id) ORDER BY RAND() LIMIT 4";
             $result = mysqli_query($conn, $sql);
             while ($row = mysqli_fetch_array($result)) {
-            ?>
+                ?>
                 <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                     <div class="quiz-card">
-                        <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
-                        <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
+                        <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>"
+                            alt="Quiz cover picture">
+                        <p class="quiz-title">
+                            <?php echo $row['quiz_title'] ?>
+                        </p>
                         <div class="quiz-tag">
-                            <p class="quiz-subject"><?php echo $row['quiz_category'] ?></p>
-                            <p class="quiz-question"><?php echo $row['totalquestion'] ?>Qs</p>
-                            <p class="quiz-play"><?php echo $row['totalplays'] ?>plays</p>
+                            <p class="quiz-subject">
+                                <?php echo $row['quiz_category'] ?>
+                            </p>
+                            <p class="quiz-question">
+                                <?php echo $row['totalquestion'] ?>Qs
+                            </p>
+                            <p class="quiz-play">
+                                <?php echo $row['totalplays'] ?>plays
+                            </p>
                         </div>
                     </div>
                 </a>
-            <?php
+                <?php
             }
             ?>
         </div>
@@ -118,7 +142,8 @@ createNewXrayTracing();
                     any topic, in any language. Sign Up now as a teacher and start
                     creating your own quiz.
                 </h3>
-                <button class="sign-up-teacher-btn" onclick="location.href='teacher-signup.php'">Sign Up As a Teacher</button>
+                <button class="sign-up-teacher-btn" onclick="location.href='teacher-signup.php'">Sign Up As a
+                    Teacher</button>
             </div>
         </div>
     </div>
@@ -151,8 +176,8 @@ createNewXrayTracing();
     <?php include("visitor-footer.php"); ?>
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            $("#send-btn").on("click", function() {
+        $(document).ready(function () {
+            $("#send-btn").on("click", function () {
                 $value = $("#data").val();
                 $msg = '<div class="user-inbox inbox"><div class="msg-header"><p>' + $value + '</p></div></div>';
                 $(".form").append($msg);
@@ -163,7 +188,7 @@ createNewXrayTracing();
                     url: 'chatbot.php',
                     type: 'POST',
                     data: 'text=' + $value,
-                    success: function(result) {
+                    success: function (result) {
                         $replay = '<div class="bot-inbox inbox"><div class="icon"><i class="fas fa-user"></i></div><div class="msg-header"><p>' + result + '</p></div></div>';
                         $(".form").append($replay);
                         // when chat goes down the scroll bar automatically comes to the bottom
@@ -178,9 +203,3 @@ createNewXrayTracing();
 </html>
 
 
-
-<?php
-
-submitXrayTracing();
-
-?>

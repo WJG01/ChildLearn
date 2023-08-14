@@ -4,16 +4,20 @@ ini_set('display_errors', 1);
 session_start();
 
 require 'vendor/autoload.php'; // Include the AWS SDK for PHP
+include("config.php");
+include("awsCode/S3operation.php");
+require_once("awsCode/Xrayoperation.php");
+
 use Pkerrigan\Xray\Trace;
 use Pkerrigan\Xray\RemoteSegment;
 use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
+
 
 if (!(isset($_SESSION['id']) || $_SESSION['teach_id'])) {
     echo '<script>alert("You must log in to your account first.")</script>';
     echo '<script>location.href="index.php"</script>';
 }
-include("config.php");
-include("awsCode/S3operation.php");
+
 
 if (isset($_SESSION['id'])) {
     $log_userid = $_SESSION['id'];
@@ -56,12 +60,14 @@ $row = mysqli_fetch_array($result);
         <span class="quiz-greetings-title">Welcome Back, <b>
                 <?php
                 if (isset($_SESSION['id'])) {
-                    echo $row['stud_first_name']; ?>&nbsp;<?php echo $row['stud_last_name'];
-                                                        } else if (isset($_SESSION['teach_id'])) {
-                                                            echo $row['teac_first_name']; ?>&nbsp;<?php echo $row['teac_last_name'];
-                                                                                                }
+                    echo $row['stud_first_name']; ?>&nbsp;
+                    <?php echo $row['stud_last_name'];
+                } else if (isset($_SESSION['teach_id'])) {
+                    echo $row['teac_first_name']; ?>&nbsp;
+                    <?php echo $row['teac_last_name'];
+                }
 
-                                                                                                    ?>
+                ?>
             </b></span>
     </div>
 
@@ -93,48 +99,39 @@ $row = mysqli_fetch_array($result);
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
 
-
+                    createFromExistingXrayTracing();
+                    createNewSQLSegment();
+                    set_SQLSegmentQuery($sql);
+                    sleep(1);
+                    end_CurrentSegment();
 
                     // Start X-Ray Tracing for CloudFront- section-1
-                    Trace::getInstance()
-                        ->setTraceHeader($_SERVER['HTTP_X_AMZN_TRACE_ID'] ?? null)
-                        ->setParentId($_SESSION['parent_id'])
-                        ->setTraceId($_SESSION['trace_id'])
-                        ->setIndependent(true)
-                        ->setName('Cloudfront Service')
-                        ->setUrl($_SERVER['REQUEST_URI'])
-                        ->setMethod($_SERVER['REQUEST_METHOD'])
-                        ->begin(100);
-
-                    Trace::getInstance()
-                        ->getCurrentSegment()
-                        ->addSubsegment(
-                            (new RemoteSegment())
-                                ->setName('cloudfront: load image')
-                                ->begin(100)
-                        );
+                    createNewCloudfrontRemoteSegment();
 
                     while ($row = mysqli_fetch_array($result)) {
-                    ?>
+                        ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
-                                <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                                <img class="quiz-cover-pic"
+                                    src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>"
+                                    alt="Course cover picture">
+                                <p class="quiz-title">
+                                    <?php echo $row['course_title'] ?>
+                                </p>
                                 <div class="quiz-tag">
-                                    <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
-                                    <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
+                                    <p class="quiz-subject">
+                                        <?php echo $row['course_category'] ?>
+                                    </p>
+                                    <p class="quiz-question">
+                                        <?php echo $row['chapter_count'] ?> Chaps
+                                    </p>
                                 </div>
                             </div>
                         </a>
-                    <?php
+                        <?php
                     }
 
-                    //End X-Ray Tracing for CloudFront-section-1
-                    Trace::getInstance()
-                        ->getCurrentSegment()
-                        ->end();
-
-                    // print_r(Trace::getInstance());
+                    end_CurrentSegment();
                     ?>
                 </div>
             </div>
@@ -153,27 +150,37 @@ $row = mysqli_fetch_array($result);
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
 
-                    Trace::getInstance()
-                        ->getCurrentSegment()
-                        ->begin();
+                    createNewSQLSegment();
+                    set_SQLSegmentQuery($sql);
+                    end_CurrentSegment();
+
+
+                    // Start X-Ray Tracing for CloudFront- section-1
+                    createNewCloudfrontRemoteSegment();
 
                     while ($row = mysqli_fetch_array($result)) {
-                    ?>
+                        ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
-                                <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                                <img class="quiz-cover-pic"
+                                    src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>"
+                                    alt="Course cover picture">
+                                <p class="quiz-title">
+                                    <?php echo $row['course_title'] ?>
+                                </p>
                                 <div class="quiz-tag">
-                                    <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
-                                    <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
+                                    <p class="quiz-subject">
+                                        <?php echo $row['course_category'] ?>
+                                    </p>
+                                    <p class="quiz-question">
+                                        <?php echo $row['chapter_count'] ?> Chaps
+                                    </p>
                                 </div>
                             </div>
                         </a>
-                    <?php
+                        <?php
                     }
-                    Trace::getInstance()
-                        ->getCurrentSegment()
-                        ->end();
+                    end_CurrentSegment();
                     ?>
                 </div>
             </div>
@@ -191,35 +198,38 @@ $row = mysqli_fetch_array($result);
                     GROUP BY course.course_id
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
-                    Trace::getInstance()
-                        ->getCurrentSegment()
-                        ->begin();
+
+                    createNewSQLSegment();
+                    set_SQLSegmentQuery($sql);
+                    end_CurrentSegment();
+
+
+                    // Start X-Ray Tracing for CloudFront- section-1
+                    createNewCloudfrontRemoteSegment();
 
                     while ($row = mysqli_fetch_array($result)) {
-                    ?>
+                        ?>
                         <a class="quiz-link" href="student-course-chapter.php?course_id=<?php echo $row['course_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>" alt="Course cover picture">
-                                <p class="quiz-title"><?php echo $row['course_title'] ?></p>
+                                <img class="quiz-cover-pic"
+                                    src="<?php echo getMediaFromCloudFront($row['course_cover']); ?>"
+                                    alt="Course cover picture">
+                                <p class="quiz-title">
+                                    <?php echo $row['course_title'] ?>
+                                </p>
                                 <div class="quiz-tag">
-                                    <p class="quiz-subject"><?php echo $row['course_category'] ?></p>
-                                    <p class="quiz-question"><?php echo $row['chapter_count'] ?> Chaps</p>
+                                    <p class="quiz-subject">
+                                        <?php echo $row['course_category'] ?>
+                                    </p>
+                                    <p class="quiz-question">
+                                        <?php echo $row['chapter_count'] ?> Chaps
+                                    </p>
                                 </div>
                             </div>
                         </a>
-                    <?php
+                        <?php
                     }
-                    Trace::getInstance()
-                        ->getCurrentSegment()
-                        ->end();
-
-                    Trace::getInstance()
-                        ->end()
-                        ->setResponseCode(http_response_code())
-                        ->submit(new DaemonSegmentSubmitter());
-
-                    // print_r(Trace::getInstance());
-
+                    end_CurrentSegment();
                     ?>
                 </div>
             </div>
@@ -248,21 +258,41 @@ $row = mysqli_fetch_array($result);
                     ORDER BY RAND()
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
+
+                    createNewSQLSegment();
+                    set_SQLSegmentQuery($sql);
+                    end_CurrentSegment();
+
+
+                    // Start X-Ray Tracing for CloudFront- section-1
+                    createNewCloudfrontRemoteSegment();
+                    
                     while ($row = mysqli_fetch_array($result)) {
-                    ?>
+                        ?>
                         <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
-                                <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
+                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>"
+                                    alt="Quiz cover picture">
+                                <p class="quiz-title">
+                                    <?php echo $row['quiz_title'] ?>
+                                </p>
                                 <div class="quiz-tag">
-                                    <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
-                                    <p class="quiz-question"><?php echo $row['totalquestion'] ?>Qs</p>
-                                    <p class="quiz-play"><?php echo $row['totalplays'] ?>plays</p>
+                                    <p class="quiz-subject"
+                                        style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        <?php echo $row['course_title'] ?>
+                                    </p>
+                                    <p class="quiz-question">
+                                        <?php echo $row['totalquestion'] ?>Qs
+                                    </p>
+                                    <p class="quiz-play">
+                                        <?php echo $row['totalplays'] ?>plays
+                                    </p>
                                 </div>
                             </div>
                         </a>
-                    <?php
+                        <?php
                     }
+                     end_CurrentSegment();
                     ?>
                 </div>
             </div>
@@ -285,21 +315,42 @@ $row = mysqli_fetch_array($result);
                     ORDER BY RAND()
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
+
+                    createNewSQLSegment();
+                    set_SQLSegmentQuery($sql);
+                    end_CurrentSegment();
+
+
+                    // Start X-Ray Tracing for CloudFront- section-1
+                    createNewCloudfrontRemoteSegment();
+                    
                     while ($row = mysqli_fetch_array($result)) {
-                    ?>
+                        ?>
                         <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
-                                <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
+                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>"
+                                    alt="Quiz cover picture">
+                                <p class="quiz-title">
+                                    <?php echo $row['quiz_title'] ?>
+                                </p>
                                 <div class="quiz-tag">
-                                    <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
-                                    <p class="quiz-question"><?php echo $row['totalquestion'] ?>Qs</p>
-                                    <p class="quiz-play"><?php echo $row['totalplays'] ?>plays</p>
+                                    <p class="quiz-subject"
+                                        style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        <?php echo $row['course_title'] ?>
+                                    </p>
+                                    <p class="quiz-question">
+                                        <?php echo $row['totalquestion'] ?>Qs
+                                    </p>
+                                    <p class="quiz-play">
+                                        <?php echo $row['totalplays'] ?>plays
+                                    </p>
                                 </div>
                             </div>
                         </a>
-                    <?php
+                        <?php
                     }
+
+                     end_CurrentSegment();
                     ?>
                 </div>
             </div>
@@ -322,26 +373,46 @@ $row = mysqli_fetch_array($result);
                     ORDER BY RAND()
                     LIMIT 4";
                     $result = mysqli_query($conn, $sql);
+
+                    createNewSQLSegment();
+                    set_SQLSegmentQuery($sql);
+                    end_CurrentSegment();
+
+
+                    // Start X-Ray Tracing for CloudFront- section-1
+                    createNewCloudfrontRemoteSegment();
+                    
                     while ($row = mysqli_fetch_array($result)) {
-                    ?>
+                        ?>
                         <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
-                                <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
+                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>"
+                                    alt="Quiz cover picture">
+                                <p class="quiz-title">
+                                    <?php echo $row['quiz_title'] ?>
+                                </p>
                                 <div class="quiz-tag">
-                                    <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
-                                    <p class="quiz-question"><?php echo $row['totalquestion'] ?>Qs</p>
-                                    <p class="quiz-play"><?php echo $row['totalplays'] ?>plays</p>
+                                    <p class="quiz-subject"
+                                        style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        <?php echo $row['course_title'] ?>
+                                    </p>
+                                    <p class="quiz-question">
+                                        <?php echo $row['totalquestion'] ?>Qs
+                                    </p>
+                                    <p class="quiz-play">
+                                        <?php echo $row['totalplays'] ?>plays
+                                    </p>
                                 </div>
                             </div>
                         </a>
-                    <?php
+                        <?php
                     }
+                     end_CurrentSegment();
                     ?>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Complete Tab -->
     <div id="completed-quiz" class="tabcontent">
@@ -353,35 +424,61 @@ $row = mysqli_fetch_array($result);
                     , (SELECT COUNT(stud_id) FROM history h WHERE (h.quques_id = qq.quques_id)) AS totalplays FROM quiz q INNER JOIN quiz_question qq, history h 
                     WHERE (qq.quiz_id = q.quiz_id) AND (qq.quques_id = h.quques_id) AND (h.stud_id = ' $log_userid') GROUP BY q.quiz_id ORDER BY RAND()";
                 $result = mysqli_query($conn, $sql);
+
+                createNewSQLSegment();
+                set_SQLSegmentQuery($sql);
+                end_CurrentSegment();
+
+
+                // Start X-Ray Tracing for CloudFront- section-1
+                createNewCloudfrontRemoteSegment();
+                
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result)) {
-                ?>
-                        <a class="quiz-link completed" href="student-result.php?qid=<?php echo $row['quiz_id']; ?>" id="<?php echo $row['quiz_id']; ?>">
+                        ?>
+                        <a class="quiz-link completed" href="student-result.php?qid=<?php echo $row['quiz_id']; ?>"
+                            id="<?php echo $row['quiz_id']; ?>">
                             <div class="quiz-card">
-                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>" alt="Quiz cover picture">
-                                <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
+                                <img class="quiz-cover-pic" src="<?php echo getMediaFromCloudFront($row['quiz_cover']); ?>"
+                                    alt="Quiz cover picture">
+                                <p class="quiz-title">
+                                    <?php echo $row['quiz_title'] ?>
+                                </p>
                                 <div class="quiz-tag">
-                                    <p class="quiz-subject"><?php echo $row['quiz_category'] ?></p>
-                                    <p class="quiz-question"><?php echo $row['totalquestion'] ?>Qs</p>
-                                    <p class="quiz-play"><?php echo $row['totalplays'] ?>plays</p>
+                                    <p class="quiz-subject">
+                                        <?php echo $row['quiz_category'] ?>
+                                    </p>
+                                    <p class="quiz-question">
+                                        <?php echo $row['totalquestion'] ?>Qs
+                                    </p>
+                                    <p class="quiz-play">
+                                        <?php echo $row['totalplays'] ?>plays
+                                    </p>
                                 </div>
                             </div>
                         </a>
-                    <?php
+                        <?php
                     }
                 } else {
                     ?>
-                    <h2 style="font-family: 'Nunito'; font-style: normal; font-weight: 400; font-size: 24px; line-height: 33px; color: #50514F; margin-bottom: 200px" id="no-quiz-title">Oops seems like you didn't attempt any quiz yet!</h2>
-                <?php
+                    <h2 style="font-family: 'Nunito'; font-style: normal; font-weight: 400; font-size: 24px; line-height: 33px; color: #50514F; margin-bottom: 200px"
+                        id="no-quiz-title">Oops seems like you didn't attempt any quiz yet!</h2>
+                    <?php
                 }
+
+                end_CurrentSegment();
+                submitXrayTracing();
+                echo 'HELLO i submitted the segment';
+                
                 ?>
             </div>
         </div>
     </div>
 
+
     <!-- Include jQuery - see http://jquery.com -->
     <script>
-        $('.completed').on('click', function() {
+        $('.completed').on('click', function () {
             var t = (this.id);
             if (confirm("Do you want to reattempt the quiz?")) {
                 $(".completed").attr("href", "student-quizquestion.php?quizid=" + t);

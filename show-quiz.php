@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("config.php");
+include("awsCode/S3operation.php");
+require_once("awsCode/Xrayoperation.php");
 
 if (isset($_SESSION['id'])) {
     $nav = "student-navi.php";
@@ -15,6 +17,9 @@ $quiz_category = $_GET['cat'];
 //Define how many results you want per page
 $result_per_page = 10;
 
+createFromExistingXrayTracing();
+createNewSQLSegment();
+
 //Find out the number of results stored in the table
 $sql = "SELECT *, (SELECT COUNT(quques_id) FROM quiz_question qq WHERE (qq.quiz_id = q.quiz_id)) AS totalquestion 
 , (SELECT COUNT(stud_id) FROM history h WHERE (h.quques_id = qq.quques_id)) AS totalplays FROM quiz q INNER JOIN quiz_question qq WHERE (qq.quiz_id = q.quiz_id) AND (q.quiz_category = '$quiz_category') GROUP BY q.quiz_id ORDER BY RAND()";
@@ -22,6 +27,9 @@ $result = mysqli_query($conn, $sql);
 $number_of_results = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result);
 $quiz_title = $row['quiz_category'];
+
+set_SQLSegmentQuery($sql);
+end_CurrentSegment();
 
 //Determine number of total pages available
 $number_of_pages = ceil($number_of_results / $result_per_page);
@@ -37,6 +45,8 @@ if (!isset($_GET['page'])) {
 $starting_num = ($page - 1) * $result_per_page;
 
 if (isset($_POST['search'])) {
+
+    createNewSQLSegment();
     $search_query = "SELECT q.*, COUNT(qq.quques_id) AS totalquestion, COUNT(h.stud_id) AS totalplays, c.course_title
                      FROM quiz q
                      INNER JOIN quiz_question qq ON qq.quiz_id = q.quiz_id
@@ -47,7 +57,12 @@ if (isset($_POST['search'])) {
                      ORDER BY RAND()";
     $result = executeQuery($search_query);
     $starting_num = 0;
+
+    set_SQLSegmentQuery($search_query);
+    end_CurrentSegment();
 } else {
+
+    createNewSQLSegment();
     // Retrieve selected results from the table and display them on the page
     $sql = "SELECT q.*, COUNT(qq.quques_id) AS totalquestion, COUNT(h.stud_id) AS totalplays, c.course_title
             FROM quiz q
@@ -60,6 +75,8 @@ if (isset($_POST['search'])) {
             LIMIT " . $starting_num . ',' . $result_per_page;
 
     $result = mysqli_query($conn, $sql);
+    set_SQLSegmentQuery($sql);
+    end_CurrentSegment();
 }
 
 function executeQuery($query)
@@ -110,11 +127,14 @@ function executeQuery($query)
         <div class="quiz-card-list-all" id="quiz-card-list-all">
             <div class="quiz-box">
                 <?php
+
+                createNewCloudfrontRemoteSegment();
+
                 while ($row = mysqli_fetch_array($result)) {
                 ?>
                     <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                         <div class="quiz-card">
-                            <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
+                            <img class="quiz-cover-pic" src="<?php getMediaFromCloudFront($row['quiz_cover'])  ?>" alt="Quiz cover picture">
                             <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
                             <div class="quiz-tag">
                                 <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>
@@ -152,6 +172,8 @@ function executeQuery($query)
                     </script>
                 <?php
                 }
+                end_CurrentSegment();
+                submitXrayTracing();
                 ?>
             </div>
         </div>
