@@ -61,7 +61,7 @@ if (isset($_POST['insert-course'])) {
 
 	if ($execute) {
 		echo '<script> alert("Course added successfully!"); 
-		// window.location="teacher-course.php";
+		window.location="teacher-course.php";
 		</script>';
 	} else {
 		echo '<script> alert("An error has occured!"); </script>';

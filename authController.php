@@ -9,6 +9,7 @@ if (!isset($_SESSION)) {
 require 'db.php';
 require_once 'authEmail.php';
 require 'vendor/autoload.php'; // Include the AWS SDK for PHP
+include("awsCode/XrayOperation.php");
 
 
 use Pkerrigan\Xray\Trace;
@@ -190,7 +191,7 @@ if (isset($_POST['stud_login'])) {
 
     if ($role === 'student') {
         createFromExistingXrayTracing('RDS service');
-        createNewSQLSegment('rds: student login');
+        createNewSQLSegment('awseb-e-ecfp7dp5pn-stack-awsebrdsdatabase-3kt0ellbqgdt.c1cevqakx6ry.us-east-1.rds.amazonaws.com');
 
         // validation
         if (count($errors) === 0) {
@@ -236,7 +237,7 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['verified'] = $user['verified'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                // window.location='student-course-quiz.php';
+                window.location='student-course-quiz.php';
                 </script>";
 
                 exit();
@@ -250,7 +251,7 @@ if (isset($_POST['stud_login'])) {
     } else if ($role === 'teacher') { // When teacher clicks on the login button
 
         createFromExistingXrayTracing('RDS service');
-        createNewSQLSegment('rds: teacher login');
+        createNewSQLSegment('awseb-e-ecfp7dp5pn-stack-awsebrdsdatabase-3kt0ellbqgdt.c1cevqakx6ry.us-east-1.rds.amazonaws.com');
         // validation
         if (count($errors) === 0) {
 
@@ -280,7 +281,7 @@ if (isset($_POST['stud_login'])) {
                 $_SESSION['log_username'] = $user['teac_username'];
                 // flash message
                 echo "<script type='text/javascript'>alert('Successfully logged in!');
-                // window.location='teacher-course.php';
+                window.location='teacher-course.php';
                 </script>";
                 exit();
             } else if ($user['teac_status'] == "Not Verified" && password_verify($log_password, $user['teac_password'])) {
@@ -415,7 +416,7 @@ if (isset($_POST['forgot-password'])) {
 
 
         echo "<script type='text/javascript'>alert('An email has been successfully sent to your email address with a link to reset your password.');
-            // window.location='index.php';
+            window.location='index.php';
             </script>";
         exit(0);
     }

@@ -62,7 +62,7 @@
                             <label for="proof-edu">
                                 <span>Proof of Education</span>
                             </label>
-                            <p class="tr-paragraph">To get verified as a teacher on Skillsoft, the applicant must submit proof of education to prove themselves qualified to create quiz for the students.</p>
+                            <p class="tr-paragraph">To get verified as a teacher on ChildLearn, the applicant must submit proof of education to prove themselves qualified to create quiz for the students.</p>
                             <input type="file" id="real-file" hidden="hidden" value="<?php echo $image; ?>" accept=".docx,.pdf" name="image" required="required">
                             <div class="flex-row upload-file">
                                 <button type="button" id="custom-button">Choose File</button>

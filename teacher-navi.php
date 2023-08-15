@@ -30,7 +30,7 @@ $tid = $row['teac_id'];
                         <li><a href="teacher-quiz.php">Quizzes</a></li>
                         <li><a href="teacher-forum.php">Forum</a></li>
                         <li><a href="teacher-statistics.php">Statistics</a></li>
-                        <li><a href="student-course-quiz.php">Course Student View</a></li>
+                        <!-- <li><a href="student-course-quiz.php">Course Student View</a></li> -->
                     </ul>
                 </nav>
             </div>

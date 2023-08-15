@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("config.php");
+require 'awsCode/S3operation.php';
 
 if (isset($_SESSION['id'])) {
     $nav = "student-navi.php";
@@ -114,7 +115,7 @@ function executeQuery($query)
                 ?>
                     <a class="quiz-link" href="student-quizquestion.php?quizid=<?php echo $row['quiz_id']; ?>">
                         <div class="quiz-card">
-                            <img class="quiz-cover-pic" src="Images/<?php echo $row['quiz_cover'] ?>" alt="Quiz cover picture">
+                            <img class="quiz-cover-pic" src="<?php getMediaFromCloudFront( $row['quiz_cover']) ?>" alt="Quiz cover picture">
                             <p class="quiz-title"><?php echo $row['quiz_title'] ?></p>
                             <div class="quiz-tag">
                                 <p class="quiz-subject" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $row['course_title'] ?></p>

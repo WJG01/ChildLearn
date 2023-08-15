@@ -2,14 +2,14 @@
 include("config.php");
 require 'vendor/autoload.php';
 include("awsCode/S3operation.php");
-include("awsCode/XrayOperation.php");
+include("authController.php");
 
 if (!isset($_SESSION)) {
     session_start();
 }
 
-
 createNewXrayTracing();
+
 ?>
 
 <!DOCTYPE html>

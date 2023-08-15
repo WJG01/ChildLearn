@@ -32,7 +32,7 @@ $tid = $row['teac_id'];
         <?php include("backbtn.php"); ?>
         <div class="setting-container">
             <h1>Profile Settings</h1>
-            <form action="#" method="POST" id="signup">
+            <!-- <form action="#" method="POST" id="signup"> -->
                 <div class="setting-info">
                     <button id="upavatar-btn" class="avatar-1-set">
                         Update avatar
@@ -46,13 +46,13 @@ $tid = $row['teac_id'];
                         Update name
                         <i class="fas fa-caret-right"></i>
                     </button>
-                    <input type="email" name="teac_email" value="<?php echo $row['teac_email']; ?>" id="teac_email" hidden>
-                    <button type="submit" value="forgot password" class="name-3-set" name="forgot-password">
+                    <!-- <input type="email" name="teac_email" value="<?php echo $row['teac_email']; ?>" id="teac_email" hidden>
+                     <button type="submit" value="forgot password" class="name-3-set" name="forgot-password">
                         Forget Password
                         <i class="fas fa-caret-right"></i>
-                    </button>
+                    </button> -->
                 </div>
-            </form>
+            <!-- </form> -->
         </div>
     </div>
 
