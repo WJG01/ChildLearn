@@ -36,11 +36,11 @@ if (isset($_POST["id"])) {
             </div>
             <div class="form-group">
                 <label>Content Image</label>
-                <input type="file" required accept="image/*,.png,.jpeg,.jpg" name="image" class="form-control">
+                <input type="file" required accept="image/*,.png,.jpeg,.jpg" name="image" id="image" class="form-control">
             </div>
             <div class="form-group">
                 <label>Content Video</label>
-                <input type="file" required accept="video/mp4" name="video" class="form-control">
+                <input type="file" required accept="video/mp4" name="video" id="video" class="form-control">
             </div>
 
             </div>';

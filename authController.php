@@ -263,7 +263,7 @@ if (isset($_POST['stud_login'])) {
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
 
-            echo 'Success run result';
+            // echo 'Success run result';
 
             // $sqlSegment->setQuery("SELECT * FROM student;");
             // $sqlSegment->end();
@@ -404,7 +404,7 @@ if (isset($_POST['forgot-password'])) {
 
 
         createFromExistingXrayTracing('Simple Notification Service');
-        createNewRemoteSegment('sns: send email');
+        createNewRemoteSegment('sns:us-east-1:941317794938:ChildLearnEmailTopic');
 
 
         //sending email here

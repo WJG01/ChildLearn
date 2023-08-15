@@ -1,6 +1,18 @@
 <?php 
 
+if (!isset($_SESSION)) {
+	session_start();
+}
+
+require 'vendor/autoload.php'; // Include the AWS SDK for PHP
+
 require 'config.php';
+require 'awsCode/S3operation.php';
+require 'awsCode/XrayOperation.php';
+
+use Pkerrigan\Xray\Trace;
+use Pkerrigan\Xray\RemoteSegment;
+use Pkerrigan\Xray\Submission\DaemonSegmentSubmitter;
 
 if(isset($_POST['insert-chapter']))
 {
@@ -10,17 +22,35 @@ if(isset($_POST['insert-chapter']))
     $courseid  		= $_POST['course_id'];
 
     if (isset($_FILES['image'])) {
-        $target_dir = "Images/";
-        $target_file = $target_dir.basename($_FILES['image']['name']);
-        move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
-        $image = $_FILES['image']['name'];
+		$fileType = 'image'; // Change this to 'video' for uploading videos
+		$uploadedFile = $_FILES['image'];
+
+        $uploadResult = uploadToS3($fileType, $uploadedFile);
+
+        if ($uploadResult) {
+			echo 'File uploaded successfully to S3!';
+			// Save the uploaded file name to the $image variable
+			$image = basename($uploadedFile['name']);
+		} else {
+			echo 'File upload failed.';
+		}
     }
 
     if (isset($_FILES['video'])) {
-        $target_dir = "Videos/";
-        $target_file = $target_dir.basename($_FILES['video']['name']);
-        move_uploaded_file($_FILES['video']['tmp_name'], $target_file);
-        $video = $_FILES['video']['name'];
+        $fileType = 'video'; // Change this to 'video' for uploading videos
+		$uploadedFile = $_FILES['video'];
+
+        $uploadResult = uploadToS3($fileType, $uploadedFile);
+
+        if ($uploadResult) {
+			echo 'File uploaded successfully to S3!';
+			// Save the uploaded file name to the $image variable
+			$video = basename($uploadedFile['name']);
+		} else {
+			echo 'File upload failed.';
+		}
+
+
     }
 
 	$query = "INSERT INTO course_chapter (`chapter_title`, `chapter_order`, `content_text`, `content_image`, `content_video`, `course_id`) 

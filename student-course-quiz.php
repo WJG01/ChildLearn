@@ -110,7 +110,7 @@ $row = mysqli_fetch_array($result);
                         ->getCurrentSegment()
                         ->addSubsegment(
                             (new RemoteSegment())
-                                ->setName('cloudfront: load image')
+                                ->setName('d2hmz1phin01an.cloudfront.net')
                                 ->begin(100)
                         );
 

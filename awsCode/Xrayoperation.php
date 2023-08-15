@@ -25,7 +25,11 @@ function createNewXrayTracing()
             ->setUrl('childlearn.us-east-1.elasticbeanstalk.com')
             ->setMethod($_SERVER['REQUEST_METHOD'])
             ->begin(100);
+    } else {
+        createFromExistingXrayTracing('childlearn.us-east-1.elasticbeanstalk.com');
+    }
 
+    if (!isset($_SESSION['trace_id'])) {
         setTrace_ParendID();
     }
 }
@@ -52,7 +56,6 @@ function createNewRemoteSegment($name)
                 ->setName($name)
                 ->begin()
         );
-
 }
 
 function createNewSQLSegment($name)
@@ -69,28 +72,7 @@ function createNewSQLSegment($name)
         );
 }
 
-// //
-
-// createNewXrayTracing() //--> being
-
-
-// createNewSQLSegment($name)
-
-// //sql query
-
-// end()
-
-// createNewSQLSegment($name)
-
-// //sql query
-
-// end()
-
-// submitXrayTracing()
-
-// //
-
- function end_Segment()
+function end_Segment()
 {
     Trace::getInstance()
         ->getCurrentSegment()
@@ -100,9 +82,9 @@ function createNewSQLSegment($name)
 function set_SQLSegmentQuery($query)
 {
     Trace::getInstance()
-    ->getCurrentSegment()
-    ->setQuery($query)
-    ->end();
+        ->getCurrentSegment()
+        ->setQuery($query)
+        ->end();
 }
 
 // function createNewSQLSegment($name)
@@ -134,7 +116,7 @@ function set_SQLSegmentQuery($query)
 function setTrace_ParendID()
 {
     if (!isset($_SESSION['trace_id']) && !isset($_SESSION['parent_id'])) {
-        echo "new trace session SET !";
+       // echo "new trace session SET !";
         $_SESSION['trace_id'] = Trace::getInstance()->getTraceId();
         $_SESSION['parent_id'] = Trace::getInstance()->getId();
     }
@@ -147,5 +129,5 @@ function submitXrayTracing()
         ->setResponseCode(http_response_code())
         ->submit(new DaemonSegmentSubmitter());
     //Print the Trace ID
-    print_r(Trace::getInstance());
+   // print_r(Trace::getInstance());
 }

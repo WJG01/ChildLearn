@@ -13,9 +13,9 @@ ini_set('display_errors', 1);
 
 // AWS credentials (Access Key and Secret Key)
 $credentials = new Aws\Credentials\Credentials(
-    'ASIA5WKXJVR5EGD7MYUV',
-    'IJn8rQKsRIVgJ7xrTLc/IYAIrJCLLjBK+eHnvsQX',
-    'FwoGZXIvYXdzEAkaDI4MD6YZvC+DFcnM1yK8AXhoagHbBgK7nFKxbnFD9asBfNWsfSG5rpwq+9h5Poee3I9gnTSME/gToKn1q7A6FS0hchGeLky3eTq30OjgzhSx7J0/v/ptDRftCs5WzGyMY1yq+ZyA7Gqn0eWEh5FUQWwrFd1moZTiBI8X/qRMjOOExIBYV6fDtVj7l27ZA9mw3U1sUsZ5yeQGzwFel3yi9Psyp1MEZjEH33AB3yLJ76MBYPZRwV7k+PjA7QokQ/jrXFxAm8Sw4JjNrLnaKL2MzaYGMi3p/k9iDqXoCRjkMGsZChIMVaug4phEVIQ5VZsSlJJU8PK+61TlfWScqNErcY8='
+    'ASIA5WKXJVR5FDCNPUOB',
+    'JE+JO62ZjUzbNsrwjNXWo3ygvKssUZEdKNRYRZ/9',
+    'FwoGZXIvYXdzEJT//////////wEaDCJTKSLylpRnszq91CK8ATFbnBONxojxTnPVF/a4D3rC0X6+OL5PrfyWi/FuBS/rtYU1xwtGpq1tvlCcjhrewS1rsGGpBuDWuAJU37FUcqBFjPD/NJ9/NMSIYVXUcmLHFXjAUu/G+wm2GR+2wh+HOep/PtqRMJq1EnXre2Ud/CSbQqnjejMSbdCsUQqYPEzV7p6NTWUd9Se4ZiwPAyMTiupum6aoNmIDUt5u1jxNe4hPcVwI8hBwA5lqepKwGeEorGobStvWqdzRKBI0KLPC66YGMi3Amnb5P/sh42kgGD5hLsDjM0513kN+u7qwJO893f9sXpI93lnb7Z/6DMtND5g='
 );
 
 // AWS region where your S3 bucket is located

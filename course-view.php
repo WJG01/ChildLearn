@@ -26,7 +26,6 @@ include("awsCode/S3operation.php");
 		$row = mysqli_fetch_array($result);
 		$qid = $row['course_id'];
 		?>
-		<div class="col-md-12 alert alert-warning"><?php echo $row['course_title'] ?></div>
 		<button class="btn btn-warning bt-sm" id="new_question"><i class="fa fa-plus"></i> Add Chapters</button>
 		<br>
 		<br>
@@ -172,6 +171,8 @@ include("awsCode/S3operation.php");
 		$('#update_chapter').click(function(event){
         var chapter_title   = $("#chapter_title").val();
         var content_text 	= $("textarea#content_text").val();
+		var image   		= $("#image").val();
+        var video 			= $("#video").val();
         var id 			    = $("#id").val();
 						$.ajax({
 			url:'updatechapter.php',
@@ -179,6 +180,8 @@ include("awsCode/S3operation.php");
 							data: {
 					'chapter_title' : chapter_title,
 					'content_text' 	: content_text,
+					'image' 		: image,
+					'video' 		: video,
 					'id'            : id
 							},
 			success:function(response){

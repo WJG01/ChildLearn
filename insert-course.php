@@ -29,7 +29,7 @@ if (isset($_POST['insert-course'])) {
 
 
 		createFromExistingXrayTracing('S3 Bucket Service');
-		createNewRemoteSegment('s3: upload image');
+		createNewRemoteSegment('childlearn-bucket.s3.amazonaws.com');
 
 		$uploadResult = uploadToS3($fileType, $uploadedFile);
 
@@ -44,7 +44,7 @@ if (isset($_POST['insert-course'])) {
 			->setResponseCode(http_response_code())
 			->submit(new DaemonSegmentSubmitter());
 
-		print_r(Trace::getInstance());
+		//print_r(Trace::getInstance());
 
 		if ($uploadResult) {
 			echo 'File uploaded successfully to S3!';

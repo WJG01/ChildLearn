@@ -1,6 +1,7 @@
 <?php
 
 require 'config.php';
+require 'awsCode/S3operation.php';
 
 if (isset($_POST['update-quiz'])) {
   $id     = $_POST['update_id'];
